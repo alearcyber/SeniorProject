@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<link rel="stylesheet" type="text/css" href="../templates/Navbar.css" />
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        div {
+  border: 1px solid blue;
+  text-align: center;
+}
+
+#seats {
+  border: 1px solid red;
+  margin: 0 auto;
+  padding: 5px;
+}
+
+#seats tr, td {
+  padding: 5px;
+}
+
+#seats button {
+    height: 80px;
+    width: 150px;
+    border: none;
+    font-weight: bold;
+}
+
+
+.unavailable_seat{
+    background-color: rgba(189, 15, 15, 0.6);
+}
+.unavailable_seat:hover{
+    background-color: rgb(189, 15, 15);
+}
+
+
+.available_seat{
+    background-color: rgba(15, 138, 15, 0.5);
+}
+.available_seat:hover{
+    background-color: rgb(15, 138, 15);
+}
+
+
+
+
+
+</style>
+</head>
+
+<!--Navbar-->
+<ul class = navbar>
+    <li><a href="/">Home</a></li>
+    <li><a href="#About">About</a></li>
+    <li><a href="/addvenue">Add New Venue</a></li>
+    <li><a href="/testvenue">Test Venue</a></li>
+</ul>
+
+
+<body>
+
+{% with messages = get_flashed_messages() %}
+
+<div>
+  <table id="seats">
+    <tr>
+        <td><button class="available_seat">A1</button></td>
+        <td><button class="available_seat">A2</button></td>
+        <td><button class="unavailable_seat">A3</button></td>
+        <td><button class="unavailable_seat">A4</button></td>
+        <td><button class="unavailable_seat">A5</button></td>
+    </tr>
+
+      <tr>
+        <td><button class="available_seat">B1</button></td>
+        <td><button class="available_seat">B2</button></td>
+        <td><button class="available_seat">B3</button></td>
+        <td><button class="available_seat">B4</button></td>
+        <td><button class="available_seat">B5</button></td>
+      </tr>
+      <tr>
+        <td><button class="available_seat">C1</button></td>
+        <td><button class="available_seat">C2</button></td>
+        <td><button class="available_seat">C3</button></td>
+        <td><button class="unavailable_seat">C4</button></td>
+        <td><button class="available_seat">C5</button></td>
+      </tr>
+
+      <tr>
+        <td><button class="unavailable_seat">D1</button></td>
+        <td><button class="unavailable_seat">D2</button></td>
+        <td><button class="available_seat">D3</button></td>
+        <td><button class="available_seat">D4</button></td>
+        <td><button class="available_seat">D5</button></td>
+      </tr>
+
+
+
+
+
+  </table>
+</div>
+
+
+
+</body>
+</html>

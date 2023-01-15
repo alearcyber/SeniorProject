@@ -1,0 +1,126 @@
+/* Main Roles ================================================== */
+body {
+  margin: 0;
+  padding: 0;
+}
+p, h1, h2, h3, h4, h5, h6 {
+  padding: 0;
+  margin: 0;
+}
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Container ================================================== */
+.container {
+  max-width: 1200px;
+  margin: 50px auto;
+  border-radius: 50px;
+  box-shadow: 0 0 20px 0px #909090;
+  background-color: #fff;
+}
+.col-50 {
+  width: 50%;
+  float: left;
+  padding: 100px 40px;
+  box-sizing: border-box;
+}
+
+/* Sign Up Form
+================================================== */
+.sign-up-form h1 {
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* Form Group
+================================================== */
+.form-group {
+  max-width: 100%;
+  border-radius: 4px;
+  position: relative;
+  margin-top: 32px;
+}
+.form-group input {
+  width: 100%;
+  box-sizing: border-box;
+  height: 52px;
+  padding: 0 12px;
+  font-size: 17px;
+  letter-spacing: 0.25px;
+  border-radius: 4px;
+  border: 2px solid #cecece;
+  color: #cecece;
+}
+.form-group label {
+  pointer-events: none;
+  position: absolute;
+  margin: 0;
+  top: 2px;
+  left: 20px;
+  line-height: 24px;
+  font-size: 16px;
+  color: #cecece;
+  padding: 12px 0;
+  transition: all 0.3s ease;
+  text-transform: capitalize;
+}
+.form-group input:active,
+.form-group input:focus {
+  outline: none;
+  border: 2px solid #efbad3;
+}
+.form-group input::selection {
+  background-color: #cecece;
+}
+.form-group input:focus + label,
+.form-group input:not(:placeholder-shown) + label {
+  transform: translate(-20px, -42px);
+  font-size: 14px;
+  color: #efbad3;
+}
+
+/* Separate Line
+================================================== */
+hr {
+  border-top: 2px solid #cecece !important;
+  width: 100%;
+  margin: 40px 0;
+}
+
+
+
+
+/* Submit Button
+================================================== */
+.submit-btn {
+  margin-top: 30px;
+}
+.submit-btn .sign-up-btn {
+  width: 100%;
+  font-size: 22px;
+  text-transform: uppercase;
+  /*background: linear-gradient(to right, #a254f2, #efbad3); */
+  background: linear-gradient(to right, #FFF842, #185875);
+  border: 0;
+  border-radius: 8px;
+  color: #fff;
+  padding: 10px 0;
+  position: relative;
+  cursor: pointer;
+}
+.submit-btn .sign-up-btn:focus {
+  outline: none;
+}
+.submit-btn .sign-up-btn:after {
+  content: "\27A1";
+  font-size: 38px;
+  line-height: 26px;
+  position: absolute;
+  right: 40px;
+  transition: all 0.3s ease;
+}
+.submit-btn .sign-up-btn:hover:after {
+  right: 30px;
+}

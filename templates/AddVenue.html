@@ -1,0 +1,67 @@
+<link rel="stylesheet" type="text/css" href="../templates/Navbar.css" />
+<link rel="stylesheet" type="text/css" href="../templates/AddVenue.css" />
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+
+
+
+<body>
+
+<!-- Navbar-->
+<ul class = navbar>
+    <li><a href="/">Home</a></li>
+    <li><a href="#About">About</a></li>
+    <li><a href="/addvenue">Add New Venue</a></li>
+    <li><a href="/testvenue">Test Venue</a></li>
+</ul>
+
+<!-- Flash Messages -->
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+<form method="POST">
+<div class="container">
+      <div class="col-50">
+        <div class="sign-up-form">
+          <h1>Create A New Venue</h1>
+        </div>
+        <div class="form-group">
+          <input type="text" placeholder=" " id="name" name="name" required>
+          <label for="name">Name of Venue</label>
+        </div><!--End Form Group-->
+        <div class="form-group">
+          <input type="text" placeholder=" " id="rows" name="rows" required>
+          <label for="rows">Number of Rows</label>
+        </div><!--End Form Group-->
+        <div class="form-group">
+          <input type="text" placeholder=" " id="cols" name="cols" required>
+          <label for="cols">Number of Seats Per Row (Columns)</label>
+        </div><!--End Form Group-->
+        <hr>
+
+        <div class="submit-btn">
+          <button type="submit" value="register" class="sign-up-btn">Create Venue</button>
+        </div>
+      </div>
+      <div style="clear:both;"></div>
+</div><!--End Container-->
+</form>
+
+
+</body>
+</html>

@@ -1,7 +1,7 @@
 <script>
     import { CarouselTransition } from "flowbite-svelte"
-    import { images } from '../carousel_data/+server.js'
     import Center from '../layouts/center.svelte'
+    import { images } from '../carousel_data/+server.js'
 
     let showThumbs=false
     let showCaptions=false

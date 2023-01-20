@@ -5,19 +5,6 @@ from flask import render_template, send_from_directory
 app = Flask(__name__, template_folder='templates', static_folder='templates')
 app.secret_key = 'test'
 
-
-############################
-# Home Page
-############################
-@app.route("/")
-def home():
-    return send_from_directory('../client/dist', 'index.html')
-
-# Path for the rest of the static files (JS/CSS)
-@app.route('/<path:path>')
-def assets(path):
-    return send_from_directory('../client/dist', path)
-
 ###########################################
 # this is for viewing the test venue
 ###########################################

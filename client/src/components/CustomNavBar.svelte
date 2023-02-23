@@ -39,7 +39,7 @@
     </div>
     <NavUl {hidden} class="order-1">
       <NavLi href="/" active={$page.url.pathname === "/"}>HOME</NavLi>
-      <NavLi href="/shows" active={$page.url.pathname === "/shows"}>SHOWS</NavLi>
+      <NavLi href="/shows" active={$page.url.pathname === "/shows" }>SHOWS</NavLi>
       <NavLi href="/tickets" active={$page.url.pathname === "/tickets"}>BUY TICKETS</NavLi>
       <NavLi href="/contact" active={$page.url.pathname === "/contact"}>CONTACT US</NavLi>
     </NavUl>

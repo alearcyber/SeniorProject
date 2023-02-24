@@ -1,4 +1,3 @@
-import DataConnector
 from flask import Flask, request, url_for, flash, redirect, get_flashed_messages, jsonify
 from flask import render_template, send_from_directory
 import Queries

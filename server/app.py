@@ -37,7 +37,7 @@ def add_venue():
 """
 
 ############################
-# Add a new venue
+# Query the database for performances
 ############################
 @app.route("/upcomingperformances", methods=['GET'])
 def add_venue():

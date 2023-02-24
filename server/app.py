@@ -1,10 +1,11 @@
 import DataConnector
-from flask import Flask, request, url_for, flash, redirect, get_flashed_messages
+from flask import Flask, request, url_for, flash, redirect, get_flashed_messages, jsonify
 from flask import render_template, send_from_directory
+import Queries
 
 app = Flask(__name__, template_folder='templates', static_folder='templates')
 app.secret_key = 'test'
-
+"""
 ###########################################
 # this is for viewing the test venue
 ###########################################
@@ -12,8 +13,8 @@ app.secret_key = 'test'
 def test_venue():
     return render_template("SeatsGrid.html")
 
-
-
+"""
+"""
 ############################
 # Add a new venue
 ############################
@@ -33,6 +34,17 @@ def add_venue():
 
     #render the template
     return render_template("AddVenue.html")
+
+"""
+
+############################
+# Add a new venue
+############################
+@app.route("/upcomingperformances", methods=['GET'])
+def add_venue():
+    print('DEBUG: received request for shows.')
+    return jsonify(Queries.get_shows())
+
 
 if __name__ == '__main__':
     app.run()

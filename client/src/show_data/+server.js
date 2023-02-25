@@ -1,3 +1,8 @@
+/** 
+ * Data file for the images for the show cards
+ * Needs to be replaced with a +page.js file in the same page directory
+ */
+
 export const events = [
     {
         id: 0,

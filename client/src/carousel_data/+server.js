@@ -1,3 +1,8 @@
+/** 
+ * Data file for the images in the carousel on the homepage
+ * Needs to be replaced with a +page.js file in the same page directory
+ */
+
 export const images = [
     {
         id: 0,

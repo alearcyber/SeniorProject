@@ -1,7 +1,12 @@
+<!-- 
+    Contact Us Page
+    This page has a contact info card and a comment form.
+-->
+
 <script>
     import { Label, Input, Textarea, Button, Card, Heading, List, DescriptionList } from 'flowbite-svelte'
 
-    let commentarea = {
+    let commentarea = { //comment area for the comment field
         id: 'message',
         name: 'message',
         label: 'Your message',
@@ -11,11 +16,15 @@
 </script>
 
 <div class="space-y-10">
+
+    <!-- Title -->
     <div class="text-center">
         <Heading tag="h1" class="mb-4" customSize="text-4xl font-extrabold  md:text-5xl lg:text-6xl">Get in touch</Heading>
     </div>
 
     <div class="flex justify-around space-x-10 max-w-5xl m-auto">
+
+        <!-- Contact Card -->
         <div class="grow">
             <Card img="../../contact-us.webp">
                 <h3 class="mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Contact Us</h3>
@@ -35,26 +44,39 @@
                 </List>
             </Card>
         </div>
+
+        <!-- Comment form -->
         <div class="grow-0">
             <Card>
                 <form class="flex flex-col space-y-6" action="/">
+                    <!-- Title -->
                     <h3 class="text-xl font-medium text-gray-900 dark:text-white p-0">Leave a comment</h3>
+                    
+                    <!-- First name field -->
                     <Label class="space-y-2">
                         <span>First Name</span>
                         <Input type="text" name="first-name" placeholder="First Name" required />
                     </Label>
+                    
+                    <!-- Last name field -->
                     <Label class="space-y-2">
                         <span>Last Name</span>
                         <Input type="text" name="last-name" placeholder="Last Name" required />
                     </Label>
+                    
+                    <!-- Email field -->
                     <Label class="space-y-2">
                         <span>Email</span>
                         <Input type="email" name="email" placeholder="name@company.com" required />
                     </Label>
+                    
+                    <!-- Comment field -->
                     <Label class="space-y-2">
                         <span>Comment</span>
                         <Textarea {...commentarea} required />
                     </Label>
+                    
+                    <!-- Submit button -->
                     <Button type="submit" class="w-full" on:click>Submit</Button>
                 </form>
             </Card>

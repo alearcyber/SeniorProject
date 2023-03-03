@@ -7,7 +7,11 @@
     import { Navbar, NavBrand, NavLi, NavUl, Button, Input, Modal, Label, Checkbox } from 'flowbite-svelte'
     import { page } from '$app/stores'
 
-    let formModal = false 
+    let is_login = false 
+    let is_creating_acct = false;
+
+    let password = "";
+    let confirm_password = "";
 </script>
 
 <Navbar let:hidden let:toggle>
@@ -22,8 +26,8 @@
 
     <!-- Login Button and Form -->
     <div class="flex md:order-2"> 
-      <Button on:click={() => formModal = true}>Login</Button>  <!-- Clicking on Login Button opens form -->
-      <Modal bind:open={formModal} size="xs" autoclose={false} class="w-full">
+      <Button on:click={() => is_login = true}>Login</Button>  <!-- Clicking on Login Button opens form -->
+      <Modal bind:open={is_login} size="xs" autoclose={false} class="w-full">
         <form class="flex flex-col space-y-6" action="#">
           <!-- Title -->
           <h3 class="text-xl font-medium text-gray-900 dark:text-white p-0">Sign in</h3>
@@ -45,8 +49,52 @@
 
           <!-- Create an account link -->
           <div class="text-sm font-medium text-gray-500 dark:text-gray-300">
-            Not registered? <a href="/" class="text-blue-700 hover:underline dark:text-blue-500">Create account</a>
+            Not registered? <a href="/" on:click={() => {is_login = false; is_creating_acct = true}} class="text-blue-700 hover:underline dark:text-blue-500">Create account</a>
           </div>
+        </form>
+      </Modal>
+
+      <!-- Create Account form -->
+      <Modal bind:open={is_creating_acct} size="xs" autoclose={false} class="w-full">
+        <form class="flex flex-col space-y-6" action='#'>
+          <!-- Title -->
+          <h3 class="text-xl font-medium text-gray-900 dark:text-white p-0">Create an Account</h3>
+
+          <!-- Email Field -->
+          <Label class="space-y-2">
+            <span>Email</span>
+            <Input type="email" name="create_email" placeholder="name@company.com" required />
+          </Label>
+
+          <!-- Password field -->
+          <Label class="space-y-2">
+            <span>Password</span>
+            <Input type="password" name="create_password" placeholder="••••••••••" bind:value={password} required />
+          </Label>
+
+          <!-- Confirm password field -->
+          <Label class="space-y-2">
+            <span>Confirm Password</span>
+            <Input type="password" name="confirm_password" placeholder="••••••••••" bind:value={confirm_password} required />
+          </Label>
+
+          <!-- Let the  user know whether or not the passwords match-->
+          <Label class="foo space-y-2">
+            {#if password === confirm_password}
+            <span style="color: green">Passwords match</span>
+            {:else}
+            <span style="color: red">Passwords do not match</span>
+            {/if}
+          </Label>
+
+          <!-- Venue ID Field -->
+          <Label class="space-y-2">
+            <span>Venue ID (optional)</span>
+            <Input type="text" name="venue_id" />
+          </Label>
+
+          <!-- Create Account button -->
+          <Button type="submit" class="w-full1">Create Account</Button>
         </form>
       </Modal>
     </div>
@@ -59,6 +107,4 @@
       <NavLi href="/contact" active={$page.url.pathname === "/contact"}>CONTACT US</NavLi>
       <NavLi href="/help" active={$page.url.pathname === "/contact"}>HELP</NavLi>
     </NavUl>
-</Navbar>
-
-
+  </Navbar>

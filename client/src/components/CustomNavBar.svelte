@@ -53,6 +53,8 @@
           </div>
         </form>
       </Modal>
+
+      <!-- Create Account form -->
       <Modal bind:open={is_creating_acct} size="xs" autoclose={false} class="w-full">
         <form class="flex flex-col space-y-6" action='#'>
           <!-- Title -->
@@ -66,7 +68,7 @@
 
           <!-- Password field -->
           <Label class="space-y-2">
-            <span>Your password</span>
+            <span>Password</span>
             <Input type="password" name="create_password" placeholder="••••••••••" bind:value={password} required />
           </Label>
 
@@ -90,6 +92,9 @@
             <span>Venue ID (optional)</span>
             <Input type="text" name="venue_id" />
           </Label>
+
+          <!-- Create Account button -->
+          <Button type="submit" class="w-full1">Create Account</Button>
         </form>
       </Modal>
     </div>

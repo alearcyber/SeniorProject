@@ -7,8 +7,16 @@
 <script>
     import { Button, Heading } from "flowbite-svelte"
     import Center from '../../layouts/center.svelte' //import Center layout
-    import { events } from '../../show_data/+server.js' //import show_data file
+    import { onMount } from "svelte"; //call onMount to do things when the page is loaded
     import ShowCard from "../../components/ShowCard.svelte" //import showcard indicator
+
+    /**
+     * 'data' is assigned by the JS in page.js, which makes an API call to retun the JSON info. The 'shows' value is a
+     * list of the upcoming shows.
+     */
+    export let data;
+    const shows = data.shows;
+
 </script>
 
 <Center>
@@ -17,7 +25,7 @@
         <Heading tag="h1" class="mb-4" customSize="text-4xl font-extrabold  md:text-5xl lg:text-6xl">Upcoming Shows</Heading>
 
         <!-- Iterate through event data and place into individual cards -->
-        {#each events as { name, imgurl, description } }
+        {#each shows as { name, imgurl, description } }
             <article>
                 <ShowCard imgUrl={imgurl} imgTitle={name}>
                     <div class="flex flex-col justify-between items-center ">

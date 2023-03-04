@@ -1,10 +1,14 @@
-import DataConnector
 from flask import Flask, request, url_for, flash, redirect, get_flashed_messages, jsonify
 from flask import render_template, send_from_directory
+from flask_cors import CORS, cross_origin
+import json
 import Queries
 
 app = Flask(__name__, template_folder='templates', static_folder='templates')
+app.config['CORS_HEADERS'] = 'Content-Type'
+cors = CORS(app)
 app.secret_key = 'test'
+
 """
 ###########################################
 # this is for viewing the test venue
@@ -38,12 +42,16 @@ def add_venue():
 """
 
 ############################
-# Add a new venue
+# Upcoming Performances
 ############################
 @app.route("/upcomingperformances", methods=['GET'])
 def add_venue():
-    print('DEBUG: received request for shows.')
-    return jsonify(Queries.get_shows())
+    print('DEBUG: received request to see upcoming performances.')
+    #out = jsonify(Queries.get_shows())
+    new_stuff = {"shows": Queries.get_shows()}
+    out = json.dumps(new_stuff, indent=4)
+    print(out)
+    return out
 
 
 if __name__ == '__main__':

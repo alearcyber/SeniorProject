@@ -7,10 +7,6 @@ TABLES = 5
 def main():
   init_database()
 
-
-
-
-
 '''
    ### RETURNS: 0 = 'database is good', 1 = 'database error occured' ###
    
@@ -26,7 +22,7 @@ def init_database():
   res = cur.execute("SELECT COUNT(1) FROM sqlite_master WHERE type='table' AND (name='user' OR name='organization' OR name='venue' OR name='volunteer' OR name='performance')")
   
   res = res.fetchall()
-  print(res[0][0])
+  #print(res[0][0])
   if (res[0][0] == TABLES):
     print("LOG: database is already setup")
     con.close()
@@ -50,7 +46,6 @@ def init_database():
     print("LOG: database shutting down")
     con.close()
     return 1
-    exit()
 
 if __name__ == "__main__":
   main()

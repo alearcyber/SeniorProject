@@ -47,5 +47,16 @@ def init_database():
     con.close()
     return 1
 
+"""
+   ### RETURNS: True = 'string has correct syntax/format', False = 'string does not meet length requirements or accepted character formatting' ###
+   
+   Checks to see if it meets requirements for input data.
+"""
+def isValid(string, minLen, maxLen, regex):
+  if (len(string) >= minLen and len(string) <= maxLen and string != "" and bool(re.match(regex, string))):
+    return True
+  else:
+    return False
+  
 if __name__ == "__main__":
   main()

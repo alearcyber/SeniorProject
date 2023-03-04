@@ -1,4 +1,4 @@
-export async function load({ fetch }) {
+export async function load() {
     try {
         const response = await fetch('http://127.0.0.1:5000/upcomingperformances') //call the api
         const json = await response.json() // wait for response and parse the json

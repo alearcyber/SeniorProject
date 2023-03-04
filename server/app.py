@@ -62,6 +62,11 @@ def add_venue():
 ############################
 @app.route("/login", methods=['POST'])
 def login():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        course = request.form.get('Course')
+
+
     #TODO write login stuff here
     return -1
     return out

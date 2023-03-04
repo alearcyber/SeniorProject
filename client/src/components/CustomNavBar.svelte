@@ -6,12 +6,24 @@
 <script>
     import { Navbar, NavBrand, NavLi, NavUl, Button, Input, Modal, Label, Checkbox } from 'flowbite-svelte'
     import { page } from '$app/stores'
+    import { writable } from 'svelte/store';
+
+    //data struct to hold login info
+    export const login_info = writable({email: "", password: ""});
+    export function login_request() {
+		alert(`email:${$login_info.name}, pass:${$login_info.password}`);
+        //const formData = new FormData(params.target);
+    }
+
 
     let is_login = false 
     let is_creating_acct = false;
 
     let password = "";
     let confirm_password = "";
+
+
+
 </script>
 
 <Navbar let:hidden let:toggle>
@@ -28,24 +40,24 @@
     <div class="flex md:order-2"> 
       <Button on:click={() => is_login = true}>Login</Button>  <!-- Clicking on Login Button opens form -->
       <Modal bind:open={is_login} size="xs" autoclose={false} class="w-full">
-        <form class="flex flex-col space-y-6" action="#">
+        <form class="flex flex-col space-y-6" method="POST" on:submit|preventDefault={login_request}>
           <!-- Title -->
           <h3 class="text-xl font-medium text-gray-900 dark:text-white p-0">Sign in</h3>
 
           <!-- Email field -->
           <Label class="space-y-2">
             <span>Email</span>
-            <Input type="email" name="email" placeholder="name@company.com" required />
+            <Input type="email" name="email" placeholder="name@company.com" bind:value={$login_info.email} required />
           </Label>
 
           <!-- Password field -->
           <Label class="space-y-2">
             <span>Your password</span>
-            <Input type="password" name="password" placeholder="••••••••••" required />
+            <Input type="password" name="password" placeholder="••••••••••" bind:value={$login_info.password} required />
           </Label>
 
           <!-- Login button -->
-          <Button type="submit" class="w-full1">Login to your account</Button>
+          <Button type="submit" class="w-full1"  onclick="login_request()">Login to your account</Button>
 
           <!-- Create an account link -->
           <div class="text-sm font-medium text-gray-500 dark:text-gray-300">

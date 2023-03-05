@@ -11,7 +11,8 @@
     //data struct to hold login info
     export const login_info = writable({email: "", password: ""});
     export function login_request() {
-		alert(`email:${$login_info.name}, pass:${$login_info.password}`);
+      console.log("Hi");
+		alert(`email:${$login_info.email}, pass:${$login_info.password}`);
         //const formData = new FormData(params.target);
     }
 

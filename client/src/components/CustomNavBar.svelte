@@ -104,7 +104,6 @@
       <NavLi href="/" active={$page.url.pathname === "/"}>HOME</NavLi>
       <NavLi href="/shows" active={$page.url.pathname === "/shows" }>SHOWS</NavLi>
       <NavLi href="/tickets" active={$page.url.pathname === "/tickets"}>BUY TICKETS</NavLi>
-      <NavLi href="/contact" active={$page.url.pathname === "/contact"}>CONTACT US</NavLi>
       <NavLi href="/help" active={$page.url.pathname === "/contact"}>HELP</NavLi>
     </NavUl>
   </Navbar>

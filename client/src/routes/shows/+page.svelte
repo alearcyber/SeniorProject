@@ -8,7 +8,7 @@
     import { Button, Heading } from "flowbite-svelte"
     import Center from '../../layouts/center.svelte' //import Center layout
     import { events } from '../../show_data/+server.js' //import show_data file
-    import ShowCard from "../../components/ShowCard.svelte" //import showcard indicator
+    import ShowCard from "../../components/ShowCard.svelte" //import showcard component
 </script>
 
 <Center>

@@ -24,7 +24,7 @@
         <div class="flex justify-between space-x-5">
             {#if imgUrl} 
                 <!-- format image -->
-                <img class="rounded-lg" src={imgUrl} alt={imgTitle} title={imgTitle} />
+                <img class="rounded-lg" src={imgUrl} alt={imgTitle} title={imgTitle} width="150px" height="200px"/>
             {/if}
             <slot />
         </div>

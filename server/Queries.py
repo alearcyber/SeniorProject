@@ -38,7 +38,7 @@ def get_shows():
     for i in range(len(rows)):
         row = rows[i]
         show_dictionary = {
-            'id': str(row[0]),
+            'id': row[0],
             'name': row[1],
             'imgurl': row[2],
             'description':row[3]
@@ -64,7 +64,7 @@ def get_shows():
 
 
 def test():
-    get_shows()
+    print(get_shows())
 
 
 

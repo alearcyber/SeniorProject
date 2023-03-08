@@ -60,6 +60,18 @@
           <!-- Title -->
           <h3 class="text-xl font-medium text-gray-900 dark:text-white p-0">Create an Account</h3>
 
+          <!-- First Name Field -->
+          <Label class="space-y-2">
+            <span>First Name</span>
+            <Input type="text" name="create_firstname" placeholder="Michael" required />
+          </Label>
+
+          <!-- Last Name Field -->
+          <Label class="space-y-2">
+            <span>Last Name</span>
+            <Input type="text" name="create_lastname" placeholder="Scott" required />
+          </Label>
+
           <!-- Email Field -->
           <Label class="space-y-2">
             <span>Email</span>

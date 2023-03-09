@@ -1,16 +1,30 @@
 """
-   If the username password and level are in correct format it will reject it.
-   Next sees if the username is taken.
+   ### RETURNS: 0 = 'user created sucessfully', 1 = 'invalid email', 2 = 'invalid first name'          ###
+   ###          3 = 'invalid last name',  4 = 'invalid password', 5 = 'account has already been taken' ###
+   
+   First checks for if the email, first name, last name, and password are correctly formatted input.
+   Next checks to see if email has already been taken.
+   If it has not then create account with standard permissions.
+   Else abort account creation.
 """
-def sign_up_account(username, password, level):
-  if (not isValid(username, 8, 64, "^[A-Za-z0-9]+$")):
+def sign_up_user(email, firstName, lastName, password):
+  if (not isValid(email, 1, 32, "^[A-Za-z0-9@.]+$")):
     return 1
-  if (not isValid(password, 8, 64, "^[A-Za-z0-9]+$")):
+  if (not isValid(firstName, 1, 32, "^[A-Za-z0-9]+$")):
     return 2
-  if (not isValid(level, 1, 1, "^[0-2]")):
+  if (not isValid(lastName, 1, 32, "^[A-Za-z0-9]+$")):
     return 3
-    
+  if (not isValid(password, 1, 32, "^[A-Za-z0-9]+$")):
+    return 4
+  
   con = sqlite3.connect("database.db")
   cur = con.cursor()
-  res = cur.execute("SELECT 1 FROM user WHERE username=?",  (username))
-  return res == cur
+  res = cur.execute("SELECT 1 FROM user WHERE email=?",  (email,))
+  if (res.fetchall() == []):
+    cur.execute("INSERT INTO user (email, firstName, lastName, password, level) VALUES (?, ?, ?, ?, 1)", (email, firstName, lastName, password))
+    con.commit()
+    con.close()
+    return 0
+  else:
+    con.close()
+    return 5

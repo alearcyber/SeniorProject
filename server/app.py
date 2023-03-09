@@ -54,5 +54,23 @@ def add_venue():
     return out
 
 
+
+############################
+# LOGIN
+# This API receives the login information. Will send back a valid or invalid login. Will also send
+# some token to keep in the session variables for that user if the login is valid.
+############################
+@app.route("/login", methods=['POST'])
+def login():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        course = request.form.get('Course')
+
+
+    #TODO write login stuff here
+    return -1
+    return out
+
+
 if __name__ == '__main__':
     app.run()

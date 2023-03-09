@@ -3,6 +3,7 @@ from flask import render_template, send_from_directory
 from flask_cors import CORS, cross_origin
 import json
 import Queries
+from database.user.sign_up import sign_up_user
 
 app = Flask(__name__, template_folder='templates', static_folder='templates')
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -71,6 +72,13 @@ def login():
     return -1
     return out
 
+@app.route("/signup", methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        user_data = request.get_json()
+        print(user_data['fname'])
 
+    return request.get_json()
+    
 if __name__ == '__main__':
     app.run()

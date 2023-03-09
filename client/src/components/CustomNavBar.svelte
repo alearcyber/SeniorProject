@@ -16,12 +16,49 @@
         //const formData = new FormData(params.target);
     }
 
+    let signup_info = {
+      fname: "d",
+      lname: "d",
+      email: "n@n.co",
+      password: "w",
+      venue_id: "",
+      level: 0,
+    };
+
+    function signup_request() {
+      if (password === confirm_password) {
+        signup_info.password = password;
+      } else {
+        alert("Passwords do not match");
+        return -1;
+      }
+
+      if (signup_info.venue_id == "") {
+        signup_info.level = 1;
+      } else {
+        signup_info.level = 2;
+      }
+      fetch("http://127.0.0.1:5000/signup", {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },         
+        body: JSON.stringify(signup_info)
+      })
+    }
+
+    function submit_signup() {
+      let result = signup_request();
+      console.log(result);
+      //is_creating_acct = false;
+    }
 
     let is_login = false 
     let is_creating_acct = false;
 
-    let password = "";
-    let confirm_password = "";
+    let password = "w";
+    let confirm_password = "w";
 
 
 
@@ -76,19 +113,19 @@
           <!-- First Name Field -->
           <Label class="space-y-2">
             <span>First Name</span>
-            <Input type="text" name="create_firstname" placeholder="Michael" required />
+            <Input type="text" name="create_firstname" placeholder="Michael" bind:value={signup_info.fname} required />
           </Label>
 
           <!-- Last Name Field -->
           <Label class="space-y-2">
             <span>Last Name</span>
-            <Input type="text" name="create_lastname" placeholder="Scott" required />
+            <Input type="text" name="create_lastname" placeholder="Scott" bind:value={signup_info.lname} required />
           </Label>
 
           <!-- Email Field -->
           <Label class="space-y-2">
             <span>Email</span>
-            <Input type="email" name="create_email" placeholder="name@company.com" required />
+            <Input type="email" name="create_email" placeholder="name@company.com" bind:value={signup_info.email} required />
           </Label>
 
           <!-- Password field -->
@@ -115,11 +152,11 @@
           <!-- Venue ID Field -->
           <Label class="space-y-2">
             <span>Venue ID (optional)</span>
-            <Input type="text" name="venue_id" />
+            <Input type="text" name="venue_id" bind:value={signup_info.venue_id} />
           </Label>
 
           <!-- Create Account button -->
-          <Button type="submit" class="w-full1">Create Account</Button>
+          <Button type="submit" class="w-full1" on:click={submit_signup}>Create Account</Button>
         </form>
       </Modal>
     </div>

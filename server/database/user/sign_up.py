@@ -20,7 +20,7 @@ def sign_up_user(email, firstName, lastName, password, level):
   
   connection = sqlite3.connect("database.db")
   cursor = connection.cursor()
-  res = cursor.execute("SELECT 1 FROM user WHERE email=?",  (email))
+  res = cursor.execute("SELECT 1 FROM user WHERE email=?",  (email,))
   if (res.fetchall() == []):
     cursor.execute("INSERT INTO user (first_name, last_name, email, password, level) VALUES (?, ?, ?, ?, ?)", (firstName, lastName, email, password, level))
     connection.commit()

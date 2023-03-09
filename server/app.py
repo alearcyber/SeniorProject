@@ -76,7 +76,11 @@ def login():
 def signup():
     if request.method == 'POST':
         user_data = request.get_json()
-        print(user_data['fname'])
+        sign_up_user(user_data['email'],
+                     user_data['fname'],
+                     user_data['lname'],
+                     user_data['password'],
+                     user_data['level'])
 
     return request.get_json()
     

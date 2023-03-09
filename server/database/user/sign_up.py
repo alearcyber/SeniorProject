@@ -8,7 +8,7 @@ import sqlite3
    If it has not then create account with standard permissions.
    Else abort account creation.
 """
-def sign_up_user(email, firstName, lastName, password):
+def sign_up_user(email, firstName, lastName, password, level):
   # if (not isValid(email, 1, 32, "^[A-Za-z0-9@.]+$")):
   #   return 1
   # if (not isValid(firstName, 1, 32, "^[A-Za-z0-9]+$")):
@@ -18,14 +18,14 @@ def sign_up_user(email, firstName, lastName, password):
   # if (not isValid(password, 1, 32, "^[A-Za-z0-9]+$")):
   #   return 4
   
-  con = sqlite3.connect("database.db")
-  cur = con.cursor()
-  res = cur.execute("SELECT 1 FROM user WHERE email=?",  (email,))
+  connection = sqlite3.connect("database.db")
+  cursor = connection.cursor()
+  res = cursor.execute("SELECT 1 FROM user WHERE email=?",  (email))
   if (res.fetchall() == []):
-    cur.execute("INSERT INTO user (email, firstName, lastName, password, level) VALUES (?, ?, ?, ?, 1)", (email, firstName, lastName, password))
-    con.commit()
-    con.close()
+    cursor.execute("INSERT INTO user (first_name, last_name, email, password, level) VALUES (?, ?, ?, ?, ?)", (firstName, lastName, email, password, level))
+    connection.commit()
+    connection.close()
     return 0
   else:
-    con.close()
+    connection.close()
     return 5

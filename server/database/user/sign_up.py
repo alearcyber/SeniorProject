@@ -1,3 +1,4 @@
+import sqlite3
 """
    ### RETURNS: 0 = 'user created sucessfully', 1 = 'invalid email', 2 = 'invalid first name'          ###
    ###          3 = 'invalid last name',  4 = 'invalid password', 5 = 'account has already been taken' ###
@@ -8,14 +9,14 @@
    Else abort account creation.
 """
 def sign_up_user(email, firstName, lastName, password):
-  if (not isValid(email, 1, 32, "^[A-Za-z0-9@.]+$")):
-    return 1
-  if (not isValid(firstName, 1, 32, "^[A-Za-z0-9]+$")):
-    return 2
-  if (not isValid(lastName, 1, 32, "^[A-Za-z0-9]+$")):
-    return 3
-  if (not isValid(password, 1, 32, "^[A-Za-z0-9]+$")):
-    return 4
+  # if (not isValid(email, 1, 32, "^[A-Za-z0-9@.]+$")):
+  #   return 1
+  # if (not isValid(firstName, 1, 32, "^[A-Za-z0-9]+$")):
+  #   return 2
+  # if (not isValid(lastName, 1, 32, "^[A-Za-z0-9]+$")):
+  #   return 3
+  # if (not isValid(password, 1, 32, "^[A-Za-z0-9]+$")):
+  #   return 4
   
   con = sqlite3.connect("database.db")
   cur = con.cursor()

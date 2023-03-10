@@ -17,10 +17,10 @@
     }
 
     let signup_info = {
-      fname: "d",
-      lname: "d",
-      email: "n@n.co",
-      password: "w",
+      fname: "",
+      lname: "",
+      email: "",
+      password: "",
       venue_id: "",
       level: 0,
     };
@@ -57,8 +57,8 @@
     let is_login = false 
     let is_creating_acct = false;
 
-    let password = "w";
-    let confirm_password = "w";
+    let password = "";
+    let confirm_password = "";
 
 
 
@@ -142,10 +142,12 @@
 
           <!-- Let the  user know whether or not the passwords match-->
           <Label class="foo space-y-2">
+            {#if password.length > 0}
             {#if password === confirm_password}
             <span style="color: green">Passwords match</span>
             {:else}
             <span style="color: red">Passwords do not match</span>
+            {/if}
             {/if}
           </Label>
 

@@ -166,7 +166,7 @@
         />
         <path 
             d="M5748.35,1589L5881.544,2066.05L7868.2771,2066.05L7734.936,1589Z" 
-            id="LOGE4" 
+            id="LOGE2" 
             fill="#ffffff" 
             stroke="#dddddd" 
             stroke-width="16"

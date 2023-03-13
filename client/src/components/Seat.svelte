@@ -9,6 +9,10 @@
 	 * @type {{ id: any; x: any; y: any; r: any; status: any; }}
 	 */
      export let seat
+     /**
+	 * @type {[{ seat_id: any; user_id: any; performance_id: any; price: any }]}
+	 */
+      export let ticket = {}
 
      export const states = {
         available: 'available',
@@ -18,9 +22,9 @@
 
     let newSeat = seat
 
-    if (newSeat?.status === undefined) {
-        newSeat.status = 'available'
-    }
+    const ticketSale = ticket?.user_id !== null
+
+    newSeat.status = ticketSale ? 'occupied' : 'available'
 
      //Change seat from available to selected and vice versa when clicked
      function handleSeatClick() {
@@ -40,7 +44,7 @@
             class="seat cursor-pointer"
             cx={seat.x}
             cy={seat.y}
-            r={seat.r}
+            r="68.5"
             fill="blue"
         />
     {:else if newSeat.status === states.selected} <!-- Seat is green if selected -->
@@ -50,7 +54,7 @@
             class="seat cursor-pointer"
             cx={seat.x}
             cy={seat.y}
-            r={seat.r}
+            r="68.5"
             fill="limegreen"
         />
     {:else} <!-- Seat is gray if occupied -->
@@ -60,7 +64,7 @@
             class="seat"
             cx={seat.x}
             cy={seat.y}
-            r={seat.r}
+            r="68.5"
             fill="gray"
         />
     {/if}

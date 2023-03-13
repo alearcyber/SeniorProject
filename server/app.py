@@ -76,13 +76,13 @@ def login():
 def signup():
     if request.method == 'POST':
         user_data = request.get_json()
-        sign_up_user(user_data['email'],
+        result = sign_up_user(user_data['email'],
                      user_data['fname'],
                      user_data['lname'],
                      user_data['password'],
                      user_data['level'])
 
-    return request.get_json()
+    return result
     
 if __name__ == '__main__':
     app.run()

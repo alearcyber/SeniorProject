@@ -25,7 +25,7 @@ def sign_up_user(email, firstName, lastName, password, level):
     cursor.execute("INSERT INTO user (first_name, last_name, email, password, level) VALUES (?, ?, ?, ?, ?)", (firstName, lastName, email, password, level))
     connection.commit()
     connection.close()
-    return 0
+    return 'success'
   else:
     connection.close()
-    return 5
+    return 'account_exists'

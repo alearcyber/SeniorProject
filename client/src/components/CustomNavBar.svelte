@@ -25,7 +25,7 @@
       level: 0,
     };
 
-    function signup_request() {
+    async function signup_request() {
       if (password === confirm_password) {
         signup_info.password = password;
       } else {
@@ -38,14 +38,15 @@
       } else {
         signup_info.level = 2;
       }
-      fetch("http://127.0.0.1:5000/signup", {
+      let response = await fetch("http://127.0.0.1:5000/signup", {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },         
         body: JSON.stringify(signup_info)
-      })
+      });
+      return response;
     }
 
     function submit_signup() {

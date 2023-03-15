@@ -15,6 +15,7 @@
     };
 
     async function login_request() {
+      // Make a POST request to the server with the login info
       let response = await fetch("http://127.0.0.1:5000/login", {
         method: 'POST',
         headers: {

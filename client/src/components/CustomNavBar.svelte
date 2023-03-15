@@ -63,9 +63,10 @@
       // Otherwise, set a session variable to the user's email so they remain
       // logged in throughout their session.
       if (out === 'account_exists') {
-        alert("An account with that email already exists.");
+        does_email_exist = true;
         return out;
       } else {
+        does_email_exist = false;
         sessionStorage.setItem("user", signup_info.email);
         is_creating_acct = false; // Closes the modal window
       }
@@ -75,6 +76,7 @@
 
     let is_login = false 
     let is_creating_acct = false;
+    let does_email_exist = false;
 
     let password = "";
     let confirm_password = "";
@@ -146,6 +148,12 @@
             <span>Email</span>
             <Input type="email" name="create_email" placeholder="name@company.com" bind:value={signup_info.email} required />
           </Label>
+          <!-- Let the user know if that email already exists in the database -->
+          <Label class="foo space-y-2">
+            {#if does_email_exist}
+            <span style="color: red">A user account with that email already exists</span>
+            {/if}
+          </Label>
 
           <!-- Password field -->
           <Label class="space-y-2">
@@ -158,8 +166,7 @@
             <span>Confirm Password</span>
             <Input type="password" name="confirm_password" placeholder="••••••••••" bind:value={confirm_password} required />
           </Label>
-
-          <!-- Let the  user know whether or not the passwords match-->
+          <!-- Let the user know whether or not the passwords match-->
           <Label class="foo space-y-2">
             {#if password.length > 0}
             {#if password === confirm_password}

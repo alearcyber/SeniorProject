@@ -9,10 +9,22 @@
     import { writable } from 'svelte/store';
 
     //data struct to hold login info
-    export const login_info = writable({email: "", password: ""});
-    export function login_request() {
-      console.log("Hi");
-		alert(`email:${$login_info.email}, pass:${$login_info.password}`);
+    let login_info = {
+      email: "", 
+      password: ""
+    };
+
+    async function login_request() {
+      let response = await fetch("http://127.0.0.1:5000/login", {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },         
+        body: JSON.stringify(login_info)
+      });
+      const out = await response.json();
+		//alert(`email:${$login_info.email}, pass:${$login_info.password}`);
         //const formData = new FormData(params.target);
     }
 
@@ -74,9 +86,11 @@
       return out;
     }
 
-    let is_login = false 
+    let is_logging_in = false 
     let is_creating_acct = false;
     let does_email_exist = false;
+    let valid_email_passw = true;
+    let is_logged_in = false;
 
     let password = "";
     let confirm_password = "";
@@ -97,8 +111,8 @@
 
     <!-- Login Button and Form -->
     <div class="flex md:order-2"> 
-      <Button on:click={() => is_login = true}>Login</Button>  <!-- Clicking on Login Button opens form -->
-      <Modal bind:open={is_login} size="xs" autoclose={false} class="w-full">
+      <Button on:click={() => is_logging_in = true}>{#if is_logged_in}Sign out{:else}Log in{/if}</Button>  <!-- Clicking on Login Button opens form -->
+      <Modal bind:open={is_logging_in} size="xs" autoclose={false} class="w-full">
         <form class="flex flex-col space-y-6" method="POST" on:submit|preventDefault={login_request}>
           <!-- Title -->
           <h3 class="text-xl font-medium text-gray-900 dark:text-white p-0">Sign in</h3>
@@ -106,13 +120,13 @@
           <!-- Email field -->
           <Label class="space-y-2">
             <span>Email</span>
-            <Input type="email" name="email" placeholder="name@company.com" bind:value={$login_info.email} required />
+            <Input type="email" name="email" placeholder="name@company.com" bind:value={login_info.email} required />
           </Label>
 
           <!-- Password field -->
           <Label class="space-y-2">
             <span>Your password</span>
-            <Input type="password" name="password" placeholder="••••••••••" bind:value={$login_info.password} required />
+            <Input type="password" name="password" placeholder="••••••••••" bind:value={login_info.password} required />
           </Label>
 
           <!-- Login button -->
@@ -120,7 +134,7 @@
 
           <!-- Create an account link -->
           <div class="text-sm font-medium text-gray-500 dark:text-gray-300">
-            Not registered? <a href="/" on:click={() => {is_login = false; is_creating_acct = true}} class="text-blue-700 hover:underline dark:text-blue-500">Create account</a>
+            Not registered? <a href="/" on:click={() => {is_logging_in = false; is_creating_acct = true}} class="text-blue-700 hover:underline dark:text-blue-500">Create account</a>
           </div>
         </form>
       </Modal>

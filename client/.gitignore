@@ -8,5 +8,4 @@ node_modules
 !.env.example
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
-../server/__pycache__
-../server/database/user/__pycache__
+**/__pycache__/

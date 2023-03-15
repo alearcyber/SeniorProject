@@ -67,15 +67,10 @@
         return out;
       } else {
         sessionStorage.setItem("user", signup_info.email);
+        is_creating_acct = false; // Closes the modal window
       }
 
       return out;
-    }
-
-    function submit_signup() {
-      let result = signup_request();
-      //console.log(result);
-      //is_creating_acct = false;
     }
 
     let is_login = false 
@@ -182,7 +177,7 @@
           </Label>
 
           <!-- Create Account button -->
-          <Button type="submit" class="w-full1" on:click={submit_signup}>Create Account</Button>
+          <Button type="submit" class="w-full1" on:click={signup_request}>Create Account</Button>
         </form>
       </Modal>
     </div>

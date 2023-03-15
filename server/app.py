@@ -82,7 +82,8 @@ def signup():
                      user_data['password'],
                      user_data['level'])
 
-    return result
+    print(result)
+    return json.dumps(result, indent=4)
     
 if __name__ == '__main__':
     app.run()

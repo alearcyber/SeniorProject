@@ -46,12 +46,19 @@
         },         
         body: JSON.stringify(signup_info)
       });
-      return response;
+
+      const out = await response.json();
+
+      if (out != 'account_exists') {
+        sessionStorage.setItem("user", signup_info.email);
+      }
+
+      return out;
     }
 
     function submit_signup() {
       let result = signup_request();
-      console.log(result);
+      //console.log(result);
       //is_creating_acct = false;
     }
 

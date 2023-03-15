@@ -1,3 +1,4 @@
+import sqlite3
 """
    ### RETURNS: 0 = 'login success' 1 = 'login failure' ###
    
@@ -7,12 +8,12 @@
 """
 def login_user(email, password):
   email = email.strip()
-  con = sqlite3.connect("database.db")
-  cur = con.cursor()
-  res = cur.execute("SELECT 1 FROM user WHERE email=? AND password=?", (email, password))
+  connection = sqlite3.connect("database.db")
+  cursor = connection.cursor()
+  res = cursor.execute("SELECT 1 FROM user WHERE email=? AND password=?", (email, password))
   if (res.fetchall() == [(1,)]):
-    con.close()
+    connection.close()
     return 0
   else:
-    con.close()
+    connection.close()
     return 1

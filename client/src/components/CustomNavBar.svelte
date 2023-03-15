@@ -26,6 +26,9 @@
     };
 
     async function signup_request() {
+
+      // Check to see if passwords match.
+      // If not, alert user and prevent account creation.
       if (password === confirm_password) {
         signup_info.password = password;
       } else {
@@ -33,11 +36,16 @@
         return -1;
       }
 
+      // If there's nothing in the venue field, the user is a normal user (level 1).
+      // If the user did type a venue ID, they're a volunteer (level 2).
+      // This can likely be moved serverside.
       if (signup_info.venue_id == "") {
         signup_info.level = 1;
       } else {
         signup_info.level = 2;
       }
+
+      // Make a request to the server with the signup info
       let response = await fetch("http://127.0.0.1:5000/signup", {
         method: 'POST',
         headers: {
@@ -47,9 +55,17 @@
         body: JSON.stringify(signup_info)
       });
 
+      // Wait for the response from the server
       const out = await response.json();
 
-      if (out != 'account_exists') {
+      // If the account already exists, alert the user. The server has already
+      // prevented the account from being created.
+      // Otherwise, set a session variable to the user's email so they remain
+      // logged in throughout their session.
+      if (out === 'account_exists') {
+        alert("An account with that email already exists.");
+        return out;
+      } else {
         sessionStorage.setItem("user", signup_info.email);
       }
 

@@ -1,5 +1,7 @@
 <script>
-    import { Card, Table, TableHead, TableBody, TableHeadCell, TableBodyCell, TableBodyRow } from "flowbite-svelte"
+// @ts-nocheck
+
+    import { Button, Card, Table, TableHead, TableBody, TableHeadCell, TableBodyCell, TableBodyRow } from "flowbite-svelte"
 
     export let section
     export let row
@@ -7,7 +9,7 @@
     export let price
 </script>
 
-<Card href="">
+<Card>
     <Table noborder={true}>
         <TableHead
             class="text-lg text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400"
@@ -24,5 +26,8 @@
             </TableBodyRow>
         </TableBody>
     </Table>
-    <h1 class="text-right text-lg">${price}</h1>
+    <div class="flex content-center justify-between pt-6">
+        <h1 class="text-lg">${price}</h1>
+        <Button class="w-24" size="sm">Buy</Button>
+    </div>
 </Card> 

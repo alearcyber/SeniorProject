@@ -5,6 +5,8 @@
 -->
 
 <script>
+// @ts-nocheck
+
     import Playhouse from "../../components/Playhouse.svelte"
     import { Listgroup, ListgroupItem, Button, Dropdown, DropdownItem, DropdownDivider, Chevron } from 'flowbite-svelte'
 	// @ts-ignore
@@ -18,9 +20,9 @@
 	* @type {any[]}
 	*/
     let seats = [];
-    Object.keys(data.seats).forEach(section => seats.push(...data.seats[section]))
-
     let tickets = Object.assign(...data.tickets.map(ticket => ({ [ticket.seat_id]: ticket })))
+
+    Object.keys(data.seats).forEach(section => seats.push(...data.seats[section]))
 </script>
 
 <div class="block p-6 bg-blue-700 border border-gray-700 shadow-md dark:bg-gray-800 dark:border-gray-700 text-white text-xl font-serif max-w-50rem">
@@ -48,9 +50,11 @@
                 Available Seats
             </h1>
             {#each seats as { id, sec, row, seat } }
-                <ListgroupItem class="text-base font-semibold gap-2">
-                    <TicketCard section={sec} row={row} seat={seat} price={tickets[id]?.price ?? 0}/>
-                </ListgroupItem>
+                <!-- {#if ![undefined, null].includes(tickets[id]?.user_id) } -->
+                    <ListgroupItem class="text-base font-semibold gap-2">
+                        <TicketCard section={sec} row={row} seat={seat} price={tickets[id]?.price ?? 0}/>
+                    </ListgroupItem>
+                <!-- {/if} -->
             {/each}
         </Listgroup>
     </div>

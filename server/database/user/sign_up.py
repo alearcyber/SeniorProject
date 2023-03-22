@@ -8,13 +8,13 @@
    Else abort account creation.
 """
 def sign_up_user(email, firstName, lastName, password):
-  if (not isValid(email, 1, 32, "^[A-Za-z0-9@.]+$")):
+  if (not isValid(email, 1, 32, "^[A-Za-z0-9]+@[a-z]+\.(edu|com|net|org)$")):
     return 1
-  if (not isValid(firstName, 1, 32, "^[A-Za-z0-9]+$")):
+  if (not isValid(firstName, 1, 32, "^[A-Z][A-Za-z]+$")):
     return 2
-  if (not isValid(lastName, 1, 32, "^[A-Za-z0-9]+$")):
+  if (not isValid(lastName, 1, 32, "^[A-Z][A-Za-z]+$")):
     return 3
-  if (not isValid(password, 1, 32, "^[A-Za-z0-9]+$")):
+  if (not isValid(password, 8, 32, "^[A-Za-z0-9]+$")):
     return 4
   
   con = sqlite3.connect("database.db")

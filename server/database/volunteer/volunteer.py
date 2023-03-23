@@ -1,6 +1,6 @@
 """
    ### RETURNS: 0 = 'volunteer successfully added', 1 = 'email is invalid', 2 = 'email is not registered to an account'  ###
-   ###          3 = 'organization name is not valid', 4 = 'organization code is not valid', 5 = 'organization does not exists' ###
+   ###          3 = 'organization name is not valid'                                                                     ###
    
    First checks to see if email is valid. Next check to see if the email has been registered in the database and see if account level is eligible.
    Next see if name and organization code of organization is valid. Finally see if the organization does not exists. If insert the volunteer into the database.
@@ -33,4 +33,4 @@ def add_volunteer(user, name, org_code):
     return 0
   else:
     con.close()
-    return 5
+    return 3

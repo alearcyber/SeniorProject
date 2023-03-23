@@ -23,9 +23,11 @@ def add_organization(user, name, org_code):
     con.close()
     return 2
   
+  name = name.strip()
   if (not isValid(name, 1, 32, "^[A-Z][A-Za-z ]+$")):
     con.close()
     return 3
+  org_code = org_code.strip()
   if (not isValid(org_code, 8, 32, "^[A-Za-z0-9]+$")):
     con.close()
     return 4

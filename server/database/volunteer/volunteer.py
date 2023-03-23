@@ -19,15 +19,9 @@ def add_volunteer(user, name, org_code):
     con.close()
     return 2
   
-  # Remove white space and see if the input matches the pattern expected.
+  # Remove white space.
   name = name.strip()
-  if (not isValid(name, 1, 32, "^[A-Z][A-Za-z ]+$")):
-    con.close()
-    return 3
   org_code = org_code.strip()
-  if (not isValid(org_code, 8, 32, "^[A-Za-z0-9]+$")):
-    con.close()
-    return 4
   
   # Check to see if the organization exists and if the code matches with that organization. Add user to volunteer.
   res = cur.execute("SELECT 1 FROM organization WHERE name=? AND org_code=?",  (name, org_code))

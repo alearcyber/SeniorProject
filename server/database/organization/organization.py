@@ -23,6 +23,7 @@ def add_organization(user, name, org_code):
     con.close()
     return 2
   
+  # Check to see if organization name and code are following valid the valid input pattern.
   name = name.strip()
   if (not isValid(name, 1, 32, "^[A-Z][A-Za-z ]+$")):
     con.close()
@@ -31,7 +32,8 @@ def add_organization(user, name, org_code):
   if (not isValid(org_code, 8, 32, "^[A-Za-z0-9]+$")):
     con.close()
     return 4
-    
+  
+  # Look to see if the organization already exists.
   res = cur.execute("SELECT 1 FROM organization WHERE name=?",  (name,))
   if (res.fetchall() == []):
     cur.execute("INSERT INTO organization (name, org_code) VALUES (?, ?)", (name, org_code))

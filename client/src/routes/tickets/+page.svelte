@@ -20,6 +20,7 @@
     },
   ]
 
+  //display correct venue graphic
   function href(item) {
     return item.venue === 'Civic Center Concert Hall' 
       ? '/concert_seats' 

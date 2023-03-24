@@ -29,7 +29,7 @@
     ))
 
     let mySeatStore
-    $: mySeatStore = $SeatStore
+    $: mySeatStore = $SeatStore //subscribe to seat store
 </script>
 
 <!-- Performance information heading -->
@@ -41,7 +41,7 @@
 </div>
 
 <div class="min-w-max flex content-center">
-    <!-- Seat graphic -->
+    <!-- Seat graphic and legend -->
     <div {seats} class="grow inline-block max-w-50rem p-6 bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
         <Legend />
         <Playhouse bind:seats={data.seats} tickets={tickets} />
@@ -49,12 +49,11 @@
 
     <!-- List of seats -->
     <div class="w-96 inline-block p-6 bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700 max-w-50rem">
-        <!-- Display list of available seats -->
+        <!-- Display list of selected seats -->
         <Listgroup class="mt-6 max-h-screen overflow-auto">
             <h1 class="text-center bg-white text-black font-bold rounded-t-lg text-2xl">
                 Your Tickets
             </h1>
-
             {#each mySeatStore as { id, sec, row, seat } }
                 {#if seat } 
                     <ListgroupItem class="text-base font-semibold gap-2">

@@ -13,12 +13,10 @@
     export let seats
     export let tickets
 
+    //clear the seat store when page is left
     onDestroy(() => {
 		clear()
 	})
-
-    function zoom() {
-    }
 </script>
 
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 10240 7680" x="0px" y="0px" width="1024px" height="768px">
@@ -262,6 +260,7 @@
         />
       </g>
     </g>
+    <!-- Add seats to the different sections -->
     <g class="seats">
         <g data-component="svg_block" data-section-name="PITL" data-section-id="s_1" class="section" >
             {#each seats.left_pit as seat}

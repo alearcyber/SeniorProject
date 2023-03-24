@@ -36,7 +36,7 @@
             </TableBody>
         </Table>
 
-        <!-- Price of ticket and button -->
+        <!-- Price of ticket and add to cart button -->
         <div class="flex content-center justify-between pt-6">
             <h1 class="text-lg">${price}</h1>
             <Button class="w-28" size="sm">Add to Cart</Button>

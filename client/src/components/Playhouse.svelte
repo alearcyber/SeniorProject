@@ -18,6 +18,7 @@
 	*/
     export let tickets
 
+    //clear the seat store when page is left
     onDestroy(() => {
 		clear()
 	})
@@ -114,6 +115,7 @@
         class="hover:opacity-60"
         />
     </g>
+    <!-- Add seats to the different sections -->
     <g class="seats">
         <g data-component="svg_block" data-section-name="ORCHL" data-section-id="s_1" class="section" >
             {#each seats.left_orch as seat}

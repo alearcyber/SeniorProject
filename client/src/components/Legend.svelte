@@ -1,3 +1,8 @@
+<!-- 
+    Legend Component 
+    This component is the legend for the seat graphics.
+-->
+
 <script>
     import { Card, Indicator } from "flowbite-svelte"
 </script>

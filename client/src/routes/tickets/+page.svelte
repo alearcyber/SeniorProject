@@ -28,7 +28,9 @@
 </script>
 
 <!-- Title -->
-<Heading tag="h1" class="mb-4 text-blue-500" customSize="text-3xl font-extrabold  md:text-4xl lg:text-5xl">Events</Heading>
+<Heading tag="h1" class="mb-4 text-blue-500" customSize="text-3xl font-extrabold  md:text-4xl lg:text-5xl">
+  Events
+</Heading>
 
 <!-- List of events -->
 <Listgroup items={list} let:item class="border-0 dark:!bg-transparent">

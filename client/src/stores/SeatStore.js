@@ -7,7 +7,7 @@ export const addSeat = (seat) => {
 }
 
 export const removeSeat = (seat) => {
-    SeatStore.update((currentSeats) => currentSeats.filter((s) => s !== seat))
+    SeatStore.update((currentSeats) => currentSeats.filter((s) => s.id !== seat.id))
 }
 
 export const clear = () => {

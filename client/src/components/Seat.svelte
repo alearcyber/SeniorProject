@@ -26,10 +26,10 @@
     }
 
     seat.status = ticketSale ? 'occupied' : 'available'
-
+    
     let mySeatStore
     $: mySeatStore = $SeatStore
-    
+
     //Change seat from available to selected and vice versa when clicked
     function handleSeatClick() {
         if (seat.status === states.available) {

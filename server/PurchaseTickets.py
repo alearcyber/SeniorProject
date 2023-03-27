@@ -291,4 +291,19 @@ def test_purchase_tickets():
 # tests for this file
 ################################
 if __name__ == "__main__":
-    test_purchase_tickets()
+    seats = []
+    #test_purchase_tickets()
+    seating_data = load_playhouse_data()
+    for key in seating_data:
+        #print(f'---{key}---')
+        for seat in seating_data[key]:
+            seats.append((seat['sec'], seat['number'], seat['row']))
+            #print(seat)
+
+    for seat in seats:
+        print(seat)
+
+
+#Create a function for each venue, reutrn a list of seats (as a 3 tuple).
+# The values of the seat tuple are -> (section, number, row)
+#

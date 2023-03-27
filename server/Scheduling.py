@@ -7,6 +7,7 @@ and it includes the seats for the performances of the production
 """
 
 import Constants
+from Constants import query
 
 """
 QUESTIONS: where does venue id belong?
@@ -59,24 +60,17 @@ def add_production(title, venue_id, org_id, image, desc, duration):
         raise InvalidFormat
 
     # Test for if duration matches expected pattern.
-    if (not isValid(duration, 5, 5, "^0[0-5]:[0-5][0-9]$")):
+    if (not isValid(str(duration), 1, 3, "^[0-9]$")):
         raise InvalidFormat
-    if (duration == "00:00"):
+    if (duration <= 0 or duration > 300):
         raise InvalidFormat
-
 
     # Test to see if a performance is already in the database. If not then add it into the database.
-    con = sqlite3.connect(Constants.DB_PATH)
-    cur = con.cursor()
-    res = cur.execute("SELECT 1 from Production WHERE title=?", (title,))
+    res = query("SELECT 1 from Production WHERE title=?", params=(title,))
     if (res.fetchall() == []):
-        cur.execute(
-            "INSERT INTO Production (title, venue_id, org_id, image, description, duration) VALUES (?, ?, ?, ?, ?, ?)",
-            (title, venue_id, org_id, image, desc, duration))
-        con.commit()
-        con.close()
-    else
-        con.close()
+        query("INSERT INTO Production (title, venue_id, org_id, image, description, duration) VALUES (?, ?, ?, ?, ?, ?)",
+            params=(title, venue_id, org_id, image, desc, duration))
+    else:
         raise ProductionExists
 
 

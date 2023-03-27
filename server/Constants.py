@@ -42,6 +42,7 @@ def query(query_text, params=None):
         result = cursor.execute(query_text, params).fetchall()
 
     # close the connection
+    connection.commit()
     connection.close()
 
     # return a list of results

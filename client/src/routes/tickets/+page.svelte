@@ -19,6 +19,12 @@
     { name: "Wicked", date: "May 8", time: "6:00 p.m.", venue: "Civic Center Playhouse"
     },
   ]
+
+  function href(item) {
+    return item.venue === 'Civic Center Concert Hall' 
+      ? '/concert_seats' 
+      : '/playhouse_seats'
+  }
 </script>
 
 <!-- Title -->
@@ -47,7 +53,7 @@
     </div>
 
     <!-- Button linking to Seats page -->
-    <Button class="w-fit" href="/seats">
+    <Button class="w-fit" href={href(item)}>
       Buy tickets
     </Button>
   </div>

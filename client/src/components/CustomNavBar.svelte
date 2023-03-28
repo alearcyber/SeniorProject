@@ -7,11 +7,23 @@
     import { Navbar, NavBrand, NavLi, NavUl, Button, Input, Modal, Label, Checkbox } from 'flowbite-svelte'
     import { page } from '$app/stores'
 
-    let is_login = false 
+
+    let is_login = false;
     let is_creating_acct = false;
 
     let password = "";
     let confirm_password = "";
+
+    let visible = true;
+
+    function toggleVissible() {
+        visible = !visible
+    }
+    
+    //If user is a volunteer
+    
+
+	  
 </script>
 
 <Navbar let:hidden let:toggle>
@@ -23,6 +35,7 @@
         alt="Huntsville Civic Center Logo"
       />
     </NavBrand>
+
 
     <!-- Login Button and Form -->
     <div class="flex md:order-2"> 
@@ -118,5 +131,6 @@
       <NavLi href="/tickets" active={$page.url.pathname === "/tickets"}>BUY TICKETS</NavLi>
       <NavLi href="/contact" active={$page.url.pathname === "/contact"}>CONTACT US</NavLi>
       <NavLi href="/help" active={$page.url.pathname === "/contact"}>HELP</NavLi>
+      <NavLi href="/volunteers" active={$page.url.pathname === "/contact"}>VOLUNTEERS</NavLi>
     </NavUl>
   </Navbar>

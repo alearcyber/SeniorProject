@@ -1,4 +1,21 @@
 import sqlite3
+
+
+############################################################
+# add a volunteer
+############################################################
+def register_user_as_volunteer(email, org_passcode):
+  # get the id of the user with the corresponding email
+  # user_id = SELECT user_id FROM User where email={email};
+
+  # org_id, we have this alreayd
+  # INSERT INTO Volunteer (user_id, org_id) VALUES ({user_id},{org_id});
+
+  pass
+
+
+
+
 """
 Queries the database with the given account information.
 If a user with the given email already exists, an appropriate message is sent

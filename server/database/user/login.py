@@ -10,10 +10,13 @@ def login_user(email, password):
   email = email.strip()
   connection = sqlite3.connect("database.db")
   cursor = connection.cursor()
-  res = cursor.execute("SELECT 1 FROM user WHERE email=? AND password=?", (email, password))
-  if (res.fetchall() == [(1,)]):
+  res = cursor.execute("SELECT first_name FROM user WHERE email=? AND password=?", (email, password))
+  name = res.fetchone()
+  if (name != None):
+    print("Success: " + name[0])
     connection.close()
-    return "success"
+    return name[0]
   else:
+    print("Failed")
     connection.close()
     return "fail"

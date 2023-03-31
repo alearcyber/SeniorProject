@@ -26,12 +26,12 @@
       });
       const out = await response.json();
 
-      if (out === "success") {
+      if (out != "fail") {
         valid_email_passw = true;
         is_logged_in = true;
         is_logging_in = false;
         localStorage.setItem("user", login_info.email);
-        console.log(`${login_info.email} logged in`);
+        console.log(`${out} logged in`);
       } else {
         valid_email_passw = false;
         is_logged_in = false;
@@ -121,7 +121,8 @@
     </NavBrand>
 
     <!-- Login Button and Form -->
-    <div class="flex md:order-2"> 
+    <div class="flex flex-col md:order-2 justify-items-start"> 
+      <Label class="text-lg">Hello, world</Label>
       <Button on:click={() => is_logging_in = true}>{#if is_logged_in}Sign out{:else}Log in{/if}</Button>  <!-- Clicking on Login Button opens form -->
       <Modal bind:open={is_logging_in} size="xs" autoclose={false} class="w-full">
         <form class="flex flex-col space-y-6" method="POST" on:submit|preventDefault={login_request}>

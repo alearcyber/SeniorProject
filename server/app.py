@@ -68,8 +68,6 @@ def login():
         user_input = request.get_json()
         result = login_user(user_input["email"], user_input["password"])
 
-        print(result)
-
     #TODO write login stuff here
     return json.dumps(result, indent=4);
 
@@ -83,7 +81,6 @@ def signup():
                      user_data['password'],
                      user_data['level'])
 
-    print(result)
     return json.dumps(result, indent=4)
     
 if __name__ == '__main__':

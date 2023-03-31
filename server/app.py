@@ -4,6 +4,7 @@ from flask_cors import CORS, cross_origin
 import json
 import Queries
 from database.user.sign_up import sign_up_user
+from database.user.login import login_user
 
 app = Flask(__name__, template_folder='templates', static_folder='templates')
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -64,13 +65,13 @@ def add_venue():
 @app.route("/login", methods=['POST'])
 def login():
     if request.method == 'POST':
-        name = request.form.get('name')
-        course = request.form.get('Course')
+        user_input = request.get_json()
+        result = login_user(user_input["email"], user_input["password"])
 
+        print(result)
 
     #TODO write login stuff here
-    return -1
-    return out
+    return json.dumps(result, indent=4);
 
 @app.route("/signup", methods=['GET', 'POST'])
 def signup():

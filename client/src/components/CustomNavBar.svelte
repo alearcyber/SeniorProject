@@ -131,7 +131,7 @@
           </Label>
 
           <!-- Login button -->
-          <Button type="submit" class="w-full1"  onclick="login_request()">Login to your account</Button>
+          <Button type="submit" class="w-full1"  on:click={login_request}>Login to your account</Button>
 
           <!-- Create an account link -->
           <div class="text-sm font-medium text-gray-500 dark:text-gray-300">

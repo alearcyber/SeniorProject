@@ -13,7 +13,7 @@ def login_user(email, password):
   res = cursor.execute("SELECT 1 FROM user WHERE email=? AND password=?", (email, password))
   if (res.fetchall() == [(1,)]):
     connection.close()
-    return 0
+    return "success"
   else:
     connection.close()
-    return 1
+    return "fail"

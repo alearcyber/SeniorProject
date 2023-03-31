@@ -31,7 +31,7 @@
         is_logged_in = true;
         is_logging_in = false;
         sessionStorage.setItem("user", login_info.email);
-        sessionStorage.setItem("name", out)
+        first_name = out;
         console.log(`${out} logged in`);
       } else {
         valid_email_passw = false;
@@ -107,6 +107,7 @@
     let password = "";
     let confirm_password = "";
 
+    let first_name = "";
 
 
 </script>
@@ -122,8 +123,8 @@
     </NavBrand>
 
     <!-- Login Button and Form -->
-    <div class="flex flex-col md:order-2 justify-items-start"> 
-      <Label class="text-lg"></Label>
+    <div class="flex flex-row md:order-2 items-center"> 
+      <Label class="text-lg pr-4">{#if first_name != ""}Hey, {first_name}!{:else}{first_name}{/if}</Label>
       <Button on:click={() => is_logging_in = true}>{#if is_logged_in}Sign out{:else}Log in{/if}</Button>  <!-- Clicking on Login Button opens form -->
       <Modal bind:open={is_logging_in} size="xs" autoclose={false} class="w-full">
         <form class="flex flex-col space-y-6" method="POST" on:submit|preventDefault={login_request}>

@@ -8,12 +8,15 @@
     import { page } from '$app/stores'
     import { writable } from 'svelte/store';
 
-    //data struct to hold login info
+    // Data struct to hold login info
     let login_info = {
       email: "", 
       password: ""
     };
 
+    // --------------
+    // LOGIN ACTIONS
+    // --------------
     async function login_request() {
       // Make a POST request to the server with the login info
       let response = await fetch("http://127.0.0.1:5000/login", {
@@ -45,6 +48,7 @@
       }
     }
 
+    // Data struct to hold signup info
     let signup_info = {
       fname: "",
       lname: "",
@@ -54,6 +58,9 @@
       level: 0,
     };
 
+    // -----------------------
+    // CREATE ACCOUNT ACTIONS
+    // -----------------------
     async function signup_request() {
 
       // Check to see if passwords match.
@@ -105,6 +112,7 @@
       return out;
     }
 
+    // When user logs out, unset the appropriate variables
     function logout() {
       is_logged_in = false;
       sessionStorage.removeItem("user");

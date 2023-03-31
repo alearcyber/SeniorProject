@@ -25,8 +25,18 @@
         body: JSON.stringify(login_info)
       });
       const out = await response.json();
-		//alert(`email:${$login_info.email}, pass:${$login_info.password}`);
-        //const formData = new FormData(params.target);
+
+      if (out === "success") {
+        valid_email_passw = true;
+        is_logged_in = true;
+        is_logging_in = false;
+        localStorage.setItem("user", login_info.email);
+        console.log(`${login_info.email} logged in`);
+      } else {
+        valid_email_passw = false;
+        is_logged_in = false;
+        is_logging_in = true;
+      }
     }
 
     let signup_info = {

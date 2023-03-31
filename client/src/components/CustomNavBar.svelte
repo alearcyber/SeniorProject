@@ -150,6 +150,12 @@
             <Input type="password" name="password" placeholder="••••••••••" bind:value={login_info.password} required />
           </Label>
 
+          <Label class="foo space-y-2">
+            {#if !valid_email_passw}
+            <span style="color: red">This email/password combination does not exist in our records</span>
+            {/if}
+          </Label>
+
           <!-- Login button -->
           <Button type="submit" class="w-full1"  on:click={login_request}>Login to your account</Button>
 

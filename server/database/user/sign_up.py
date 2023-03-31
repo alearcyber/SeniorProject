@@ -5,7 +5,7 @@ If a user with the given email already exists, an appropriate message is sent
 to the client.
 If not, a new user is inserted with the given information and a success message is returned.
 """
-def sign_up_user(email, firstName, lastName, password, level):
+def sign_up_user(email, firstName, lastName, password, venue_id):
 
   # Query the database for a matching email
   connection = sqlite3.connect("database.db")
@@ -14,6 +14,9 @@ def sign_up_user(email, firstName, lastName, password, level):
 
   # Case where the email does NOT exist in the db: insert a new user
   if (res.fetchall() == []):
+    level = 1
+    if (venue_id != ""):
+      level = 2
     cursor.execute("INSERT INTO user (first_name, last_name, email, password, level) VALUES (?, ?, ?, ?, ?)", (firstName, lastName, email, password, level))
     connection.commit()
     connection.close()

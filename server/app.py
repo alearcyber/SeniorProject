@@ -79,7 +79,7 @@ def signup():
                      user_data['fname'],
                      user_data['lname'],
                      user_data['password'],
-                     user_data['level'])
+                     user_data['venue_id'])
 
     return json.dumps(result, indent=4)
     

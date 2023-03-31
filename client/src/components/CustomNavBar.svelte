@@ -26,6 +26,11 @@
       });
       const out = await response.json();
 
+      // The server returns either the user's first name or "fail".
+      // If a name came through, set the session variable and first name and
+      // close the window.
+      // In either case, set the variables that will be used to control the
+      // window's items.
       if (out != "fail") {
         valid_email_passw = true;
         is_logged_in = true;
@@ -93,6 +98,8 @@
         does_email_exist = false;
         sessionStorage.setItem("user", signup_info.email);
         is_creating_acct = false; // Closes the modal window
+        is_logged_in = true;
+        first_name = signup_info.fname;
       }
 
       return out;

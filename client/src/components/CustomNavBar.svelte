@@ -105,6 +105,12 @@
       return out;
     }
 
+    function logout() {
+      is_logged_in = false;
+      sessionStorage.removeItem("user");
+      first_name = ""
+    }
+
     let is_logging_in = false 
     let is_creating_acct = false;
     let does_email_exist = false;
@@ -132,7 +138,11 @@
     <!-- Login Button and Form -->
     <div class="flex flex-row md:order-2 items-center"> 
       <Label class="text-lg pr-4">{#if first_name != ""}Hey, {first_name}!{:else}{first_name}{/if}</Label>
-      <Button on:click={() => is_logging_in = true}>{#if is_logged_in}Sign out{:else}Log in{/if}</Button>  <!-- Clicking on Login Button opens form -->
+      {#if !is_logged_in}
+      <Button on:click={() => is_logging_in = true}>Log In</Button>
+      {:else}
+      <Button on:click={logout}>Sign out</Button>
+      {/if}
       <Modal bind:open={is_logging_in} size="xs" autoclose={false} class="w-full">
         <form class="flex flex-col space-y-6" method="POST" on:submit|preventDefault={login_request}>
           <!-- Title -->

@@ -1,3 +1,4 @@
+import sqlite3
 """
    ### RETURNS: 0 = 'volunteer successfully added', 1 = 'email is invalid', 2 = 'email is not registered to an account'  ###
    ###          3 = 'organization name is not valid'                                                                     ###
@@ -6,10 +7,10 @@
    Next see if name and organization code of organization is valid. Finally see if the organization does not exists. If insert the volunteer into the database.
    Then change user level to 2 and they are inserted into the volunteer table.
 """
-def add_volunteer(user, name, org_code):
+def add_volunteer(user, org_code):
   # Checks to see if user is valid before searching database for user.
-  if (not isValid(user, 1, 32, "^[A-Za-z0-9]+@[a-z]+\.(edu|com|net|org)$")):
-    return 1
+  # if (not isValid(user, 1, 32, "^[A-Za-z0-9]+@[a-z]+\.(edu|com|net|org)$")):
+  #   return 1
   
   # Checks for if the user exists and their level corresponds to a regular user.
   con = sqlite3.connect("database.db")
@@ -20,14 +21,13 @@ def add_volunteer(user, name, org_code):
     return 2
   
   # Remove white space.
-  name = name.strip()
   org_code = org_code.strip()
   
-  # Check to see if the organization exists and if the code matches with that organization. Add user to volunteer.
-  res = cur.execute("SELECT 1 FROM organization WHERE name=? AND org_code=?",  (name, org_code))
+  # Check to see if the organization exists and if the code matches   with that organization. Add user to volunteer.
+  res = cur.execute("SELECT 1 FROM organization WHERE passcode=?",  (org_code,))
   if (res.fetchall() != []):
     cur.execute("UPDATE user SET level=2 WHERE email=?", (user,))
-    cur.execute("INSERT INTO volunteer (user_id, org_id) VALUES ((SELECT user_id FROM USER WHERE email=?), (SELECT org_id FROM organization WHERE name=?))", (user, name))
+    cur.execute("INSERT INTO volunteer (user_id, org_id) VALUES ((SELECT user_id FROM USER WHERE email=?), (SELECT org_id FROM organization WHERE passcode=?))", (user, org_code))
     con.commit()
     con.close()
     return 0

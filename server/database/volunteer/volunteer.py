@@ -1,4 +1,5 @@
 import sqlite3
+from database.main import isValid
 """
    ### RETURNS: 0 = 'volunteer successfully added', 1 = 'email is invalid', 2 = 'email is not registered to an account'  ###
    ###          3 = 'organization name is not valid'                                                                     ###
@@ -8,9 +9,6 @@ import sqlite3
    Then change user level to 2 and they are inserted into the volunteer table.
 """
 def add_volunteer(user, org_code):
-  # Checks to see if user is valid before searching database for user.
-  # if (not isValid(user, 1, 32, "^[A-Za-z0-9]+@[a-z]+\.(edu|com|net|org)$")):
-  #   return 1
   
   # Checks for if the user exists and their level corresponds to a regular user.
   con = sqlite3.connect("database.db")

@@ -1,5 +1,6 @@
 import sqlite3
 from database.volunteer.volunteer import add_volunteer
+from database.main import isValid
 
 
 ############################################################
@@ -24,6 +25,10 @@ to the client.
 If not, a new user is inserted with the given information and a success message is returned.
 """
 def sign_up_user(email, firstName, lastName, password, org_code):
+
+  # Checks to see if user is valid before searching database for user.
+  if (not isValid(email, 1, 256, "^[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+$")):
+    return 'invalid_email'
 
   # Query the database for a matching email
   connection = sqlite3.connect("database.db")

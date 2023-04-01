@@ -101,8 +101,12 @@
       if (out === 'account_exists') {
         does_email_exist = true;
         return out;
+      } else if (out === 'invalid_email') {
+        is_valid_email = false;
+        return out;
       } else {
         does_email_exist = false;
+        is_valid_email = true;
         sessionStorage.setItem("user", signup_info.email);
         is_creating_acct = false; // Closes the modal window
         is_logged_in = true;
@@ -122,6 +126,7 @@
     let is_logging_in = false 
     let is_creating_acct = false;
     let does_email_exist = false;
+    let is_valid_email = true;
     let valid_email_passw = true;
     let is_logged_in = false;
 
@@ -211,6 +216,11 @@
           <Label class="foo space-y-2">
             {#if does_email_exist}
             <span style="color: red">A user account with that email already exists</span>
+            {/if}
+          </Label>
+          <Label class="foo space-y-2">
+            {#if !is_valid_email}
+            <span style="color: red">Please enter a valid email</span>
             {/if}
           </Label>
 

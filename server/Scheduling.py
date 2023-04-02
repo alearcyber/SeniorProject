@@ -34,11 +34,6 @@ class InvalidPermission(Exception):
     pass
 
 
-#######################################################
-# Check if a Production already exists in the database
-# uses the title as input
-#######################################################
-
 
 
 
@@ -111,7 +106,11 @@ def add_production(title, venue_id, org_id, image, desc, duration):
                  "VALUES (?, ?, ?, ?, ?, ?)"
     parameters = (title, venue_id, org_id, image, desc, duration)
     query(query_text, params=parameters)
-    return True
+
+    #grab and return the id of the recently inserted production
+    results = Constants.query(f"SELECT id FROM Production where title='{title}'")
+    id = int(results[0][0])
+    return id
 
 
 ##################################################
@@ -253,9 +252,18 @@ def test1():
     initialize_playhouse_seats(1)
 
 
+##########################################################
+# Test add production
+##########################################################
+def test2():
+    #(title, venue_id, org_id, image, desc, duration)
+    production_id = add_production('TESTING ADDING SECOND PRODUCTION', None, None, None, None, None)
+    print('id of production added:', production_id)
+
+
 
 #######################################################
 # For running tests
 #######################################################
 if __name__ == '__main__':
-    pass
+    test2()

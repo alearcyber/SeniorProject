@@ -2,3 +2,4 @@
 /venv
 **/__pycache__
 /server/database/user/__pycache__/
+__pycache__/

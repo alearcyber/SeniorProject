@@ -17,7 +17,8 @@ def add_season(org_id, title, description):
 
 
 
-def add_productions_to_season(producitons)
+def add_productions_to_season(productions):
+    pass
 
 
 #checks if a user is a volunteer of an organization

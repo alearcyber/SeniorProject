@@ -38,7 +38,7 @@ class InvalidPermission(Exception):
 # Check if a Production already exists in the database
 # uses the title as input
 #######################################################
-def production_exists(title)
+
 
 
 
@@ -46,7 +46,7 @@ def production_exists(title)
 # adds a single production entry to the database
 ##################################################
 def add_production(title, venue_id, org_id, image, desc, duration):
-
+    """
     # Test for if input matches expected pattern.
     if (not isValid(title, 1, 32, "^[A-Za-z0-9 ]+$")):
         raise InvalidFormat
@@ -64,17 +64,16 @@ def add_production(title, venue_id, org_id, image, desc, duration):
         raise InvalidFormat
     if (duration <= 0 or duration > 300):
         raise InvalidFormat
+    """
 
-    # Test to see if a performance is already in the database. If not then add it into the database.
-    res = query("SELECT 1 from Production WHERE title=?", params=(title,))
-    if (res.fetchall() == []):
-        query("INSERT INTO Production (title, venue_id, org_id, image, description, duration) VALUES (?, ?, ?, ?, ?, ?)",
-            params=(title, venue_id, org_id, image, desc, duration))
-    else:
-        raise ProductionExists
+    #insert the production
+    query("INSERT INTO Production (title, venue_id, org_id, image, description, duration) VALUES (?, ?, ?, ?, ?, ?)", params=(title, venue_id, org_id, image, desc, duration))
+    return True
 
 
-def add_performance(production_id, startTime):
+
+def add_performance(production_id, org_id, startTime):
+    """
     if (not isValid(str(production_id), 1, 8, "^[0-9]+$")):
         raise InvalidID
     if (not isValid(startTime, 19, 19,
@@ -84,6 +83,9 @@ def add_performance(production_id, startTime):
     con = sqlite3.connect(Constants.DB_PATH)
     cur = con.cursor()
     res = cur.execute("INSERT INTO Performance (production_id, time) VALUES (?, ?)", (production_id, startTime))
+    """
+    query("INSERT INTO Performance (production_id, time) VALUES (?, ?)", (production_id, startTime))
+    return True
 
 
 def is_timeslot_available(startTime, endTime, venue_id):
@@ -92,6 +94,10 @@ def is_timeslot_available(startTime, endTime, venue_id):
        End time cannot equal or less than to start time.
        Also cannot end time be more than 5 hours than the start time.
     """
+    """
+    
+    #doesn't make sense for this to be here. This function checks to see if the timeslote is open, that is all.
+    #have another function that checks for extrema in the times given
     date = datetime.strptime(startTime, "%Y-%m-%d %H:%M:%S")
     tempDate = datetime.strptime(endTime, "%Y-%m-%d %H:%M:%S")
     if (tempDate <= date):
@@ -101,7 +107,6 @@ def is_timeslot_available(startTime, endTime, venue_id):
     if (tempDate > date):
         con.close()
         raise InvalidTime
-
     # Checks for unreasonable startTime. IE Before current time or an hour after current time.
     date = datetime.strptime(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
     tempDate = datetime.strptime(startTime, "%Y-%m-%d %H:%M:%S")
@@ -109,17 +114,19 @@ def is_timeslot_available(startTime, endTime, venue_id):
     if (tempDate < date):
         con.close()
         raise InvalidTime
+    """
 
-    con = sqlite3.connect(Constants.DB_PATH)
-    cur = con.cursor()
-    res = cur.execute("SELECT 1 FROM performance WHERE venue_id=? AND (startTime AND endTime BETWEEN ? AND ?)",
+
+    #Query for performances in the venue within a given time frame
+    result = query("SELECT 1 FROM performance WHERE venue_id=? AND (startTime AND endTime BETWEEN ? AND ?)",
                       (venue_id, startTime, endTime))
-    if (res.fetchall() == []):
-        con.close()
+
+    #return true if no performances were there in the given time frame, false otherwise
+    if len(result) <= 0:
         return True
     else:
-        con.close()
         return False
+
 
 
 def get_production_id_from_title(title):

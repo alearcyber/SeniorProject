@@ -1,4 +1,6 @@
 import sqlite3
+from database.volunteer.volunteer import add_volunteer
+from database.main import isValid
 
 
 ############################################################
@@ -22,7 +24,11 @@ If a user with the given email already exists, an appropriate message is sent
 to the client.
 If not, a new user is inserted with the given information and a success message is returned.
 """
-def sign_up_user(email, firstName, lastName, password, venue_id):
+def sign_up_user(email, firstName, lastName, password, org_code):
+
+  # Checks to see if user is valid before searching database for user.
+  if (not isValid(email, 1, 256, "^[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+$")):
+    return 'invalid_email'
 
   # Query the database for a matching email
   connection = sqlite3.connect("database.db")
@@ -31,12 +37,12 @@ def sign_up_user(email, firstName, lastName, password, venue_id):
 
   # Case where the email does NOT exist in the db: insert a new user
   if (res.fetchall() == []):
-    level = 1
-    if (venue_id != ""):
-      level = 2
-    cursor.execute("INSERT INTO user (first_name, last_name, email, password, level) VALUES (?, ?, ?, ?, ?)", (firstName, lastName, email, password, level))
+    cursor.execute("INSERT INTO user (first_name, last_name, email, password, level) VALUES (?, ?, ?, ?, ?)", (firstName, lastName, email, password, 1))
+    
     connection.commit()
     connection.close()
+    if (org_code != ""):
+      print(add_volunteer(email, org_code))
     return 'success'
   else:
   # Case where the email already exists: inform the client and don't insert the user

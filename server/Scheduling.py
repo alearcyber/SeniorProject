@@ -8,6 +8,7 @@ and it includes the seats for the performances of the production
 
 import Constants
 from Constants import query
+import sqlite3
 
 """
 QUESTIONS: where does venue id belong?
@@ -116,7 +117,7 @@ def add_production(title, venue_id, org_id, image, desc, duration):
 ##################################################
 # adds a single item to performance table
 ##################################################
-def add_performance(production_id, org_id, startTime):
+def add_performance(production_id, startTime):
     """
     if (not isValid(str(production_id), 1, 8, "^[0-9]+$")):
         raise InvalidID
@@ -128,8 +129,13 @@ def add_performance(production_id, org_id, startTime):
     cur = con.cursor()
     res = cur.execute("INSERT INTO Performance (production_id, time) VALUES (?, ?)", (production_id, startTime))
     """
-    query("INSERT INTO Performance (production_id, time) VALUES (?, ?)", (production_id, startTime))
-    return True
+    connection = sqlite3.connect(Constants.DB_PATH)
+    cursor = connection.cursor()
+    cursor.execute("INSERT INTO Performance (production_id, time) VALUES (?, ?)", (production_id, startTime))
+    id = cursor.lastrowid
+    connection.commit()
+    connection.close()
+    return id
 
 
 def is_timeslot_available(startTime, endTime, venue_id):
@@ -222,6 +228,40 @@ def schedule_performances(user, title, venue_id, org_id, image, desc, duration, 
         add_performance(production_id, time)
 
 
+##########################################################
+# Create a new production
+# This function does ALL the stuff for
+#   creating a production, the corresponding performances
+#   and seats/tickets for each performance
+# Params:
+#   title, venue_id, org_id, description - all self descriptive
+#   image - path to where the image is as a string
+#   duration - integer, how many minutes the show lasts
+#   times - list of performance times, will be formatted
+#       as "%Y-%m-%d %H:%M:%S", no am pm, 24 hour day cycle
+#
+# returns the id of the created production
+##########################################################
+def create_new_production(title, venue_id, org_id, image, description, duration, times):
+    # first, insert item into production table
+    # parameters are (title, venue_id, org_id, image, descrition, duration)
+    production_id = add_production(title, venue_id, org_id, image, description, duration)
+
+    #iterate over the times, add performance and initialize the seats
+    for time in times:
+        #add the performance
+        performance_id = add_performance(production_id, time) # params: (production_id, startTime)
+
+        #add seats for that performance
+        if venue_id == 2: # playhouse
+            initialize_playhouse_seats(performance_id)
+        else: #conert hall, venue_id == 1
+            assert False, "HEY, I HAVE NOT MADE THE SEATING THING FOR THE CONCERT HALL YET"
+
+    #return the id of the production that was added
+    return production_id
+
+
 class InvalidFormat(Exception):
     pass
 
@@ -266,4 +306,4 @@ def test2():
 # For running tests
 #######################################################
 if __name__ == '__main__':
-    test2()
+    add_performance(None, "2020-01-01 12:30:00")

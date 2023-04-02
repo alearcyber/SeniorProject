@@ -42,6 +42,45 @@ class InvalidPermission(Exception):
 
 
 
+
+####################################################################
+# This will initialize the empty seats/tickets for a performance
+#   that takes place in the playhouse venue
+# Params:
+#   performance_id - What performance takes place in the
+#
+# NOTE: The information for the seats is stored in
+#   binary files. This would include the x, y, row, number, and
+#   section.
+#
+# PLayhouse is venue id 2
+####################################################################
+def initialize_playhouse_seats(performance_id):
+    #Read playhouse seating data into memory
+    seating_data = Constants.load_playhouse_data()
+
+    #parse seating data
+    for section in seating_data: # loop through each sections
+        seats = seating_data[section] # grab the list of seat data for each section
+        # This loop iterates over all the seats in the playhouse
+        for seat in seats:
+            # debug print
+            # print(f"x:{seat['x']}, y:{seat['y']}, section:{seat['sec']}, row:{seat['row']}, number:{seat['number']}")
+
+            #construct the query
+            query_text = "INSERT INTO Seat " \
+                    "(row, number, x, y, user_id, venue_id, performance_id, section, payment_method) " \
+                    "VALUES " \
+                    "(?, ?, ?, ?, ?, ?, ?, ?, ?)"
+            params = (seat['row'], seat['number'], seat['x'], seat['y'], None, 2, performance_id, seat['sec'], None)
+
+            #insert into the table
+            Constants.query(query_text, params)
+    return True
+
+
+
+
 ##################################################
 # adds a single production entry to the database
 ##################################################
@@ -95,7 +134,6 @@ def is_timeslot_available(startTime, endTime, venue_id):
        Also cannot end time be more than 5 hours than the start time.
     """
     """
-    
     #doesn't make sense for this to be here. This function checks to see if the timeslote is open, that is all.
     #have another function that checks for extrema in the times given
     date = datetime.strptime(startTime, "%Y-%m-%d %H:%M:%S")
@@ -194,3 +232,20 @@ class InvalidTime(Exception):
 class InvalidPermission(Exception):
     pass
 
+
+
+
+
+#######################################################
+# Tests for this file
+#######################################################
+def tests():
+    initialize_playhouse_seats(1)
+
+
+
+#######################################################
+# For running tests
+#######################################################
+if __name__ == '__main__':
+    tests()

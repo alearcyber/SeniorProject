@@ -2,6 +2,8 @@
 @Author Aidan Lear
 This file contains constants to be used for the backend
 """
+import pickle
+import sqlite3
 
 
 #Path to the database
@@ -70,5 +72,19 @@ def insert_many(query_text, params):
     connection.commit()
     connection.close()
     return True
+
+
+
+###########################################################################
+# This loads the playhouse seat data from the file into memory.
+# The file is 'PLayhouseInfo.pkl'
+###########################################################################
+def load_playhouse_data():
+    file = open('PlayhouseInfo.pkl', 'rb')
+    data = pickle.load(file)
+    file.close()
+    return data
+
+
 
 

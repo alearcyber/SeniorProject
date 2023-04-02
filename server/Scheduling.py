@@ -301,9 +301,30 @@ def test2():
     print('id of production added:', production_id)
 
 
+##########################################################
+# Test scheduling a new performance
+##########################################################
+def test3():
+    title = 'Inception'
+    description = 'It is a movie about a dream within a dream'
+    times = [ # four days in a row at 12:30
+        "2022-01-01 12:30:00",
+        "2022-01-02 12:30:00",
+        "2022-01-03 12:30:00",
+        "2022-01-04 12:30:00",
+    ]
+    duration = 120 #120 minutes, 2 hours
+
+    #params for creating a new production
+    #(title, venue_id, org_id, image, description, duration, times)
+    create_new_production(title, 2, None, None, description, duration, times)
+
+
+
+
 
 #######################################################
 # For running tests
 #######################################################
 if __name__ == '__main__':
-    add_performance(None, "2020-01-01 12:30:00")
+    test3()

@@ -53,7 +53,7 @@ class InvalidPermission(Exception):
 #   binary files. This would include the x, y, row, number, and
 #   section.
 #
-# PLayhouse is venue id 2
+# Playhouse is venue id 2
 ####################################################################
 def initialize_playhouse_seats(performance_id):
     #Read playhouse seating data into memory
@@ -82,7 +82,7 @@ def initialize_playhouse_seats(performance_id):
 
 
 ##################################################
-# adds a single production entry to the database
+# adds a single item to production table
 ##################################################
 def add_production(title, venue_id, org_id, image, desc, duration):
     """
@@ -106,11 +106,17 @@ def add_production(title, venue_id, org_id, image, desc, duration):
     """
 
     #insert the production
-    query("INSERT INTO Production (title, venue_id, org_id, image, description, duration) VALUES (?, ?, ?, ?, ?, ?)", params=(title, venue_id, org_id, image, desc, duration))
+    query_text = "INSERT INTO Production " \
+                 "(title, venue_id, org_id, image, description, duration) " \
+                 "VALUES (?, ?, ?, ?, ?, ?)"
+    parameters = (title, venue_id, org_id, image, desc, duration)
+    query(query_text, params=parameters)
     return True
 
 
-
+##################################################
+# adds a single item to performance table
+##################################################
 def add_performance(production_id, org_id, startTime):
     """
     if (not isValid(str(production_id), 1, 8, "^[0-9]+$")):
@@ -234,12 +240,16 @@ class InvalidPermission(Exception):
 
 
 
+#####################################################################################
+################################ TESTS ##############################################
+#####################################################################################
 
 
-#######################################################
-# Tests for this file
-#######################################################
-def tests():
+
+##########################################################
+# Test intitlizing the seats for a playhouse performance
+##########################################################
+def test1():
     initialize_playhouse_seats(1)
 
 
@@ -248,4 +258,4 @@ def tests():
 # For running tests
 #######################################################
 if __name__ == '__main__':
-    tests()
+    pass

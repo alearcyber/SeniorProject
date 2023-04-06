@@ -2,6 +2,8 @@
 @Author Aidan Lear
 This file contains constants to be used for the backend
 """
+import pickle
+import sqlite3
 
 
 #Path to the database
@@ -47,5 +49,42 @@ def query(query_text, params=None):
 
     # return a list of results
     return result
+
+
+
+
+###########################################################################
+# Send Multiple parameterized queries to the database
+# params - a list of tuples, where each tuple is to be executed.
+# query_text - The SQL statement to place the tuples into from params
+# returns true on success
+# NOTE: does NOT return the results of the query. Only use for inserting.
+###########################################################################
+def insert_many(query_text, params):
+    # establish connection with database
+    connection = sqlite3.connect(DB_PATH)
+    cursor = connection.cursor()
+
+    #execute the query
+    cursor.executemany(query_text, params)
+
+    #commit change and close the connection
+    connection.commit()
+    connection.close()
+    return True
+
+
+
+###########################################################################
+# This loads the playhouse seat data from the file into memory.
+# The file is 'PLayhouseInfo.pkl'
+###########################################################################
+def load_playhouse_data():
+    file = open('PlayhouseInfo.pkl', 'rb')
+    data = pickle.load(file)
+    file.close()
+    return data
+
+
 
 

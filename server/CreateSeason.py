@@ -10,66 +10,6 @@ from Constants import query
 
 
 
-#adds a single entry to the Season table
-#returns a Season_id
-def add_season(org_id, title, description):
-    pass
-
-
-
-def add_productions_to_season(productions):
-    pass
-
-
-#checks if a user is a volunteer of an organization
-def is_volunteer(email):
-    pass
-
-
-
-#check if a production is already part of a season
-#returns a boolean
-
-
-
-#get all future productions for the employee, so that they can have a list of productions
-#to choose from when creating the season.
-# return the information in the same data structure the query returns it as.
-#THIS IS FOR THE FIRST PART
-def get_future_list_of_productions(email, org_id):
-    pass
-
-
-#given a production_id, add that production to the season.
-def add_production_to_season(production_id, season_id):
-    pass
-
-
-
-
-
-
-#This is the MAIN function for adding all the information
-def main(email, org_name, list_of_production_ids, title, description):
-    #check that the person is even part of the org
-    #throw some Exception if they are not part of the org
-
-
-    org_id = #grab the org id form the named
-
-    season_id = add_season(org_id, title, description)
-
-    #at this point, the season has been succesfully added
-    #now we want to register the selected productions as being part of the season
-    for production_id in list_of_production_ids:
-        add_produciton_to_season(production_id, season_id)
-
-    #done
-
-
-
-
-
 """
 
 --The logic--
@@ -96,6 +36,75 @@ What we do with this information...
     - Add the season id for the season that was just created as the season_id column for all of the 
         productions that were sent to us.
 """
+
+
+
+
+###################################
+# CODE FROM JAINUM
+###################################
+
+"""
+add_production_to_season = add_productions_to_season ?
+work on get_future_list_of_productions. What outputs ?
+"""
+
+
+def add_season(org_id, title, description):
+    query("INSERT INTO Season (org_id, name, description) VALUES (?, ?, ?)", params=(org_id, title, description))
+    return query("SELECT id FROM Season WHERE org_id=? AND name=? AND description=?",
+                 params=(org_id, title, description))
+
+
+def add_productions_to_season(productions, season_id):
+    for production in productions:
+        query("UPDATE Production SET season_id=? WHERE id=?", params=(season_id, production))
+
+
+def is_volunteer(email, org_id):
+    return query(
+        "SELECT 1 FROM volunteer INNER JOIN user ON user.user_id=volunteer.user_id WHERE user.email=? AND user.level=2 AND volunteer.org_id=?",
+        params=(email, int(org_id)))
+
+
+#######################################
+# Available productions to select from
+#######################################
+def get_future_list_of_productions(email, org_id):
+    if (is_volunteer(email, org_id) != [(1,)]):
+        raise InvalidPermission
+
+
+    query_text = "SELECT Performance.performance_id, Production.title " \
+    "FROM" \
+    "Performance JOIN Production ON Performance.production_id=Production.id" \
+    "WHERE" \
+    "Production.org_id=? AND Production.season_id IS NULL;"
+
+    result = query(query_text, (org_id,))
+    return result
+
+
+
+def main(email, org_name, productions, title, description):
+    org_id = query("SELECT org_id FROM Organization WHERE name=?", params=(org_name,))
+    if (org_id == []):
+        raise InvalidPermission
+
+    if (is_volunteer(email, org_id) != [(1,)]):
+        raise InvalidPermission
+
+    if (not isValid(title, 1, 32, "^[A-Za-z0-9 ]+$")):
+        raise InvalidFormat
+    if (not isValid(description, 1, 1024, "^[A-Za-z0-9 .!?]+$")):
+        raise InvalidFormat
+
+    season_id = add_season(org_id, title, description)
+    add_productions_to_season(productions, season_id)
+
+
+
+
 
 
 

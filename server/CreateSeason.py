@@ -85,7 +85,7 @@ def get_future_list_of_productions(email, org_id):
     return result
 
 
-
+#THIS IS THE DRIVER FUNCTION FOR DOING STUFF
 def main(email, org_name, productions, title, description):
     org_id = query("SELECT org_id FROM Organization WHERE name=?", params=(org_name,))
     if (org_id == []):

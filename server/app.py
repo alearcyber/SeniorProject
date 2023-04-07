@@ -5,7 +5,7 @@ import json
 import Queries
 from database.user.sign_up import sign_up_user
 from database.user.login import login_user
-from CreateSeason import is_volunteer
+from CreateSeason import is_volunteer_passcode
 
 app = Flask(__name__, template_folder='templates', static_folder='templates')
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -85,10 +85,10 @@ def signup():
     return json.dumps(result, indent=4)
 
 @app.route("/login_volunteer", methods=['POST'])
-def signup():
+def login_volunteer():
     if request.method == 'POST':
         vol_data = request.get_json()
-        result = is_volunteer(vol_data['email'], vol_data['org_id'])
+        result = is_volunteer_passcode(vol_data['email'], vol_data['passcode'])
 
     return json.dumps(result, indent=4)
     

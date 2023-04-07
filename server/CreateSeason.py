@@ -62,9 +62,19 @@ def add_productions_to_season(productions, season_id):
 
 
 def is_volunteer(email, org_id):
+    print(email)
     return query(
         "SELECT 1 FROM volunteer INNER JOIN user ON user.user_id=volunteer.user_id WHERE user.email=? AND user.level=2 AND volunteer.org_id=?",
         params=(email, int(org_id)))
+
+# Author: Nick Pittman
+# Wraps is_volunteer so it can be accessed with a passcode instead of an org id
+def is_volunteer_passcode(email, passcode):
+    org_id_tuple_array = query("SELECT org_id FROM organization WHERE passcode=?", params=(passcode,))
+    if (len(org_id_tuple_array) > 0):
+        return is_volunteer(email, org_id_tuple_array[0][0])
+    else:
+        return -1
 
 
 #######################################

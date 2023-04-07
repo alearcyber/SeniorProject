@@ -9,7 +9,44 @@
 
     let is_adding_volunteer = false;
 
-    
+    // Data struct to hold login info
+    let vol_info = {
+      email: "", 
+      passcode: ""
+    };
+
+    // --------------
+    // LOGIN VOLUNTEER ACTIONS
+    // --------------
+    async function login_volunteer_request() {
+      // Make a POST request to the server with the login info
+      let response = await fetch("http://127.0.0.1:5000/login_volunteer", {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },         
+        body: JSON.stringify(vol_info)
+      });
+      const out = await response.json();
+
+      // The server returns either the user's first name or "fail".
+      // If a name came through, set the session variable and first name and
+      // close the window.
+      // In either case, set the variables that will be used to control the
+      // window's items.
+      if (out == 1) {
+        valid_email_org = true;
+        sessionStorage.setItem("volunteer", "true");
+        console.log(`${out} logged in`);
+        window.location.href = '/volunteers/navigation'
+      } else {
+        valid_email_org = false;
+      }
+    }
+
+    let valid_email_org = true;
+
 </script>
   
     <!-- Volunteer Login Form -->
@@ -21,17 +58,24 @@
             <!-- Email field -->
             <Label class="space-y-2">
               <span>Email</span>
-              <Input type="email" name="email" placeholder="name@company.com" required />
+              <Input type="email" name="email" placeholder="name@company.com" bind:value={vol_info.email} required />
             </Label>
   
             <!-- Organization Code field -->
             <Label class="space-y-2">
               <span>Organization Code</span>
-              <Input type="text" name="org_code" placeholder="••••••••••" required />
+              <Input type="text" name="org_code" placeholder="••••••••••" bind:value={vol_info.passcode} required />
+            </Label>
+
+            <Label class="foo space-y-2">
+              {#if !valid_email_org}
+              <span style="color: red">This email/organization combination does not exist in our records</span>
+              {/if}
             </Label>
   
             <!-- Login button -->
-            <Button type="submit" href="/volunteers/navigation" class="w-full1">Login as volunteer</Button>
+            <!-- <Button type="submit" href="/volunteers/navigation" class="w-full1">Login as volunteer</Button> -->
+            <Button type="submit" class="w-full1" on:click={login_volunteer_request}>Login as volunteer</Button>
   
             <!-- Add volunteer link -->
             <div class="text-sm font-medium text-gray-500 dark:text-gray-300">

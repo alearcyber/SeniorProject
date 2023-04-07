@@ -135,7 +135,6 @@
 
     let first_name = "";
 
-
 </script>
 
 <Navbar let:hidden let:toggle>
@@ -147,6 +146,7 @@
         alt="Huntsville Civic Center Logo"
       />
     </NavBrand>
+
 
     <!-- Login Button and Form -->
     <div class="flex flex-row md:order-2 items-center"> 
@@ -264,5 +264,6 @@
       <NavLi href="/shows" active={$page.url.pathname === "/shows" }>SHOWS</NavLi>
       <NavLi href="/tickets" active={$page.url.pathname === "/tickets"}>BUY TICKETS</NavLi>
       <NavLi href="/help" active={$page.url.pathname === "/contact"}>HELP</NavLi>
+      <NavLi href="/volunteers" active={$page.url.pathname === "/contact"}>VOLUNTEERS</NavLi>
     </NavUl>
   </Navbar>

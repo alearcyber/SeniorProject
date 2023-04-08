@@ -39,8 +39,16 @@
         is_logged_in = true;
         is_logging_in = false;
         sessionStorage.setItem("user", login_info.email);
-        first_name = out;
-        console.log(`${out} logged in`);
+        first_name = out[0];
+
+        let level = out[1];
+        if (level > 1) {
+          sessionStorage.setItem("volunteer", "true");
+        } else {
+          sessionStorage.setItem("volunteer", "false");
+        }
+        
+        console.log(`${out[0]} logged in`);
       } else {
         valid_email_passw = false;
         is_logged_in = false;

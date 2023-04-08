@@ -14,7 +14,7 @@
   
     <!-- Volunteer Login Form -->
     <div class="mb-10 flex justify-center">
-      {#if sessionStorage.getItem("volunteer") === "true"}
+      {#if sessionStorage.getItem("org_id") != null && sessionStorage.getItem("org_id") != ""}
       <script>
         window.location.href = "/volunteers/navigation"
       </script>

@@ -21,6 +21,7 @@
 	let email = '';
 	var org_id = '';
 
+  // Triggered when page is loaded
 	onMount(async () => {
 		console.log('This is onMount');
 		let val = sessionStorage.getItem('user');
@@ -35,7 +36,7 @@
 	});
 
 	// Returns the id of the organization the user is a part of if they are a volunteer.
-	// If they're a normal user, returns false.
+	// If they're a normal user, returns <empty string>
 	async function is_volunteer() {
 		let vol_response = await fetch('http://127.0.0.1:5000/is_volunteer', {
 			method: 'POST',
@@ -48,13 +49,6 @@
 
 		const out = await vol_response.json();
 		console.log(out['org_id']);
-		// org_id = out['org_id'];
-		// console.log("Org ID before check: ", org_id);
-		// if (org_id === null) {
-		// 	org_id = '';
-		// }
-		// sessionStorage.setItem('org_id', org_id);
-		// console.log(org_id);
 	}
 
 	// Data struct to hold login info
@@ -100,10 +94,12 @@
 				body: JSON.stringify({ email: email })
 			});
 
+      // Get the organization id
 			const vol_out = await vol_response.json();
       console.log("vol_out.org_id: ", vol_out['org_id']);
       sessionStorage.setItem("org_id", vol_out['org_id']);
 
+      // Reload the page
 			window.location.href = '/';
 
 			console.log(`${out[0]} logged in`);

@@ -231,7 +231,7 @@ class SeatTaken(Exception):
 #       The only acceptable values for payment method are None, 'card', 'cash'
 #
 ###########################################################################
-def purchase_tickets(seat_ids, email, performance_id, payment_method):
+def purchase_tickets(seat_ids, email, payment_method, exchange_ids):
     # check that a valid payment_method was entered
     assert payment_method in Payment.all, "ERROR: payment method should be either " \
                                                       "None, 'card', 'check, or 'cash'. " \
@@ -256,6 +256,46 @@ def purchase_tickets(seat_ids, email, performance_id, payment_method):
     print(user_id)
 
     #assign tickets to the user
+    for seat_id in seat_ids:
+
+
+
+
+###########################################################################
+# Grab seat/ticket info for the user to select.
+# The returned information is used to populate the view
+#   of the seating selection chart
+###########################################################################
+def get_seating_chart(performance_id):
+
+    #get seating data from db
+    query_one = f"SELECT " \
+                f"id, row, number, x, y, price, section, user_id " \
+                f"FROM Seat WHERE performance_id={performance_id}"
+    results = Constants.query(query_one)
+
+
+    #transform the output to JSON
+    tickets = [] # tickets are stored here
+    for s in results: # iterate over all the seats
+        #create new seat and parse in the information
+        n = dict() # new seat
+        n['id'] = s[0]
+        n['row'] = s[1]
+        n['number'] = s[2]
+        n['x'] = s[3]
+        n['y'] = s[4]
+        n['price'] = s[5]
+        n['section'] = s[6]
+        n['user'] = s[7]
+        tickets.append(n)
+
+
+    #build output and return
+    out = json.dumps({'tickets': tickets})
+    return out
+
+
 
 
 
@@ -287,23 +327,20 @@ def test_purchase_tickets():
     purchase_tickets(1, 'brenda@gmail.com', 4, 'card')
 
 
+
+
+################################
+# test retrieving seating chart
+################################
+def test_seating_chart():
+    id = 15
+    result = get_seating_chart(id)
+    print(result)
+
+
 ################################
 # tests for this file
 ################################
 if __name__ == "__main__":
-    seats = []
-    #test_purchase_tickets()
-    seating_data = load_playhouse_data()
-    for key in seating_data:
-        #print(f'---{key}---')
-        for seat in seating_data[key]:
-            seats.append((seat['sec'], seat['number'], seat['row']))
-            #print(seat)
+    test_seating_chart()
 
-    for seat in seats:
-        print(seat)
-
-
-#Create a function for each venue, reutrn a list of seats (as a 3 tuple).
-# The values of the seat tuple are -> (section, number, row)
-#

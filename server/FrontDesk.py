@@ -73,6 +73,9 @@ def load_seats(performance_id):
     pass
 
 
+#TODO LOAD THE SEATS
+
+
 
 
 

@@ -5,35 +5,45 @@
 -->
 
 <script>
-    /**
-	 * @type {{ id: any; x: any; y: any; r: any; status: any; }}
-	 */
-     export let seat
+    import { SeatStore, addSeat, removeSeat } from '../stores/SeatStore.js'
 
-     export const states = {
+    /**
+	* @type {{ id: any; x: any; y: any; r: any; status: any; }}
+	*/
+    export let seat
+    /**
+	* @type {[{ seat_id: any; user_id: any; performance_id: any; price: any }]}
+	*/
+    // @ts-ignore
+    export let ticket = {}
+    // @ts-ignore
+    const ticketSale = ![null].includes(ticket?.user_id)
+
+    export const states = {
         available: 'available',
         occupied: 'occupied', 
         selected: 'selected'
     }
 
-    let newSeat = seat
+    seat.status = ticketSale ? 'occupied' : 'available'
 
-    if (newSeat?.status === undefined) {
-        newSeat.status = 'available'
-    }
+    let mySeatStore
+    $: mySeatStore = $SeatStore //subscribe to seat store
 
-     //Change seat from available to selected and vice versa when clicked
-     function handleSeatClick() {
-        if (newSeat.status === states.available) {
-            newSeat.status = states.selected
-        } else if (newSeat.status === states.selected) {
-            newSeat.status = states.available
+    //Change seat from available to selected and vice versa when clicked
+    function handleSeatClick() {
+        if (seat.status === states.available) {
+            seat.status = states.selected
+            addSeat(seat) //add seat to seat store
+        } else if (seat.status === states.selected) {
+            seat.status = states.available
+            removeSeat(seat) //remove seat from seat store
         }
     }
 </script>
 
 <g on:click={handleSeatClick} on:keypress={handleSeatClick}>
-    {#if newSeat.status === states.available} <!-- Seat is blue if available -->
+    {#if seat.status === states.available} <!-- Seat is blue if available -->
         <circle 
             data-component="svg_seat" 
             id={seat.id}
@@ -43,7 +53,7 @@
             r={seat.r}
             fill="blue"
         />
-    {:else if newSeat.status === states.selected} <!-- Seat is green if selected -->
+    {:else if seat.status === states.selected} <!-- Seat is green if selected -->
         <circle 
             data-component="svg_seat" 
             id={seat.id}

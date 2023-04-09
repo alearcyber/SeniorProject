@@ -8,10 +8,20 @@
     import { page } from '$app/stores'
     import { writable } from 'svelte/store';
 
+
+  //Hide volunteer tab
+  let visible = false;
+
+  function toggleVissible() {
+      visible = !visible
+  }
+
+
     // Data struct to hold login info
     let login_info = {
       email: "", 
-      password: ""
+      password: "",
+      venue_id: ""
     };
 
     // --------------
@@ -45,7 +55,16 @@
         valid_email_passw = false;
         is_logged_in = false;
         is_logging_in = true;
+        visible = false;
       }
+
+      if (login_info.venue_id == "") {
+       visible = false;
+      } else {
+        visible = true;
+      }
+
+
     }
 
     // Data struct to hold signup info
@@ -77,8 +96,10 @@
       // This can likely be moved serverside.
       if (signup_info.venue_id == "") {
         signup_info.level = 1;
+        visible = false;
       } else {
         signup_info.level = 2;
+        visible = true;
       }
 
       // Make a request to the server with the signup info
@@ -100,9 +121,11 @@
       // logged in throughout their session.
       if (out === 'account_exists') {
         does_email_exist = true;
+        visible = false;
         return out;
       } else if (out === 'invalid_email') {
         is_valid_email = false;
+        visible = false;
         return out;
       } else {
         does_email_exist = false;
@@ -110,6 +133,7 @@
         sessionStorage.setItem("user", signup_info.email);
         is_creating_acct = false; // Closes the modal window
         is_logged_in = true;
+        visible = true;
         first_name = signup_info.fname;
       }
 
@@ -121,6 +145,7 @@
       is_logged_in = false;
       sessionStorage.removeItem("user");
       first_name = ""
+      visible = false;
     }
 
     let is_logging_in = false 
@@ -264,6 +289,8 @@
       <NavLi href="/shows" active={$page.url.pathname === "/shows" }>SHOWS</NavLi>
       <NavLi href="/tickets" active={$page.url.pathname === "/tickets"}>BUY TICKETS</NavLi>
       <NavLi href="/help" active={$page.url.pathname === "/contact"}>HELP</NavLi>
-      <NavLi href="/volunteers" active={$page.url.pathname === "/contact"}>VOLUNTEERS</NavLi>
+      {#if visible}
+        <NavLi href="/volunteers/navigation" active={$page.url.pathname === "/contact"}>VOLUNTEERS</NavLi>
+      {/if}
     </NavUl>
   </Navbar>

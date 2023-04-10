@@ -6,16 +6,16 @@
 
 <script>
     /**
-     * imgURL is type String
-	 * @type {String}
-	 */
-     export let imgUrl
+    * imgURL is type String
+	* @type {String}
+	*/
+    export let imgUrl
 
     /**
-     * imgTitle is type String
-	 * @type {String}
-	 */
-     export let imgTitle = 'image'
+    * imgTitle is type String
+	* @type {String}
+	*/
+    export let imgTitle = 'image'
 </script>
 
 <!-- Create cards -->

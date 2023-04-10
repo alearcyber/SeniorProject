@@ -5,16 +5,23 @@
 
 <script>
     import Seat from "../components/Seat.svelte"
+    import { clear } from '../stores/SeatStore.js'
+    import { onDestroy } from 'svelte'
 
     /**
-	 * @type {{ left_orch: any; main_orch: any; right_orch: any; balc: any; left_loge: any; right_loge: any; left_box: any; right_box: any; }}
-	 */
-     export let seats
+	* @type {{ left_orch: any; main_orch: any; right_orch: any; balc: any; left_loge: any; right_loge: any; left_box: any; right_box: any; }}
+	*/
+    export let seats
 
-     /**
-	 * @type {{ [x: string]: any; }}
-	 */
-      export let tickets
+    /**
+	* @type {{ [x: string]: any; }}
+	*/
+    export let tickets
+
+    //clear the seat store when page is left
+    onDestroy(() => {
+		clear()
+	})
 </script>
 
 
@@ -108,46 +115,47 @@
         class="hover:opacity-60"
         />
     </g>
+    <!-- Add seats to the different sections -->
     <g class="seats">
         <g data-component="svg_block" data-section-name="ORCHL" data-section-id="s_1" class="section" >
             {#each seats.left_orch as seat}
-                <Seat seat={seat} ticket={tickets[seat?.id] ?? {}} />
+                <Seat bind:seat={seat} ticket={tickets[seat?.id] ?? {}} />
             {/each}
         </g>
         <g data-component="svg_block" data-section-name="ORCH" data-section-id="s_2" class="section" >
             {#each seats.main_orch as seat}
-                <Seat seat={seat} ticket={tickets[seat?.id] ?? {}} />
+                <Seat bind:seat={seat} ticket={tickets[seat?.id] ?? {}} />
             {/each}
         </g>
         <g data-component="svg_block" data-section-name="ORCHR" data-section-id="s_3" class="section" >
             {#each seats.right_orch as seat}
-                <Seat seat={seat} ticket={tickets[seat?.id] ?? {}} />
+                <Seat bind:seat={seat} ticket={tickets[seat?.id] ?? {}} />
             {/each}
         </g>
         <g data-component="svg_block" data-section-name="BALC" data-section-id="s_4" class="section" >
             {#each seats.balc as seat}
-                <Seat seat={seat} ticket={tickets[seat?.id] ?? {}} />
+                <Seat bind:seat={seat} ticket={tickets[seat?.id] ?? {}} />
             {/each}
         </g>
         <g data-component="svg_block" data-section-name="LLOGE" data-section-id="s_5" class="section" >
             {#each seats.left_loge as seat}
-                <Seat seat={seat} ticket={tickets[seat?.id] ?? {}} />
+                <Seat bind:seat={seat} ticket={tickets[seat?.id] ?? {}} />
             {/each}
         </g>
         <g data-component="svg_block" data-section-name="RLOGE" data-section-id="s_6" class="section" >
             {#each seats.right_loge as seat}
-                <Seat seat={seat} ticket={tickets[seat?.id] ?? {}} />
+                <Seat bind:seat={seat} ticket={tickets[seat?.id] ?? {}} />
             {/each}
         </g>
         <g data-component="svg_block" data-section-name="BOXL" data-section-id="s_7" class="section" >
             {#each seats.left_box as seat}
-                <Seat seat={seat} ticket={tickets[seat?.id] ?? {}} />
+                <Seat bind:seat={seat} ticket={tickets[seat?.id] ?? {}} />
             {/each}
         </g>
         <g data-component="svg_block" data-section-name="BOXR" data-section-id="s_8" class="section" >
             {#each seats.right_box as seat}
-                <Seat seat={seat} ticket={tickets[seat?.id] ?? {}} />
+                <Seat bind:seat={seat} ticket={tickets[seat?.id] ?? {}} />
             {/each}
         </g>
     </g>
-    </svg>
+</svg>

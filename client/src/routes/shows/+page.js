@@ -1,5 +1,3 @@
-// @ts-ignore
-
 export async function load({ fetch }) {
     try {
         const response = await fetch('http://127.0.0.1:5000/upcomingperformances') //call the api

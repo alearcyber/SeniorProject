@@ -7,16 +7,21 @@
 <script>
     import { Button, Heading } from "flowbite-svelte"
     import Center from '../../layouts/center.svelte' //import Center layout
-    import { onMount } from "svelte"; //call onMount to do things when the page is loaded
-    import ShowCard from "../../components/ShowCard.svelte" //import showcard indicator
+
+
+    //import { onMount } from "svelte"; //call onMount to do things when the page is loaded
+    //import ShowCard from "../../components/ShowCard.svelte" //import showcard indicator
 
     /**
      * 'data' is assigned by the JS in page.js, which makes an API call to retun the JSON info. The 'shows' value is a
      * list of the upcoming shows.
      */
-    export let data;
-    const shows = data.shows;
+    //export let data;
+    //const shows = data.shows;
 
+
+    import { events } from '../../show_data/+server.js' //import show_data file
+    import ShowCard from "../../components/ShowCard.svelte" //import showcard indicator
 </script>
 
 <Center>

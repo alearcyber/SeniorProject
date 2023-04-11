@@ -28,8 +28,8 @@ export async function load() {
         seats: {
            left_orch: [
             {x: '2341.05', y: '4995.57', r: "68.5", sec: 'SEC1', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 1},
-            {x: '2290.97', y: '5152.51', r: "68.5", sec: 'SEC1', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 2},
-            {x: '2235.12', y: '5307.48', r: "68.5", sec: 'SEC1', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 3},
+            {x: '2290.97', y: '5152.51', r: "68.5", sec: 'SEC1', row: 'A', seat: 2, venue: 'Civic Center Playhouse', id: 2},
+            {x: '2235.12', y: '5307.48', r: "68.5", sec: 'SEC1', row: 'A', seat: 13, venue: 'Civic Center Playhouse', id: 3},
             {x: '2173.57', y: '5460.27', r: "68.5", sec: 'SEC1', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 4},
             {x: '2106.42', y: '5610.7', r: "68.5", sec: 'SEC1', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 5},
             {x: '2033.74', y: '5758.52', r: "68.5", sec: 'SEC1', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 6},

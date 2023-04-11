@@ -98,7 +98,7 @@ def seating_chart():
     data = request.get_json()
     performance_id = data['performance_id']
     print("Received request for seating data for peformance of id", performance_id)
-    result = PurchaseTickets.get_seating_chart(performance_id)
+    result = PurchaseTickets.seating_chart_f(performance_id)
     return result
 
 

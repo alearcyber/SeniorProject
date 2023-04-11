@@ -78,22 +78,14 @@
 
 
         <!-- Venue Field -->
+
         <Label class="space-y-2">
           <span>Venue</span>
           <Input type="text" name="venue" bind:value={venue_input} placeholder="Civic Center Playhouse" required />
         </Label>
 
-        <!-- Start Date Field -->
-        <Label class="space-y-2">
-            <span>Starting Date</span>
-            <Input type="text" name="start_date" placeholder="MM/DD/YYYY" required />
-        </Label>
 
-          <!-- End Date Field -->
-        <Label class="space-y-2">
-            <span>Ending Date</span>
-            <Input type="text" name="end_date" placeholder="MM/DD/YYYY"  required />
-        </Label>
+
 
         <h3 class="text-xl font-medium text-gray-900 dark:text-white p-0">Performance</h3>
 

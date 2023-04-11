@@ -12,6 +12,35 @@
     import { SeatStore, removeSeat } from '../../stores/SeatStore.js'
     import Legend from "../../components/Legend.svelte"
     import { XMark } from 'svelte-heros-v2'
+	import { onMount } from 'svelte';
+    import { page } from '$app/stores';
+
+
+    const url = $page.url;
+    console.log(url.searchParams.get('id')); // John
+
+
+    /**
+	onMount(async () => {
+	    try {
+            let content = {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({performance_id: })
+            };
+	        const response = await fetch('http://127.0.0.1:5000/performance') //call the api
+            const json = await response.json() // wait for response and parse the json
+            return json; // return the json
+
+        } catch (error) {
+            console.log("AN ERROR HAPPENED:", error)
+        }
+	    });
+     */
+
+
+
+
 
     /**
 	* @type {{ seats: {}; tickets: Array<{}>; performance: {title: string;}; }}

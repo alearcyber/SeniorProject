@@ -436,7 +436,7 @@ def seating_chart_f(performance_id):
         seats[sec].append(new_seat)
 
     #combine data into one map
-    data = {'tickets': tickets, 'seats':seats}
+    data = {'performance':performance, 'tickets': tickets, 'seats':seats}
     return data
 
 

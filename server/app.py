@@ -103,6 +103,18 @@ def seating_chart():
 
 
 
+###########################################
+# list of upcoming performances
+###########################################
+@app.route("/upcoming_peformances", methods=['GET'])
+def upcoming_performances():
+    print('LOG: Received request for upcoming performances')
+    data = PurchaseTickets.upcoming_performances()
+    out = json.dumps(data, indent=4)
+    return out
+
+
+
 
 
 

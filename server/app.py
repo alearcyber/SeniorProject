@@ -5,6 +5,7 @@ import json
 import Queries
 from database.user.sign_up import sign_up_user
 from database.user.login import login_user
+import PurchaseTickets
 
 app = Flask(__name__, template_folder='templates', static_folder='templates')
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -82,6 +83,25 @@ def signup():
                      user_data['venue_id'])
 
     return json.dumps(result, indent=4)
-    
+
+
+
+
+
+###########################################
+# Get the seating chart for a performance
+# expected request body:
+#   {performance_id: n}
+###########################################
+@app.route("/get_seating_chart", methods=['POST'])
+def seating_chart():
+    data = request.get_json()
+    performance_id = data['performance_id']
+    print("Received request for seating data for peformance of id", performance_id)
+    result = PurchaseTickets.get_seating_chart(performance_id)
+    return result
+
+
+
 if __name__ == '__main__':
     app.run()

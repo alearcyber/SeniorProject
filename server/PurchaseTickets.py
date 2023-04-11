@@ -257,6 +257,7 @@ def purchase_tickets(seat_ids, email, payment_method, exchange_ids):
 
     #assign tickets to the user
     for seat_id in seat_ids:
+        pass
 
 
 

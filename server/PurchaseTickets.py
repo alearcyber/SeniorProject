@@ -300,6 +300,69 @@ def get_seating_chart(performance_id):
 
 
 
+###########################################################################
+# List of upcoming performances so the user can select which
+#   one to purchase a ticket for.
+###########################################################################
+def upcoming_performances():
+    #query for upcoming shows
+    query_text = """
+    SELECT
+    prod.title, perf.time, prod.venue_id, perf.performance_id
+        FROM
+    Performance perf JOIN Production prod ON perf.production_id=prod.id
+        WHERE
+    perf.time > datetime()
+    """
+
+    #mapping month number to month string
+    months = ['nada', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
+              'September', 'October', 'November', 'December']
+
+    #execute and grab the results
+    results = Constants.query(query_text)
+    formatted_results = []
+    for r in results:
+        title = r[0]
+        datetime = r[1]
+        venue = 'Civic Center Playhouse' if r[2] == 2 else 'Civic Center Concert Hall'
+        performance_id = r[3]
+
+        #make datetime into date and time
+        tokens = datetime.split(' ') # split on the space
+        date = tokens[0]
+        time = tokens[1]
+        d_tokens = date.split('-')
+        t_tokens = time.split(':')
+
+        #date
+        month = months[int(d_tokens[1])]
+        year = d_tokens[0]
+        day = d_tokens[2]
+
+        #time
+        hour = int(t_tokens[0])
+        min = t_tokens[1]
+        suffix = 'a.m.'
+        if hour == 12:
+            suffix = 'p.m.'
+        elif hour > 12:
+            hour = hour - 12
+            suffix = 'p.m.'
+
+        #formatting
+        date = f'{month} {day}, {year}'  #example: "May 3, 2023"
+        time = f'{hour}:{min} {suffix}'  #example: "6:00 p.m."
+
+        #append new map
+        #example name: "Hamilton", date: "May 7", time: "6:00 p.m.", venue: "Civic Center Concert Hall", performance_id: "2"
+        new_result = {'name': title, 'date': date, 'time': time, 'venue':venue, 'performance_id':performance_id}
+        formatted_results.append(new_result)
+
+    #return the results in the appropraite format
+    return formatted_results
+
+
 
 
 
@@ -308,6 +371,15 @@ def get_seating_chart(performance_id):
 ##########################################################################################
 #####################################   TESTS    #########################################
 ##########################################################################################
+
+
+#test upcoming performances
+def test_upcoming_performances():
+    results = upcoming_performances()
+    for r in results:
+        print(r)
+
+
 
 
 ############################
@@ -343,5 +415,5 @@ def test_seating_chart():
 # tests for this file
 ################################
 if __name__ == "__main__":
-    test_seating_chart()
+    test_upcoming_performances()
 

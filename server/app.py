@@ -103,5 +103,13 @@ def seating_chart():
 
 
 
+
+
+
+#for the BUY TICKETS page at the top
+
+
+
+
 if __name__ == '__main__':
     app.run()

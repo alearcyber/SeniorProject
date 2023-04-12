@@ -10,14 +10,15 @@ def login_user(email, password):
   #  Query the database: try to get one first_name from it with the given email and password
   connection = sqlite3.connect("database.db")
   cursor = connection.cursor()
-  res = cursor.execute("SELECT first_name FROM user WHERE email=? AND password=?", (email, password))
-  name = res.fetchone()
+  res = cursor.execute("SELECT first_name,level FROM user WHERE email=? AND password=?", (email, password))
+  user_info = res.fetchone()
+  print(user_info)
 
   # Case where the db returned a name
-  if (name != None):
-    print("Success: " + name[0])
+  if (user_info != None):
+    print("Success: " + user_info[0])
     connection.close()
-    return name[0]
+    return user_info
   else:
   # Case where the db returned None
     print("Failed")

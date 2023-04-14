@@ -6,6 +6,7 @@ import Queries
 import Constants
 from database.user.sign_up import sign_up_user
 from database.user.login import login_user
+from Scheduling import create_new_production
 
 app = Flask(__name__, template_folder='templates', static_folder='templates')
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -102,6 +103,13 @@ def is_volunteer():
 
     return json.dumps({'org_id': org_id})
 
+@app.route("/create_production", methods=['GET', 'POST'])
+def create_production():
+    data = request.get_json()
+    result = create_new_production(data['title'], data['venue_id'], 
+                                   data['org_id'], data['image'], data['desc'], 
+                                   data['duration'], data['times'])
+    return json.dumps(result)
 
 if __name__ == '__main__':
     app.run()

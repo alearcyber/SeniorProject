@@ -4,19 +4,20 @@
 -->
 
 <script>
-    import { Label, Input, Textarea, Button, Card, Heading, List, DescriptionList } from 'flowbite-svelte'
+    import { Label, Input, Button, Listgroup, Checkbox } from 'flowbite-svelte'
+    
+    //hard coded event data that will eventually be received from database
+    let list = [
+        { name: "Phantom of the Opera"
+        },
+        { name: "Hamilton"
+        },
+        { name: "Wicked"
+        },
+    ]
 
-    let values=[{
-       "title": "",
-    }]; 
-        
-    const addField = () => {
-       values = [...values, {title: ''}]
-    };
-        
-    const removeField = () => {
-       values = values.slice(0, values.length-1)
-    };
+    
+    let selected = [""];
 </script>
   
 <div class="mb-10 flex justify-center" >
@@ -36,21 +37,17 @@
           <Input type="text" name="organization" placeholder="" required />
         </Label>
 
-        <!-- Production Name Field -->
-        {#each values as v, i}
-        <div>
-            <Label class="space-y-2">
-                <span>Production Title</span>
-                <Input type="text" name="production_name" bind:value={values[i].title} placeholder="" required />
-            </Label>
-        </div>
-        {/each}
-        {#if values.length >= 2}
-        <Button style="width: 200px" color="light" on:click={removeField}>Remove Production -</Button>
-        {/if}
-        <Button style="width: 200px" color="dark" on:click={addField}>Add Production +</Button>
+        <!-- Production List -->
+        <Label class="space-y-2">
+        <span> Production List</span>
+            {#each list as item}
+                <div class="d-flex justify-space-around">
+                    <Checkbox bind:group={selected} value={item.name}/> {item.name}<br>
+                </div>
+            {/each}   
+        </Label>
 
-
+        
         <!-- Create Season button -->
         <Button type="submit" class="w-full1">Create Season</Button>
     </form>

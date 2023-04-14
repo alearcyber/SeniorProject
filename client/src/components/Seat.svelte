@@ -5,6 +5,8 @@
 -->
 
 <script>
+// @ts-nocheck
+
     import { SeatStore, addSeat, removeSeat } from '../stores/SeatStore.js'
 
     /**
@@ -34,7 +36,7 @@
     function handleSeatClick() {
         if (seat.status === states.available) {
             seat.status = states.selected
-            addSeat(seat) //add seat to seat store
+            addSeat({...seat, price: ticket.price}) //add seat to seat store
         } else if (seat.status === states.selected) {
             seat.status = states.available
             removeSeat(seat) //remove seat from seat store

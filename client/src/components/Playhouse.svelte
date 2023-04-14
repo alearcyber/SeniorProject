@@ -6,7 +6,7 @@
 <script>
     import Seat from "../components/Seat.svelte"
     import { clear } from '../stores/SeatStore.js'
-    import { onDestroy } from 'svelte'
+    import { onMount } from 'svelte'
 
     /**
 	* @type {{ left_orch: any; main_orch: any; right_orch: any; balc: any; left_loge: any; right_loge: any; left_box: any; right_box: any; }}
@@ -19,7 +19,7 @@
     export let tickets
 
     //clear the seat store when page is left
-    onDestroy(() => {
+    onMount(() => {
 		clear()
 	})
 </script>

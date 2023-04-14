@@ -91,7 +91,7 @@
 		let end_date = Date.parse(end_date_str);
 		production_info.duration = (end_date - start_date) / 8.64e7;
 
-        // 
+        // Record each performance time
         for (let i in performances) {
             let performance_date = new Date(performances[i].date + " " + performances[i].time);
             production_info.times.push(performance_date.toISOString());
@@ -99,7 +99,7 @@
 
         console.log(production_info);
 
-		let response = await fetch('http://127.0.0.1/create_production', {
+		let response = await fetch('http://127.0.0.1:5000/create_production', {
 			method: 'POST',
 			headers: {
 				Accept: 'application/json',
@@ -110,6 +110,7 @@
 
         const out = await response.json();
         console.log(out);
+		return out;
 	}
 </script>
 
@@ -315,6 +316,6 @@
 		<Button style="width: 200px" color="dark" on:click={addField}>Add Performance +</Button>
 
 		<!-- Create Production button -->
-		<Button class="w-full1" type="submit" on:click={create_production}>Create Production</Button>
+		<Button class="w-full1" on:click={create_production}>Create Production</Button>
 	</form>
 </div>

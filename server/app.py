@@ -107,10 +107,10 @@ def is_volunteer():
 def create_production():
     data = request.get_json()
     print(data)
-    # result = create_new_production(data['title'], data['venue_id'], 
-    #                                data['org_id'], data['image'], data['desc'], 
-    #                                data['duration'], data['times'])
-    # return json.dumps(result)
+    result = create_new_production(data['title'], data['venue_id'], 
+                                   data['org_id'], data['image'], data['description'], 
+                                   data['duration'], data['times'])
+    return json.dumps(result)
 
 if __name__ == '__main__':
     app.run()

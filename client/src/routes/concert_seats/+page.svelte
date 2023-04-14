@@ -10,7 +10,6 @@
 	import TicketCard from "../../components/TicketCard.svelte"
     import { SeatStore } from '../../stores/SeatStore.js'
     import Legend from "../../components/Legend.svelte"
-    import { XMark } from 'svelte-heros-v2'
 
     /**
 	* @type {{ seats: {}; tickets: Array<{}>; performance: {title: string;}; }}
@@ -56,15 +55,13 @@
             {#each mySeatStore as { id, sec, row, seat } }
                 {#if seat } 
                     <ListgroupItem class="text-base font-semibold gap-2">
-                        <div class="relative">
-                            <Button pill={true} class="!p-2 absolute right-0">
-                                <XMark class="text-white h-5 w-5" />
-                            </Button>
-                        </div>
                         <TicketCard section={sec} row={row} seat={seat} price={tickets[id]?.price ?? 0} />
                     </ListgroupItem>
                 {/if}
             {/each}
         </Listgroup>
+        <div>
+            <Button class="w-full h-full" size="sm" href="/payment">Buy Tickets</Button>
+        </div>
     </div>
 </div>

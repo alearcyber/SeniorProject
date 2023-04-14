@@ -7,7 +7,7 @@
 
 <script>
     // @ts-nocheck
-    import { Button, Card, Table, TableHead, TableBody, TableHeadCell, TableBodyCell, TableBodyRow } from "flowbite-svelte"
+    import { Card, Table, TableHead, TableBody, TableHeadCell, TableBodyCell, TableBodyRow } from "flowbite-svelte"
 
     export let section
     export let row
@@ -37,9 +37,8 @@
         </Table>
 
         <!-- Price of ticket and add to cart button -->
-        <div class="flex content-center justify-between pt-6">
+        <div class="flex content-center justify-end pt-6">
             <h1 class="text-lg">${price}</h1>
-            <Button class="w-28" size="sm">Add to Cart</Button>
         </div>
     </Card> 
 </div>

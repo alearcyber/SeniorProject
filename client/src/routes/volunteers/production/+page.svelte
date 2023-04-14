@@ -8,23 +8,20 @@
 	import {
 		Label,
 		Input,
-		Textarea,
 		Button,
-		Card,
-		Heading,
-		List,
-		DescriptionList
+		Radio,
+		Textarea,
 	} from 'flowbite-svelte';
 
-    let production_info = {
-        title: "",
-        venue_id: "",
-        org_id: "",
-        image: "",
-        description: "",
-        duration: "",
-        times: [],
-    }
+	let production_info = {
+		title: '',
+		venue_id: '',
+		org_id: '',
+		image: '',
+		description: '',
+		duration: '',
+		times: []
+	};
 
 	let values = [
 		{
@@ -42,16 +39,28 @@
 	const removeField = () => {
 		values = values.slice(0, values.length - 1);
 	};
-	let venue_input;
+
+	const venue_options = [
+		{
+			value: '1',
+			text: 'Civic Center Concert Hall'
+		},
+		{
+			value: '2',
+			text: 'Civic Center Playhouse'
+		}
+	];
 
 	let input;
 	let container;
 	let image;
-	let placeholder;
 	let showImage = false;
+
+	let start_date_str, end_date;
 
 	function onChange() {
 		const file = input.files[0];
+		production_info.image = file.name;
 
 		if (file) {
 			showImage = true;
@@ -61,6 +70,7 @@
 				image.setAttribute('src', reader.result);
 			});
 			reader.readAsDataURL(file);
+			console.log(file);
 
 			return;
 		}
@@ -68,13 +78,23 @@
 	}
 
 	async function create_production() {
-		let response = await fetch('http://127.0.0.1/create_production', {
-			method: 'POST',
-			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json'
-			}
-		});
+        console.log("Creating production...")
+		// Get org id from sessionStorage
+		let org_id = sessionStorage.getItem('org_id');
+		if (org_id != undefined) {
+			production_info.org_id = parseInt(org_id);
+		} else {
+			console.error('Invalid organization ID');
+		}
+
+        console.log();
+		// let response = await fetch('http://127.0.0.1/create_production', {
+		// 	method: 'POST',
+		// 	headers: {
+		// 		Accept: 'application/json',
+		// 		'Content-Type': 'application/json'
+		// 	}
+		// });
 	}
 </script>
 
@@ -86,7 +106,13 @@
 		<!-- Production Title Field -->
 		<Label class="space-y-2">
 			<span>Production Title</span>
-			<Input type="text" name="production_name" placeholder="" required />
+			<Input
+				type="text"
+				name="production_name"
+				placeholder=""
+				bind:value={production_info.title}
+				required
+			/>
 		</Label>
 
 		<!-- Production Image Field -->
@@ -101,27 +127,28 @@
 		</Label>
 
 		<!-- Venue Field -->
-		<Label class="space-y-2">
-			<span>Venue</span>
-			<Input
-				type="text"
-				name="venue"
-				bind:value={venue_input}
-				placeholder="Civic Center Playhouse"
-				required
-			/>
-		</Label>
+        <Label class="space-y-2">
+            <span>Venue</span>
+        </Label>
+        <Radio name="venue" on:click={() => {production_info.venue_id = 1}}>Civic Center Concert Hall</Radio>
+        <Radio name="venue" on:click={() => {production_info.venue_id = 2}}>Civic Center Playhouse</Radio>
 
-		<!-- Start Date Field -->
+		 <!-- Start Date Field -->
 		<Label class="space-y-2">
 			<span>Starting Date</span>
-			<Input type="text" name="start_date" placeholder="MM/DD/YYYY" required />
+			<Input type="date" name="start_date" bind:value={start_date_str} required />
 		</Label>
 
 		<!-- End Date Field -->
 		<Label class="space-y-2">
 			<span>Ending Date</span>
-			<Input type="text" name="end_date" placeholder="MM/DD/YYYY" required />
+			<Input type="date" name="end_date" bind:value={end_date} required />
+		</Label>
+
+        <!-- Description Field -->
+        <Label class="space-y-2">
+			<span>Description</span>
+			<Textarea name="prod_desc" placeholder="A description of the types of shows in this production" required />
 		</Label>
 
 		<h3 class="text-xl font-medium text-gray-900 dark:text-white p-0">Performance</h3>
@@ -157,7 +184,7 @@
 
 					<!-- Section Prices' Field -->
 					<h3 class=" text-xl font-medium text-gray-900 dark:text-white p-0">Sections</h3>
-					{#if venue_input == 'Civic Center Playhouse'}
+					{#if production_info.venue_id == 1}
 						<span>Orchestra Price</span>
 						<Input
 							type="text"
@@ -198,7 +225,7 @@
 							placeholder="$"
 							required
 						/>
-					{:else if venue_input == 'Civic Center Concert Hall'}
+					{:else if production_info.venue_id == 2}
 						<span>Orchestra Price</span>
 						<Input
 							type="text"
@@ -258,6 +285,6 @@
 		<Button style="width: 200px" color="dark" on:click={addField}>Add Performance +</Button>
 
 		<!-- Create Production button -->
-		<Button type="submit" class="w-full1">Create Production</Button>
+		<Button class="w-full1" on:click={create_production}>Create Production</Button>
 	</form>
 </div>

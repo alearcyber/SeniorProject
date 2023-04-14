@@ -31,6 +31,12 @@
                 <img src="../frontdesk.jpg" class="mr-3 h-24 sm:h-24" alt="logo" style=" height:250px" />
                 <a href="/volunteers/frontdesk" class="text-4xl text-blue-700 hover:underline dark:text-blue-500">Manage Front Desk</a>
             </Card> 
+
+            <!-- Import/Export -->
+            <Card class="flex flex-col space-y-5" style="width: 500px">
+                <img src="../started_logo.jpg" class="mr-3 h-24 sm:h-24" alt="logo" style=" height:250px" />
+                <a href="/volunteers/importexport" class="text-4xl text-blue-700 hover:underline dark:text-blue-500">Import/Export Database</a>
+            </Card> 
         </div>
     </div>  
     

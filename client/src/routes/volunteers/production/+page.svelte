@@ -5,13 +5,7 @@
 <script>
 	// @ts-nocheck
 
-	import {
-		Label,
-		Input,
-		Button,
-		Radio,
-		Textarea,
-	} from 'flowbite-svelte';
+	import { Label, Input, Button, Radio, Textarea } from 'flowbite-svelte';
 
 	let production_info = {
 		title: '',
@@ -19,25 +13,26 @@
 		org_id: '',
 		image: '',
 		description: '',
-		duration: '',
+		duration: 0,
 		times: []
 	};
 
-	let values = [
+	let performances = [
 		{
 			title: '',
 			date: '',
 			time: '',
-			seats: ''
+			seats: '',
+            sections: ''
 		}
 	];
 
 	const addField = () => {
-		values = [...values, { title: '', date: '', time: '', seats: '', sections: '' }];
+		performances = [...performances, { title: '', date: '', time: '', seats: '', sections: '' }];
 	};
 
 	const removeField = () => {
-		values = values.slice(0, values.length - 1);
+		performances = performances.slice(0, performances.length - 1);
 	};
 
 	const venue_options = [
@@ -54,12 +49,15 @@
 	let input;
 	let container;
 	let image;
+    let image_file;
 	let showImage = false;
 
-	let start_date_str, end_date;
+	let start_date_str, end_date_str;
 
 	function onChange() {
+		// Set image filename
 		const file = input.files[0];
+        image_file = file;
 		production_info.image = file.name;
 
 		if (file) {
@@ -78,7 +76,8 @@
 	}
 
 	async function create_production() {
-        console.log("Creating production...")
+		console.log('Creating production...');
+
 		// Get org id from sessionStorage
 		let org_id = sessionStorage.getItem('org_id');
 		if (org_id != undefined) {
@@ -87,14 +86,30 @@
 			console.error('Invalid organization ID');
 		}
 
-        console.log();
-		// let response = await fetch('http://127.0.0.1/create_production', {
-		// 	method: 'POST',
-		// 	headers: {
-		// 		Accept: 'application/json',
-		// 		'Content-Type': 'application/json'
-		// 	}
-		// });
+		// Calculate days between the dates
+		let start_date = Date.parse(start_date_str);
+		let end_date = Date.parse(end_date_str);
+		production_info.duration = (end_date - start_date) / 8.64e7;
+
+        // 
+        for (let i in performances) {
+            let performance_date = new Date(performances[i].date + " " + performances[i].time);
+            production_info.times.push(performance_date.toISOString());
+        }
+
+        console.log(production_info);
+
+		let response = await fetch('http://127.0.0.1/create_production', {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			},
+            body: JSON.stringify(production_info)
+		});
+
+        const out = await response.json();
+        console.log(out);
 	}
 </script>
 
@@ -127,13 +142,23 @@
 		</Label>
 
 		<!-- Venue Field -->
-        <Label class="space-y-2">
-            <span>Venue</span>
-        </Label>
-        <Radio name="venue" on:click={() => {production_info.venue_id = 1}}>Civic Center Concert Hall</Radio>
-        <Radio name="venue" on:click={() => {production_info.venue_id = 2}}>Civic Center Playhouse</Radio>
+		<Label class="space-y-2">
+			<span>Venue</span>
+		</Label>
+		<Radio
+			name="venue"
+			on:click={() => {
+				production_info.venue_id = 1;
+			}}>Civic Center Concert Hall</Radio
+		>
+		<Radio
+			name="venue"
+			on:click={() => {
+				production_info.venue_id = 2;
+			}}>Civic Center Playhouse</Radio
+		>
 
-		 <!-- Start Date Field -->
+		<!-- Start Date Field -->
 		<Label class="space-y-2">
 			<span>Starting Date</span>
 			<Input type="date" name="start_date" bind:value={start_date_str} required />
@@ -142,34 +167,39 @@
 		<!-- End Date Field -->
 		<Label class="space-y-2">
 			<span>Ending Date</span>
-			<Input type="date" name="end_date" bind:value={end_date} required />
+			<Input type="date" name="end_date" bind:value={end_date_str} required />
 		</Label>
 
-        <!-- Description Field -->
-        <Label class="space-y-2">
+		<!-- Description Field -->
+		<Label class="space-y-2">
 			<span>Description</span>
-			<Textarea name="prod_desc" placeholder="A description of the types of shows in this production" required />
+			<Textarea
+				name="prod_desc"
+				placeholder="A description of the types of shows in this production"
+				bind:value={production_info.description}
+				required
+			/>
 		</Label>
 
 		<h3 class="text-xl font-medium text-gray-900 dark:text-white p-0">Performance</h3>
 
 		<!-- Performance Field -->
-		{#each values as v, i}
+		{#each performances as v, i}
 			<div>
 				<Label class="space-y-2">
 					<span>Date</span>
 					<Input
-						type="text"
+						type="date"
 						name="performance_date"
-						bind:value={values[i].date}
+						bind:value={performances[i].date}
 						placeholder="MM/DD/YYYY"
 						required
 					/>
 					<span>Time</span>
 					<Input
-						type="text"
+						type="time"
 						name="performance_time"
-						bind:value={values[i].time}
+						bind:value={performances[i].time}
 						placeholder="X:XX p.m."
 						required
 					/>
@@ -177,7 +207,7 @@
 					<Input
 						type="text"
 						name="seat_price"
-						bind:value={values[i].seats}
+						bind:value={performances[i].seats}
 						placeholder="$"
 						required
 					/>
@@ -189,7 +219,7 @@
 						<Input
 							type="text"
 							name="orch_price"
-							bind:value={values[i].sections}
+							bind:value={performances[i].sections}
 							placeholder="$"
 							required
 						/>
@@ -197,7 +227,7 @@
 						<Input
 							type="text"
 							name="balcony_price"
-							bind:value={values[i].sections}
+							bind:value={performances[i].sections}
 							placeholder="$"
 							required
 						/>
@@ -205,7 +235,7 @@
 						<Input
 							type="text"
 							name="loge_price"
-							bind:value={values[i].sections}
+							bind:value={performances[i].sections}
 							placeholder="$"
 							required
 						/>
@@ -213,7 +243,7 @@
 						<Input
 							type="text"
 							name="box_price"
-							bind:value={values[i].sections}
+							bind:value={performances[i].sections}
 							placeholder="$"
 							required
 						/>
@@ -221,7 +251,7 @@
 						<Input
 							type="text"
 							name="handicap_price"
-							bind:value={values[i].sections}
+							bind:value={performances[i].sections}
 							placeholder="$"
 							required
 						/>
@@ -230,7 +260,7 @@
 						<Input
 							type="text"
 							name="orch_price"
-							bind:value={values[i].sections}
+							bind:value={performances[i].sections}
 							placeholder="$"
 							required
 						/>
@@ -238,7 +268,7 @@
 						<Input
 							type="text"
 							name="pit_price"
-							bind:value={values[i].sections}
+							bind:value={performances[i].sections}
 							placeholder="$"
 							required
 						/>
@@ -246,7 +276,7 @@
 						<Input
 							type="text"
 							name="lower_balcony_price"
-							bind:value={values[i].sections}
+							bind:value={performances[i].sections}
 							placeholder="$"
 							required
 						/>
@@ -254,7 +284,7 @@
 						<Input
 							type="text"
 							name="upper_balcony_price"
-							bind:value={values[i].sections}
+							bind:value={performances[i].sections}
 							placeholder="$"
 							required
 						/>
@@ -262,7 +292,7 @@
 						<Input
 							type="text"
 							name="loge_price"
-							bind:value={values[i].sections}
+							bind:value={performances[i].sections}
 							placeholder="$"
 							required
 						/>
@@ -270,7 +300,7 @@
 						<Input
 							type="text"
 							name="handicap_price"
-							bind:value={values[i].sections}
+							bind:value={performances[i].sections}
 							placeholder="$"
 							required
 						/>
@@ -278,13 +308,13 @@
 				</Label>
 			</div>
 		{/each}
-		{#if values.length >= 2}
+		{#if performances.length >= 2}
 			<Button style="width: 200px" color="light" on:click={removeField}>Remove Performance -</Button
 			>
 		{/if}
 		<Button style="width: 200px" color="dark" on:click={addField}>Add Performance +</Button>
 
 		<!-- Create Production button -->
-		<Button class="w-full1" on:click={create_production}>Create Production</Button>
+		<Button class="w-full1" type="submit" on:click={create_production}>Create Production</Button>
 	</form>
 </div>

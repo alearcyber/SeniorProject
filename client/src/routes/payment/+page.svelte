@@ -4,14 +4,25 @@
 -->
 
 <script>
-  import { Input, Label, Button, Select, Heading, P, Hr } from 'flowbite-svelte'
+  import { Input, Label, Button, Select, Heading, P, Hr, Checkbox } from 'flowbite-svelte'
 	import Center from '../../layouts/center.svelte' //import Center layout
   import Checkout from '../../components/Checkout.svelte'
   
   const button_alert = () => {
-    alert('Thank you for your purchase! Your order has been confirmed.');
+    alert('Thank you for your purchase! Your order has been confirmed.')
   };
+
+  let visible = true;
+
+  function toggleVisible() {
+      visible = !visible
+  }
+
 </script>
+
+<!-- GET RID OF THIS
+-->
+<Button class="w-full h-full" size="sm" href="/season_pass">Season Pass</Button> 
 
 <Center>
   <div class="grid grid-cols-2 gap-10">
@@ -59,20 +70,23 @@
             <Input type="text" id="country" placeholder="United States" required />
           </div>
         </div>
-        <div class="mb-6">
-          <Label for="card_number" class="mb-2">Card Number</Label>
-          <Input type="text" id="card_number" placeholder="**** **** **** ****" required />
-        </div>
-        <div class="grid gap-6 mb-6 md:grid-cols-2">
-          <div>
-            <Label for="date" class="mb-2">Expiration MM/YY</Label>
-            <Input type="text" id="date" placeholder="01/01" required />
+        {#if visible}
+          <div class="mb-6">
+            <Label for="card_number" class="mb-2">Card Number</Label>
+            <Input type="text" id="card_number" placeholder="**** **** **** ****" required />
           </div>
-          <div>
-            <Label for="security_code" class="mb-2">Security Code</Label>
-            <Input type="text" id="security_code" placeholder="***" required />
+          <div class="grid gap-6 mb-6 md:grid-cols-2">
+            <div>
+              <Label for="date" class="mb-2">Expiration MM/YY</Label>
+              <Input type="text" id="date" placeholder="01/01" required />
+            </div>
+            <div>
+              <Label for="security_code" class="mb-2">Security Code</Label>
+              <Input type="text" id="security_code" placeholder="***" required />
+            </div>
           </div>
-        </div>
+        {/if}
+        <Checkbox class="mb-4" on:change={toggleVisible}>I'm paying with cash or check</Checkbox>
         <Button type="submit" on:click={button_alert} href="/">Submit</Button>
       </form>
     </div>

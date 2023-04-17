@@ -75,13 +75,9 @@ def get_future_list_of_productions(email, org_id):
         raise InvalidPermission
 
 
-    query_text = "SELECT Performance.performance_id, Production.title " \
-    "FROM" \
-    "Performance JOIN Production ON Performance.production_id=Production.id" \
-    "WHERE" \
-    "Production.org_id=? AND Production.season_id IS NULL;"
+    query_text = "select title from Production where org_id=? and (select season_id from Production where org_id=?) IS NULL;"
 
-    result = query(query_text, (org_id,))
+    result = query(query_text, (org_id,org_id))
     return result
 
 

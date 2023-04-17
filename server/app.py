@@ -7,6 +7,7 @@ import Constants
 from database.user.sign_up import sign_up_user
 from database.user.login import login_user
 from Scheduling import create_new_production
+from CreateSeason import get_future_list_of_productions
 
 app = Flask(__name__, template_folder='templates', static_folder='templates')
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -110,6 +111,12 @@ def create_production():
     result = create_new_production(data['title'], data['venue_id'], 
                                    data['org_id'], data['image'], data['description'], 
                                    data['duration'], data['times'])
+    return json.dumps(result)
+
+@app.route('/get_productions/<email>:<org_id>')
+def get_productions(email, org_id):
+    result = get_future_list_of_productions(email, org_id)
+
     return json.dumps(result)
 
 if __name__ == '__main__':

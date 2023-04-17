@@ -22,6 +22,8 @@
         },
     ]
 
+    let org_name = "";
+
     async function get_production_list() {
         let email = sessionStorage.getItem("user");
         let org_id = sessionStorage.getItem("org_id");
@@ -29,12 +31,15 @@
 
         let response = await fetch(`http://127.0.0.1:5000/get_productions/${email}:${org_id}`);
         const out = await response.json();
-        console.log(out);
-        list = out;
-        return out;
+        console.log(out['production_list']);
+        list = out['production_list'];
+        org_name = out['org_name'];
+        return out
     }
     
-    
+    async function create_season() {
+
+    }
 
     
     let selected = [""];
@@ -53,8 +58,7 @@
 
         <!-- Organization Field -->
         <Label class="space-y-2">
-          <span>Organization</span>
-          <Input type="text" name="organization" placeholder="" required />
+          <span>Organization: {org_name}</span>
         </Label>
 
         <!-- Production List -->

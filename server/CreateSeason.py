@@ -60,6 +60,8 @@ def add_productions_to_season(productions, season_id):
     for production in productions:
         query("UPDATE Production SET season_id=? WHERE id=?", params=(season_id, production))
 
+def get_org_name(org_id):
+    return query("SELECT name FROM Organization WHERE org_id=?", params=(org_id,))
 
 def is_volunteer(email, org_id):
     return query(

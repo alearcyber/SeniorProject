@@ -23,12 +23,39 @@
 			date: '',
 			time: '',
 			seats: '',
-            sections: ''
+			section_prices: {
+				orchestra: 0,
+				balcony: 0,
+				loge: 0,
+				box: 0,
+				handicap: 0,
+				pit: 0,
+				lower_balcony: 0,
+				upper_balcony: 0
+			}
 		}
 	];
 
 	const addField = () => {
-		performances = [...performances, { title: '', date: '', time: '', seats: '', sections: '' }];
+		performances = [
+			...performances,
+			{
+				title: '',
+				date: '',
+				time: '',
+				seats: '',
+				section_prices: {
+					orchestra: 0,
+					balcony: 0,
+					loge: 0,
+					box: 0,
+					handicap: 0,
+					pit: 0,
+					lower_balcony: 0,
+					upper_balcony: 0
+				}
+			}
+		];
 	};
 
 	const removeField = () => {
@@ -49,7 +76,7 @@
 	let input;
 	let container;
 	let image;
-    let image_file;
+	let image_file;
 	let showImage = false;
 
 	let start_date_str, end_date_str;
@@ -57,7 +84,7 @@
 	function onChange() {
 		// Set image filename
 		const file = input.files[0];
-        image_file = file;
+		image_file = file;
 		production_info.image = file.name;
 
 		if (file) {
@@ -91,13 +118,13 @@
 		let end_date = Date.parse(end_date_str);
 		production_info.duration = (end_date - start_date) / 8.64e7;
 
-        // Record each performance time
-        for (let i in performances) {
-            let performance_date = new Date(performances[i].date + " " + performances[i].time);
-            production_info.times.push(performance_date.toISOString());
-        }
+		// Record each performance time
+		for (let i in performances) {
+			let performance_date = new Date(performances[i].date + ' ' + performances[i].time);
+			production_info.times.push(performance_date.toISOString());
+		}
 
-        console.log(production_info);
+		console.log(production_info);
 
 		let response = await fetch('http://127.0.0.1:5000/create_production', {
 			method: 'POST',
@@ -105,11 +132,11 @@
 				Accept: 'application/json',
 				'Content-Type': 'application/json'
 			},
-            body: JSON.stringify(production_info)
+			body: JSON.stringify(production_info)
 		});
 
-        const out = await response.json();
-        console.log(out);
+		const out = await response.json();
+		console.log(out);
 		return out;
 	}
 </script>
@@ -218,9 +245,9 @@
 					{#if production_info.venue_id == 1}
 						<span>Orchestra Price</span>
 						<Input
-							type="text"
+							type="number"
 							name="orch_price"
-							bind:value={performances[i].sections}
+							bind:value={performances[i].section_prices.orchestra}
 							placeholder="$"
 							required
 						/>
@@ -228,7 +255,7 @@
 						<Input
 							type="text"
 							name="balcony_price"
-							bind:value={performances[i].sections}
+							bind:value={performances[i].section_prices.balcony}
 							placeholder="$"
 							required
 						/>
@@ -236,7 +263,7 @@
 						<Input
 							type="text"
 							name="loge_price"
-							bind:value={performances[i].sections}
+							bind:value={performances[i].section_prices.loge}
 							placeholder="$"
 							required
 						/>
@@ -244,7 +271,7 @@
 						<Input
 							type="text"
 							name="box_price"
-							bind:value={performances[i].sections}
+							bind:value={performances[i].section_prices.box}
 							placeholder="$"
 							required
 						/>
@@ -252,7 +279,7 @@
 						<Input
 							type="text"
 							name="handicap_price"
-							bind:value={performances[i].sections}
+							bind:value={performances[i].section_prices.handicap}
 							placeholder="$"
 							required
 						/>
@@ -261,7 +288,7 @@
 						<Input
 							type="text"
 							name="orch_price"
-							bind:value={performances[i].sections}
+							bind:value={performances[i].section_prices.orchestra}
 							placeholder="$"
 							required
 						/>
@@ -269,7 +296,7 @@
 						<Input
 							type="text"
 							name="pit_price"
-							bind:value={performances[i].sections}
+							bind:value={performances[i].section_prices.pit}
 							placeholder="$"
 							required
 						/>
@@ -277,7 +304,7 @@
 						<Input
 							type="text"
 							name="lower_balcony_price"
-							bind:value={performances[i].sections}
+							bind:value={performances[i].section_prices.lower_balcony}
 							placeholder="$"
 							required
 						/>
@@ -285,7 +312,7 @@
 						<Input
 							type="text"
 							name="upper_balcony_price"
-							bind:value={performances[i].sections}
+							bind:value={performances[i].section_prices.upper_balcony}
 							placeholder="$"
 							required
 						/>
@@ -293,7 +320,7 @@
 						<Input
 							type="text"
 							name="loge_price"
-							bind:value={performances[i].sections}
+							bind:value={performances[i].section_prices.loge}
 							placeholder="$"
 							required
 						/>
@@ -301,7 +328,7 @@
 						<Input
 							type="text"
 							name="handicap_price"
-							bind:value={performances[i].sections}
+							bind:value={performances[i].section_prices.handicap}
 							placeholder="$"
 							required
 						/>

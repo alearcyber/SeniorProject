@@ -3,7 +3,7 @@
     This page is where the volunteers go to create a new season.
 -->
 <script>
-    import { Label, Input, Button, Listgroup, Checkbox } from 'flowbite-svelte'
+    import { Label, Input, Button, Listgroup, Checkbox, Textarea } from 'flowbite-svelte'
     import { onMount } from 'svelte';
 
     onMount(async () => {
@@ -59,6 +59,18 @@
 		<Label class="space-y-2">
 			<span>Organization: {org_name}</span>
 		</Label>
+
+        <!-- Description Field -->
+		<Label class="space-y-2">
+			<span>Description</span>
+			<Textarea
+				name="prod_desc"
+				placeholder="A description of the types of shows in this season"
+				bind:value={season_info.description}
+				required
+			/>
+		</Label>
+
 
 		<!-- Production List -->
 		<Label class="space-y-2">

@@ -77,7 +77,7 @@ def get_future_list_of_productions(email, org_id):
         raise InvalidPermission
 
 
-    query_text = "select title from Production where org_id=? and (select season_id from Production where org_id=?) IS NULL;"
+    query_text = "select id, title from Production where org_id=? and (select season_id from Production where org_id=?) IS NULL;"
 
     result = query(query_text, (org_id,org_id))
     return result

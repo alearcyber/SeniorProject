@@ -11,11 +11,12 @@
 		console.log(get_production_list());
 	});
 
-    //hard coded event data that will eventually be received from database
-    let list = [{ name: "Placeholder production" }]
+    let production_names = [{ name: "Placeholder production" }]
+	let production_ids = [];
 
     let org_name = "";
 
+	// This info will be passed into the database
     let season_info = {
         org_id: '',
         season_name: '',
@@ -32,14 +33,26 @@
         let response = await fetch(`http://127.0.0.1:5000/get_productions/${email}:${org_id}`);
         const out = await response.json();
         console.log(out['production_list']);
-        list = out['production_list'];
+		
+		production_names = [];
+		production_ids = [];
+		for (let i in out['production_list']) {
+			production_names.push(out['production_list'][i][1]);
+			production_ids.push(out['production_list'][i][0]);
+		}
+
         org_name = out['org_name'];
+
         return out
     }
     
     async function create_season() {
         console.log(selected);
     }
+
+	function on_checkbox_change() {
+
+	}
 
     
 </script>
@@ -55,11 +68,6 @@
 			<Input type="text" name="season_name" bind:value={season_info.season_name} placeholder="" required />
 		</Label>
 
-		<!-- Organization Field -->
-		<Label class="space-y-2">
-			<span>Organization: {org_name}</span>
-		</Label>
-
         <!-- Description Field -->
 		<Label class="space-y-2">
 			<span>Description</span>
@@ -71,13 +79,17 @@
 			/>
 		</Label>
 
+		<!-- Organization Field -->
+		<Label class="space-y-2">
+			<span>Organization: {org_name}</span>
+		</Label>
 
 		<!-- Production List -->
 		<Label class="space-y-2">
 			<span> Production List</span>
-			{#each list as item, i}
+			{#each production_names as item, i}
 				<div class="d-flex justify-space-around">
-					<Checkbox group={selected} value={item.name} />
+					<Checkbox bind:bindGroup={selected} name={item.name} value={item.name} />
 					{item}<br />
 				</div>
 			{/each}

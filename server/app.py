@@ -107,13 +107,14 @@ def is_volunteer():
 @app.route("/create_production", methods=['GET', 'POST'])
 def create_production():
     data = request.get_json()
-    print(data)
+    #print(data)
     result = create_new_production(data['title'], data['venue_id'], 
                                    data['org_id'], data['image'], data['description'], 
                                    data['duration'], data['times'])
     
     # Add section pricing to performances
-    
+    for key in data['performances']:
+        print("Section prices:", key['section_prices'])
 
     return json.dumps(result)
 

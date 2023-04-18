@@ -26,7 +26,7 @@
 			seats: '',
 			default_price: '',
 			section_prices: {
-				orchestra: '',
+				main_orch: '',
 				balcony: '',
 				loge: '',
 				box: '',
@@ -126,6 +126,7 @@
 			production_info.times.push(performance_date.toISOString());
 		}
 
+		// Insert performances into production before the data is sent over
 		production_info.performances = performances;
 
 		console.log(production_info);

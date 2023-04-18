@@ -19,24 +19,26 @@ QUESTIONS: where does venue id belong?
 #####################################################################################
 ################################ EXCEPTIONS #########################################
 #####################################################################################
+
+
 class InvalidFormat(Exception):
     pass
+
 
 class ProductionExists(Exception):
     pass
 
+
 class InvalidID(Exception):
     pass
+
 
 class InvalidTime(Exception):
     pass
 
+
 class InvalidPermission(Exception):
     pass
-
-
-
-
 
 
 ####################################################################
@@ -52,29 +54,29 @@ class InvalidPermission(Exception):
 # Playhouse is venue id 2
 ####################################################################
 def initialize_playhouse_seats(performance_id):
-    #Read playhouse seating data into memory
+    # Read playhouse seating data into memory
     seating_data = Constants.load_playhouse_data()
 
-    #parse seating data
-    for section in seating_data: # loop through each sections
-        seats = seating_data[section] # grab the list of seat data for each section
+    # parse seating data
+    for section in seating_data:  # loop through each sections
+        # grab the list of seat data for each section
+        seats = seating_data[section]
         # This loop iterates over all the seats in the playhouse
         for seat in seats:
             # debug print
             # print(f"x:{seat['x']}, y:{seat['y']}, section:{seat['sec']}, row:{seat['row']}, number:{seat['number']}")
 
-            #construct the query
+            # construct the query
             query_text = "INSERT INTO Seat " \
-                    "(row, number, x, y, user_id, venue_id, performance_id, section, payment_method) " \
-                    "VALUES " \
-                    "(?, ?, ?, ?, ?, ?, ?, ?, ?)"
-            params = (seat['row'], seat['number'], seat['x'], seat['y'], None, 2, performance_id, seat['sec'], None)
+                "(row, number, x, y, user_id, venue_id, performance_id, section, payment_method) " \
+                "VALUES " \
+                "(?, ?, ?, ?, ?, ?, ?, ?, ?)"
+            params = (seat['row'], seat['number'], seat['x'],
+                      seat['y'], None, 2, performance_id, seat['sec'], None)
 
-            #insert into the table
+            # insert into the table
             Constants.query(query_text, params)
     return True
-
-
 
 
 ##################################################
@@ -101,15 +103,16 @@ def add_production(title, venue_id, org_id, image, desc, duration):
         raise InvalidFormat
     """
 
-    #insert the production
+    # insert the production
     query_text = "INSERT INTO Production " \
                  "(title, venue_id, org_id, image, description, duration) " \
                  "VALUES (?, ?, ?, ?, ?, ?)"
     parameters = (title, venue_id, org_id, image, desc, duration)
     query(query_text, params=parameters)
 
-    #grab and return the id of the recently inserted production
-    results = Constants.query(f"SELECT id FROM Production where title='{title}'")
+    # grab and return the id of the recently inserted production
+    results = Constants.query(
+        f"SELECT id FROM Production where title='{title}'")
     id = int(results[0][0])
     return id
 
@@ -131,7 +134,8 @@ def add_performance(production_id, startTime):
     """
     connection = sqlite3.connect(Constants.DB_PATH)
     cursor = connection.cursor()
-    cursor.execute("INSERT INTO Performance (production_id, time) VALUES (?, ?)", (production_id, startTime))
+    cursor.execute(
+        "INSERT INTO Performance (production_id, time) VALUES (?, ?)", (production_id, startTime))
     id = cursor.lastrowid
     connection.commit()
     connection.close()
@@ -165,23 +169,22 @@ def is_timeslot_available(startTime, endTime, venue_id):
         raise InvalidTime
     """
 
-
-    #Query for performances in the venue within a given time frame
+    # Query for performances in the venue within a given time frame
     result = query("SELECT 1 FROM performance WHERE venue_id=? AND (startTime AND endTime BETWEEN ? AND ?)",
-                      (venue_id, startTime, endTime))
+                   (venue_id, startTime, endTime))
 
-    #return true if no performances were there in the given time frame, false otherwise
+    # return true if no performances were there in the given time frame, false otherwise
     if len(result) <= 0:
         return True
     else:
         return False
 
 
-
 def get_production_id_from_title(title):
     con = sqlite3.connect(Constants.DB_PATH)
     cur = con.cursor()
-    res = cur.execute("SELECT production_id FROM Production WHERE title=?", title)
+    res = cur.execute(
+        "SELECT production_id FROM Production WHERE title=?", title)
     return res
 
 
@@ -245,44 +248,69 @@ def schedule_performances(user, title, venue_id, org_id, image, desc, duration, 
 def create_new_production(title, venue_id, org_id, image, description, duration, times):
     # first, insert item into production table
     # parameters are (title, venue_id, org_id, image, descrition, duration)
-    production_id = add_production(title, venue_id, org_id, image, description, duration)
+    production_id = add_production(
+        title, venue_id, org_id, image, description, duration)
 
-    #iterate over the times, add performance and initialize the seats
+    # iterate over the times, add performance and initialize the seats
     for time in times:
-        #add the performance
-        performance_id = add_performance(production_id, time) # params: (production_id, startTime)
+        # add the performance
+        # params: (production_id, startTime)
+        performance_id = add_performance(production_id, time)
 
-        #add seats for that performance
-        if venue_id == 2: # playhouse
+        # add seats for that performance
+        if venue_id == 2:  # playhouse
             initialize_playhouse_seats(performance_id)
-        else: #conert hall, venue_id == 1
+        else:  # conert hall, venue_id == 1
             assert False, "HEY, I HAVE NOT MADE THE SEATING THING FOR THE CONCERT HALL YET"
 
-    #return the id of the production that was added
+    # return the id of the production that was added
     return production_id
+
+# Set all section prices for a production
+def set_section_prices(production_id, section_prices):
+
+    query_text = """UPDATE Seat
+                    SET
+                        price = ?
+                    WHERE
+                        section = ?
+                    AND
+                        performance_id IN (
+                        SELECT Performance.performance_id
+                        FROM Production JOIN Performance
+                        ON Production.id = Performance.production_id
+                        WHERE Production.id=?)
+                    """
+    for section_name in section_prices:
+        price = section_prices[section_name]
+        Constants.query(query_text, params=(price, section_name, production_id))
+
+    return True
 
 
 class InvalidFormat(Exception):
     pass
 
+
 class ProductionExists(Exception):
     pass
+
 
 class InvalidID(Exception):
     pass
 
+
 class InvalidTime(Exception):
     pass
+
 
 class InvalidPermission(Exception):
     pass
 
 
-
 #####################################################################################
 ################################ TESTS ##############################################
 #####################################################################################
-
 
 
 ##########################################################
@@ -296,8 +324,9 @@ def test1():
 # Test add production
 ##########################################################
 def test2():
-    #(title, venue_id, org_id, image, desc, duration)
-    production_id = add_production('TESTING ADDING SECOND PRODUCTION', None, None, None, None, None)
+    # (title, venue_id, org_id, image, desc, duration)
+    production_id = add_production(
+        'TESTING ADDING SECOND PRODUCTION', None, None, None, None, None)
     print('id of production added:', production_id)
 
 
@@ -307,20 +336,17 @@ def test2():
 def test3():
     title = 'Inception'
     description = 'It is a movie about a dream within a dream'
-    times = [ # four days in a row at 12:30
+    times = [  # four days in a row at 12:30
         "2022-01-01 12:30:00",
         "2022-01-02 12:30:00",
         "2022-01-03 12:30:00",
         "2022-01-04 12:30:00",
     ]
-    duration = 120 #120 minutes, 2 hours
+    duration = 120  # 120 minutes, 2 hours
 
-    #params for creating a new production
-    #(title, venue_id, org_id, image, description, duration, times)
+    # params for creating a new production
+    # (title, venue_id, org_id, image, description, duration, times)
     create_new_production(title, 2, None, None, description, duration, times)
-
-
-
 
 
 #######################################################

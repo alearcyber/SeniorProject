@@ -111,6 +111,10 @@ def create_production():
     result = create_new_production(data['title'], data['venue_id'], 
                                    data['org_id'], data['image'], data['description'], 
                                    data['duration'], data['times'])
+    
+    # Add section pricing to performances
+    
+
     return json.dumps(result)
 
 @app.route('/get_productions/<email>:<org_id>')

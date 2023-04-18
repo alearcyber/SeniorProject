@@ -2,61 +2,101 @@
     Create Season Page
     This page is where the volunteers go to create a new season.
 -->
-
 <script>
-    import { Label, Input, Textarea, Button, Card, Heading, List, DescriptionList } from 'flowbite-svelte'
+    import { Label, Input, Button, Listgroup, Checkbox, Textarea } from 'flowbite-svelte'
+    import { onMount } from 'svelte';
 
-    let values=[{
-       "title": "",
-    }]; 
-        
-    const addField = () => {
-       values = [...values, {title: ''}]
-    };
-        
-    const removeField = () => {
-       values = values.slice(0, values.length-1)
-    };
+    onMount(async () => {
+		console.log('This is onMount for the Create Season page');
+		console.log(get_production_list());
+	});
+
+	let list = [{}]
+    let production_names = [{ name: "Placeholder production" }]
+	let production_ids = [0];
+
+    let org_name = "";
+
+	// This info will be passed into the database
+    let season_info = {
+        org_id: '',
+        season_name: '',
+        description: '',
+        productions: [],
+    }
+    let selected = [0];
+
+    async function get_production_list() {
+		// Get session vars about user
+        let email = sessionStorage.getItem("user");
+        let org_id = sessionStorage.getItem("org_id");
+        console.log(email, org_id);
+
+		// Get production list from server
+        let response = await fetch(`http://127.0.0.1:5000/get_productions/${email}:${org_id}`);
+        const out = await response.json();
+        console.log(out['production_list']);
+		
+		// Make local vars with the production data so they're easier to access
+		production_names = [];
+		production_ids = [];
+		list = out['production_list'];
+		for (let i in list) {
+			production_names.push(out['production_list'][i][1]);
+			production_ids.push(out['production_list'][i][0]);
+		}
+
+        org_name = out['org_name'];
+
+        return out
+    }
+    
+    async function create_season() {
+        console.log(selected);
+    }
+
+    
 </script>
-  
-<div class="mb-10 flex justify-center" >
-    <form class="flex flex-col space-y-6" style="width:800px" action='/'>
-        <!-- Title -->
-        <h3 class="text-xl font-medium text-gray-900 dark:text-white p-0">Create New Season</h3>
 
-        <!-- Season Name Field -->
-        <Label class="space-y-2">
-          <span>Season Name</span>
-          <Input type="text" name="season_name" placeholder="" required />
-        </Label>
+<div class="mb-10 flex justify-center">
+	<form class="flex flex-col space-y-6" style="width:800px" action="/">
+		<!-- Title -->
+		<h3 class="text-xl font-medium text-gray-900 dark:text-white p-0">Create New Season</h3>
 
-        <!-- Organization Field -->
-        <Label class="space-y-2">
-          <span>Organization</span>
-          <Input type="text" name="organization" placeholder="" required />
-        </Label>
+		<!-- Season Name Field -->
+		<Label class="space-y-2">
+			<span>Season Name</span>
+			<Input type="text" name="season_name" bind:value={season_info.season_name} placeholder="" required />
+		</Label>
 
-        <!-- Production Name Field -->
-        {#each values as v, i}
-        <div>
-            <Label class="space-y-2">
-                <span>Production Title</span>
-                <Input type="text" name="production_name" bind:value={values[i].title} placeholder="" required />
-            </Label>
-        </div>
-        {/each}
-        {#if values.length >= 2}
-        <Button style="width: 200px" color="light" on:click={removeField}>Remove Production -</Button>
-        {/if}
-        <Button style="width: 200px" color="dark" on:click={addField}>Add Production +</Button>
+        <!-- Description Field -->
+		<Label class="space-y-2">
+			<span>Description</span>
+			<Textarea
+				name="prod_desc"
+				placeholder="A description of the types of shows in this season"
+				bind:value={season_info.description}
+				required
+			/>
+		</Label>
 
+		<!-- Organization Field -->
+		<Label class="space-y-2">
+			<span>Organization: {org_name}</span>
+		</Label>
 
-        <!-- Create Season button -->
-        <Button type="submit" class="w-full1">Create Season</Button>
-    </form>
-  </div>
-  
- 
+		<!-- Production List -->
+		<Label class="space-y-2">
+			<span> Production List</span>
+			{#each production_names as item, p}
+				<div class="d-flex justify-space-around">
+					<input type="checkbox" value={production_ids[p]} bind:group={selected} />
+					{item}<br />
+				</div>
+			{/each}
+		</Label>
 
-
-
+		<!-- Create Season button -->
+		<Button class="w-full1" on:click={create_season}>Create Season</Button>
+	</form>
+</div>

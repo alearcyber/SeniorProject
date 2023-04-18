@@ -23,7 +23,9 @@
           </P>
           <P class= "mb-3 pl-5 text-left" weight="bold" color="text-gray-500 dark:text-gray-400"  whitespace="preline" size="xl">
             <h3 class="mb-1 pl-5 text-left text-xl font-medium text-blue-900 dark:text-white p-0">Choosing a Venue</h3>
-              1. ......
+              1. Click on <strong class="font-semibold text-blue-900 dark:text-white">"Buy Tickets" </strong> in the navigation bar.
+              2. The venue will be listed underneath the performance title. 
+              3. Select <strong class="font-semibold text-blue-900 dark:text-white">"Buy Tickets" </strong> on the performance of desired venue.
           </P>
         </Layout>
         <Layout gap={1}>
@@ -44,7 +46,12 @@
           </P>
           <P class= "mt-10 mb-3 pl-5 text-left" weight="bold" color="text-gray-500 dark:text-gray-400"  whitespace="preline" size="xl">
             <h3 class="mt-10 mb-1 pl-5 text-left text-xl font-medium text-blue-900 dark:text-white p-0">Guide to Selecting Seats</h3>
-              1. .....
+              1. Click on <strong class="font-semibold text-blue-900 dark:text-white">" Shows or Buy Tickets" </strong> in the navigation bar.
+              2. Select <strong class="font-semibold text-blue-900 dark:text-white">"Buy Tickets" </strong> on the desired performance of choice.
+              3. Select seats in the seating chart, blue means they are available
+              4. Tickets will appear on the right hand side of the screen
+              5. Then click <strong class="font-semibold text-blue-900 dark:text-white">"Purchase Tickets" </strong>, where you will be taken to a payment page.
+              6. On payment page, enter payment information. 
           </P>
         </Layout>
 

@@ -1,3 +1,21 @@
+import {data} from "./+page.svelte";
+
+/** @type {import('./$types').PageLoad} */
+export async function load({ url }) {
+    const pid = url.searchParams.get('id')
+    const response = await fetch('http://127.0.0.1:5000/get_seating_chart', {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ 'performance_id': pid })
+		});
+
+    const out = await response.json();
+    return { out };
+}
+/**
 export async function load() {
     return {
         performance: {
@@ -544,4 +562,4 @@ export async function load() {
            ],
         },
     }
-}
+}*/

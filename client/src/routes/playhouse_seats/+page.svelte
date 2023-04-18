@@ -16,27 +16,9 @@
     import { page } from '$app/stores';
 
 
-    const url = $page.url;
-    console.log(url.searchParams.get('id')); // John
-
-
-    /**
-	onMount(async () => {
-	    try {
-            let content = {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({performance_id: })
-            };
-	        const response = await fetch('http://127.0.0.1:5000/performance') //call the api
-            const json = await response.json() // wait for response and parse the json
-            return json; // return the json
-
-        } catch (error) {
-            console.log("AN ERROR HAPPENED:", error)
-        }
-	    });
-     */
+    const url = $page.url; //get url
+    //console.log(url.searchParams.get('id'));
+    let performance_id = url.searchParams.get('id') //parse out url parameters, the performance id specifically
 
 
 
@@ -45,7 +27,12 @@
     /**
 	* @type {{ seats: {}; tickets: Array<{}>; performance: {title: string;}; }}
 	*/
-    export let data
+    export let data;
+    //console.log("DATA BUILT IN:", data);
+    //console.log("DATA B:", datab);
+    console.log('THE DATA', data);
+
+
     /**
 	* @type {any[]}
 	*/

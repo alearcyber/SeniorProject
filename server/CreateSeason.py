@@ -11,7 +11,6 @@ from Constants import query
 
 
 """
-
 --The logic--
 First thing, some person on their account goes to the create season menu. 
 

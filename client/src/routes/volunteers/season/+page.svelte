@@ -11,8 +11,9 @@
 		console.log(get_production_list());
 	});
 
+	let list = [{}]
     let production_names = [{ name: "Placeholder production" }]
-	let production_ids = [];
+	let production_ids = [0];
 
     let org_name = "";
 
@@ -23,20 +24,24 @@
         description: '',
         productions: [],
     }
-    let selected = [""];
+    let selected = [0];
 
     async function get_production_list() {
+		// Get session vars about user
         let email = sessionStorage.getItem("user");
         let org_id = sessionStorage.getItem("org_id");
         console.log(email, org_id);
 
+		// Get production list from server
         let response = await fetch(`http://127.0.0.1:5000/get_productions/${email}:${org_id}`);
         const out = await response.json();
         console.log(out['production_list']);
 		
+		// Make local vars with the production data so they're easier to access
 		production_names = [];
 		production_ids = [];
-		for (let i in out['production_list']) {
+		list = out['production_list'];
+		for (let i in list) {
 			production_names.push(out['production_list'][i][1]);
 			production_ids.push(out['production_list'][i][0]);
 		}
@@ -49,10 +54,6 @@
     async function create_season() {
         console.log(selected);
     }
-
-	function on_checkbox_change() {
-
-	}
 
     
 </script>
@@ -87,9 +88,9 @@
 		<!-- Production List -->
 		<Label class="space-y-2">
 			<span> Production List</span>
-			{#each production_names as item, i}
+			{#each production_names as item, p}
 				<div class="d-flex justify-space-around">
-					<Checkbox bind:bindGroup={selected} name={item.name} value={item.name} />
+					<input type="checkbox" value={production_ids[p]} bind:group={selected} />
 					{item}<br />
 				</div>
 			{/each}

@@ -23,7 +23,6 @@ modifications within the database.
 """
 
 import Constants
-from Constants import Query
 
 
 
@@ -60,11 +59,34 @@ class PerformanceNotInSeason(Exception):
 #######################################
 # grab the upcoming seasons
 # Note: no parameters are required.
-# returns a list of tuples where each tuple is a season.
-#   This is the same format the data is returned as from the database query
+# The output is an associave array, (aka a dictionary)
+# The data will look like so:
+#   {title: month, title2: month2, etc.}
 #######################################
 def upcoming_seasons():
-    pass
+    # getting season and the times for the season
+    # this query returns the earliest time associated with each season
+    query_text = """
+    SELECT MIN(Performance.time), Season.title, Production.venue_id
+    FROM Season INNER JOIN Production JOIN Performance
+    ON
+    Performance.production_id = Production.id AND
+    Production.season_id = Season.id
+    WHERE Season.id IS NOT NULL
+    GROUP BY Season.title
+    """
+    results = Constants.query(query_text)
+    seasons = []
+    for time, title, venue_id in results:
+        out = dict()
+        #parse out the proper month
+        month = Constants.months[int(time.split('-')[1])]
+        out['title'] = title
+        out['month'] = month
+        out['location'] = 'Playhouse' if int(venue_id) == 2 else 'Concert Hall'
+        seasons.append(out)
+    return seasons
+
 
 
 
@@ -75,9 +97,14 @@ def upcoming_seasons():
 # returns a dictionary where the keys are all the names of the different productions
 #   and the the value for each productions is the list of performances in that
 #   production. The list of performances is a list of tuples.
+#
+# NOTE: CHANGED FROM PREVIOUS DEXSRIPTION ABOVE
 #######################################
-def get_all_season_performances(season_id):
-    pass
+def get_all_season_performances(season_title):
+    query_text = """
+    SELECT
+    """
+
 
 
 
@@ -106,3 +133,10 @@ def buy_season_pass(email, seat_row, seat_number, performances_ids, season_id, p
     pass
 
 
+
+#test retreival of upcoming seasons
+def test1():
+    upcoming_seasons()
+
+if __name__ == "__main__":
+    test1()

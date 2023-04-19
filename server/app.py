@@ -9,6 +9,7 @@ from database.user.login import login_user
 import PurchaseTickets
 from Scheduling import create_new_production
 from CreateSeason import get_future_list_of_productions, get_org_name
+import SeasonPass
 
 app = Flask(__name__, template_folder='templates', static_folder='templates')
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -169,9 +170,17 @@ def get_productions(email, org_id):
 
     return json.dumps({'production_list': result, 'org_name': org_name})
 
-# @app.route('/create_season')
-# def get_productions(email, org_id):
-#     pass
+
+
+
+#used for the user to select a season when they are buying a season pass
+#data is used to load the page that presents the available seasons
+@app.route('/get_upcoming_seasons')
+def get_upcoming_seasons():
+    data = SeasonPass.upcoming_seasons()
+    out = json.dumps({'seasons':data})
+    print(out)
+    return out
 
 
 if __name__ == '__main__':

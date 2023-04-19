@@ -14,27 +14,24 @@
 		image: '',
 		description: '',
 		duration: 0,
-		times: [],
-		performances: []
+		default_price: '',
+		section_prices: {
+			main_orch: '',
+			balcony: '',
+			loge: '',
+			box: '',
+			handicap: '',
+			pit: '',
+			lower_balcony: '',
+			upper_balcony: ''
+		},
+		times: []
 	};
 
 	let performances = [
 		{
-			title: '',
 			date: '',
-			time: '',
-			seats: '',
-			default_price: '',
-			section_prices: {
-				main_orch: '',
-				balcony: '',
-				loge: '',
-				box: '',
-				handicap: '',
-				pit: '',
-				lower_balcony: '',
-				upper_balcony: ''
-			}
+			time: ''
 		}
 	];
 
@@ -42,20 +39,8 @@
 		performances = [
 			...performances,
 			{
-				title: '',
 				date: '',
-				time: '',
-				default_price: '',
-				section_prices: {
-					orchestra: '',
-					balcony: '',
-					loge: '',
-					box: '',
-					handicap: '',
-					pit: '',
-					lower_balcony: '',
-					upper_balcony: ''
-				}
+				time: ''
 			}
 		];
 	};
@@ -216,6 +201,111 @@
 			/>
 		</Label>
 
+		<span>Default Seat Price</span>
+		<Input
+			type="number"
+			name="seat_price"
+			bind:value={production_info.default_price}
+			placeholder="$"
+			required
+		/>
+
+		<div>
+			<!-- Section Prices' Field -->
+			<h3 class=" text-xl font-medium text-gray-900 dark:text-white p-0">Sections</h3>
+			{#if production_info.venue_id == 1}
+				<span>Orchestra Price</span>
+				<Input
+					type="number"
+					name="orch_price"
+					bind:value={production_info.section_prices.main_orch}
+					placeholder="$"
+					required
+				/>
+				<span>Balcony Price</span>
+				<Input
+					type="text"
+					name="balcony_price"
+					bind:value={production_info.section_prices.balcony}
+					placeholder="$"
+					required
+				/>
+				<span>Loge Price</span>
+				<Input
+					type="text"
+					name="loge_price"
+					bind:value={production_info.section_prices.loge}
+					placeholder="$"
+					required
+				/>
+				<span>Box Price</span>
+				<Input
+					type="text"
+					name="box_price"
+					bind:value={production_info.section_prices.box}
+					placeholder="$"
+					required
+				/>
+				<span>Handicap Price</span>
+				<Input
+					type="text"
+					name="handicap_price"
+					bind:value={production_info.section_prices.handicap}
+					placeholder="$"
+					required
+				/>
+			{:else if production_info.venue_id == 2}
+				<span>Orchestra Price</span>
+				<Input
+					type="text"
+					name="orch_price"
+					bind:value={production_info.section_prices.orchestra}
+					placeholder="$"
+					required
+				/>
+				<span>Pit Price</span>
+				<Input
+					type="text"
+					name="pit_price"
+					bind:value={production_info.section_prices.pit}
+					placeholder="$"
+					required
+				/>
+				<span>Lower Balcony Price</span>
+				<Input
+					type="text"
+					name="lower_balcony_price"
+					bind:value={production_info.section_prices.lower_balcony}
+					placeholder="$"
+					required
+				/>
+				<span>Upper Balcony Price</span>
+				<Input
+					type="text"
+					name="upper_balcony_price"
+					bind:value={production_info.section_prices.upper_balcony}
+					placeholder="$"
+					required
+				/>
+				<span>Loge Price</span>
+				<Input
+					type="text"
+					name="loge_price"
+					bind:value={production_info.section_prices.loge}
+					placeholder="$"
+					required
+				/>
+				<span>Handicap Price</span>
+				<Input
+					type="text"
+					name="handicap_price"
+					bind:value={production_info.section_prices.handicap}
+					placeholder="$"
+					required
+				/>
+			{/if}
+		</div>
+
 		<h3 class="text-xl font-medium text-gray-900 dark:text-white p-0">Performance</h3>
 
 		<!-- Performance Field -->
@@ -238,111 +328,10 @@
 						placeholder="X:XX p.m."
 						required
 					/>
-					<span>Default Seat Price</span>
-					<Input
-						type="number"
-						name="seat_price"
-						bind:value={performances[i].default_price}
-						placeholder="$"
-						required
-					/>
-
-					<!-- Section Prices' Field -->
-					<h3 class=" text-xl font-medium text-gray-900 dark:text-white p-0">Sections</h3>
-					{#if production_info.venue_id == 1}
-						<span>Orchestra Price</span>
-						<Input
-							type="number"
-							name="orch_price"
-							bind:value={performances[i].section_prices.orchestra}
-							placeholder="$"
-							required
-						/>
-						<span>Balcony Price</span>
-						<Input
-							type="text"
-							name="balcony_price"
-							bind:value={performances[i].section_prices.balcony}
-							placeholder="$"
-							required
-						/>
-						<span>Loge Price</span>
-						<Input
-							type="text"
-							name="loge_price"
-							bind:value={performances[i].section_prices.loge}
-							placeholder="$"
-							required
-						/>
-						<span>Box Price</span>
-						<Input
-							type="text"
-							name="box_price"
-							bind:value={performances[i].section_prices.box}
-							placeholder="$"
-							required
-						/>
-						<span>Handicap Price</span>
-						<Input
-							type="text"
-							name="handicap_price"
-							bind:value={performances[i].section_prices.handicap}
-							placeholder="$"
-							required
-						/>
-					{:else if production_info.venue_id == 2}
-						<span>Orchestra Price</span>
-						<Input
-							type="text"
-							name="orch_price"
-							bind:value={performances[i].section_prices.orchestra}
-							placeholder="$"
-							required
-						/>
-						<span>Pit Price</span>
-						<Input
-							type="text"
-							name="pit_price"
-							bind:value={performances[i].section_prices.pit}
-							placeholder="$"
-							required
-						/>
-						<span>Lower Balcony Price</span>
-						<Input
-							type="text"
-							name="lower_balcony_price"
-							bind:value={performances[i].section_prices.lower_balcony}
-							placeholder="$"
-							required
-						/>
-						<span>Upper Balcony Price</span>
-						<Input
-							type="text"
-							name="upper_balcony_price"
-							bind:value={performances[i].section_prices.upper_balcony}
-							placeholder="$"
-							required
-						/>
-						<span>Loge Price</span>
-						<Input
-							type="text"
-							name="loge_price"
-							bind:value={performances[i].section_prices.loge}
-							placeholder="$"
-							required
-						/>
-						<span>Handicap Price</span>
-						<Input
-							type="text"
-							name="handicap_price"
-							bind:value={performances[i].section_prices.handicap}
-							placeholder="$"
-							required
-						/>
-					{/if}
 				</Label>
 			</div>
 		{/each}
+
 		{#if performances.length >= 2}
 			<Button style="width: 200px" color="light" on:click={removeField}>Remove Performance -</Button
 			>

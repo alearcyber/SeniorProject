@@ -26,6 +26,7 @@ import Constants
 
 
 
+
 #########################################################################################################
 ################################### EXCEPTIONS ##########################################################
 #########################################################################################################
@@ -101,9 +102,60 @@ def upcoming_seasons():
 # NOTE: CHANGED FROM PREVIOUS DEXSRIPTION ABOVE
 #######################################
 def get_all_season_performances(season_title):
-    query_text = """
+    query_text = f"""
     SELECT
+    prod.title, perf.time, prod.venue_id, perf.performance_id
+        FROM
+    Performance perf JOIN Production prod JOIN Season s
+    ON perf.production_id=prod.id AND prod.season_id=s.id
+        WHERE
+    perf.time > datetime() AND s.title='{season_title}'
     """
+
+    # execute and grab the results
+    results = Constants.query(query_text)
+    formatted_results = []
+    for r in results:
+        title = r[0]
+        datetime = r[1]
+        venue = 'Playhouse' if r[2] == 2 else 'Concert Hall'
+        performance_id = r[3]
+
+        # make datetime into date and time
+        tokens = datetime.split(' ')  # split on the space
+        date = tokens[0]
+        time = tokens[1]
+        d_tokens = date.split('-')
+        t_tokens = time.split(':')
+
+        # date
+        month = Constants.months[int(d_tokens[1])]
+        year = d_tokens[0]
+        day = d_tokens[2]
+
+        # time
+        hour = int(t_tokens[0])
+        min = t_tokens[1]
+        suffix = 'a.m.'
+        if hour == 12:
+            suffix = 'p.m.'
+        elif hour > 12:
+            hour = hour - 12
+            suffix = 'p.m.'
+
+        # formatting
+        date = f'{month} {day}, {year}'  # example: "May 3, 2023"
+        time = f'{hour}:{min} {suffix}'  # example: "6:00 p.m."
+
+        # append new map
+        # example name: "Hamilton", date: "May 7", time: "6:00 p.m.", venue: "Civic Center Concert Hall", performance_id: "2"
+        #new_result = {'name': title, 'date': date, 'time': time, 'venue': venue, 'performance_id': performance_id}
+        new_result = {'title': title, 'id': performance_id,
+                      'content': f'On {date} @ {time}'}
+        formatted_results.append(new_result)
+
+    # return the results in the appropriate format
+    return formatted_results
 
 
 
@@ -133,10 +185,24 @@ def buy_season_pass(email, seat_row, seat_number, performances_ids, season_id, p
     pass
 
 
+#seat availability for season id
+def season_seat_availability(season_id):
+  return query("SELECT Seat.id, Seat.price FROM Season JOIN Production ON Season.id=Production.season_id "
+               "JOIN Performance ON Production.id=Performance.production_id JOIN Seat "
+               "ON Seat.performance_id=Performance.performance_id WHERE Season.id=? AND Seat.user_id IS NULL",
+               params=(season_id,))
+
 
 #test retreival of upcoming seasons
 def test1():
     upcoming_seasons()
 
+#getting all the performances for a specific season
+def test2():
+    season_title = 'Movies'
+    data = get_all_season_performances(season_title)
+    print(data)
+
+
 if __name__ == "__main__":
-    test1()
+    test2()

@@ -10,6 +10,7 @@ import PurchaseTickets
 from Scheduling import create_new_production
 from CreateSeason import get_future_list_of_productions, get_org_name
 import SeasonPass
+import FrontDesk
 
 app = Flask(__name__, template_folder='templates', static_folder='templates')
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -182,6 +183,28 @@ def get_upcoming_seasons():
     print(out)
     return out
 
+
+
+# retrieves a list of all the performances for a given season
+@app.route("/get_season_performances", methods=['POST'])
+def get_season_performances():
+    title = request.get_json()['title']
+    data = SeasonPass.get_all_season_performances(title)
+    out = json.dumps({'performances': data})
+    print(out)
+    return out
+
+
+
+#getting the performances for the front desk
+@app.route("/frontdesk_upcoming_performances", methods=['POST'])
+def frontdesk_performances():
+    email = request.get_json()['email']
+    data = FrontDesk.upcoming_performances(email)
+    out = json.dumps({'performances': data})
+    print('Received request from', email, 'for a list of upcoming perforamances for the front desk.')
+    print(out)
+    return out
 
 if __name__ == '__main__':
     app.run()

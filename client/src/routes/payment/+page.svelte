@@ -7,7 +7,14 @@
   import { Input, Label, Button, Select, Heading, P, Hr, Checkbox } from 'flowbite-svelte'
 	import Center from '../../layouts/center.svelte' //import Center layout
   import Checkout from '../../components/Checkout.svelte'
+  import { SeatStore } from '../../stores/SeatStore.js'
   
+  /**
+  * @type {any[]}
+  */
+  let mySeatStore
+  $: mySeatStore = $SeatStore //subscribe to seat store
+
   const button_alert = () => {
     alert('Thank you for your purchase! Your order has been confirmed.')
   };
@@ -17,12 +24,7 @@
   function toggleVisible() {
       visible = !visible
   }
-
 </script>
-
-<!-- GET RID OF THIS
--->
-<Button class="w-full h-full" size="sm" href="/season_pass">Season Pass</Button> 
 
 <Center>
   <div class="grid grid-cols-2 gap-10">

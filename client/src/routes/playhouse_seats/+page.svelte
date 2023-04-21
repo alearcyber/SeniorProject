@@ -11,11 +11,28 @@
 	import TicketCard from "../../components/TicketCard.svelte"
     import { SeatStore } from '../../stores/SeatStore.js'
     import Legend from "../../components/Legend.svelte"
+    import { XMark } from 'svelte-heros-v2'
+	import { onMount } from 'svelte';
+    import { page } from '$app/stores';
+
+
+    const url = $page.url; //get url
+    //console.log(url.searchParams.get('id'));
+    let performance_id = url.searchParams.get('id') //parse out url parameters, the performance id specifically
+
+
+
+
 
     /**
 	* @type {{ seats: {}; tickets: Array<{}>; performance: {title: string;}; }}
 	*/
-    export let data
+    export let data;
+    //console.log("DATA BUILT IN:", data);
+    //console.log("DATA B:", datab);
+    console.log('THE DATA', data);
+
+
     /**
 	* @type {any[]}
 	*/

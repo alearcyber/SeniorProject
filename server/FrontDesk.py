@@ -1,6 +1,7 @@
 """
 This file has to do with every that goes on with operating the front desk for a performance.
 """
+import Constants
 
 ####################################################################
 ########################## EXCEPTIONS ##############################
@@ -56,7 +57,45 @@ def accept_payment(seat_id, payment_method, email=None):
 #   in from the database.
 #######################################
 def upcoming_performances(email):
-    pass
+    result = Constants.query(
+        "SELECT Performance.performance_id, Performance.time, Production.title, "
+        "Production.venue_id FROM Volunteer "
+        "JOIN User JOIN Production JOIN Performance "
+        "ON User.user_id=Volunteer.user_id AND Performance.production_id=Production.id AND Production.org_id=Volunteer.org_id "
+        "WHERE User.email=?",
+        params=(email,))
+
+    performances = []
+    for id, datetime, title, venue_id in result:
+        # parse out venue
+        venue = 'Playhouse' if venue_id == 2 else 'Concert Hall'
+
+        #parse out time
+        tokens = datetime.split(' ')  # split on the space
+        date = tokens[0]
+        time = tokens[1]
+        d_tokens = date.split('-')
+        t_tokens = time.split(':')
+        month = Constants.months[int(d_tokens[1])]
+        year = d_tokens[0]
+        day = d_tokens[2]
+        hour = int(t_tokens[0])
+        min = t_tokens[1]
+        suffix = 'a.m.'
+        if hour == 12:
+            suffix = 'p.m.'
+        elif hour > 12:
+            hour = hour - 12
+            suffix = 'p.m.'
+        date = f'{month} {day}, {year}'  # example: "May 3, 2023"
+        time = f'{hour}:{min} {suffix}'  # example: "6:00 p.m."
+
+        #create the performance dictionary and append to list
+        #performance = {'id': id, 'title':title,'date':date, 'time': time, 'venue': venue}
+        performance = {'id': id, 'title': title, 'content': f'In the {venue} | {date} @{time}'}
+        performances.append(performance)
+
+    return performances
 
 
 
@@ -71,6 +110,17 @@ def upcoming_performances(email):
 ######################################
 def load_seats(performance_id):
     pass
+
+
+
+def test1():
+    data = upcoming_performances("tom.bombadillo@arnornet.me")
+    print(data)
+
+
+
+if __name__ == "__main__":
+    test1()
 
 
 

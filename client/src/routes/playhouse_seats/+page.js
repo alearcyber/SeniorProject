@@ -1,3 +1,21 @@
+import {data} from "./+page.svelte";
+
+/** @type {import('./$types').PageLoad} */
+export async function load({ url }) {
+    const pid = url.searchParams.get('id')
+    const response = await fetch('http://127.0.0.1:5000/get_seating_chart', {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ 'performance_id': pid })
+		});
+
+    const out = await response.json();
+    return { out };
+}
+/**
 export async function load() {
     return {
         performance: {
@@ -28,8 +46,8 @@ export async function load() {
         seats: {
            left_orch: [
             {x: '2341.05', y: '4995.57', r: "68.5", sec: 'SEC1', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 1},
-            {x: '2290.97', y: '5152.51', r: "68.5", sec: 'SEC1', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 2},
-            {x: '2235.12', y: '5307.48', r: "68.5", sec: 'SEC1', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 3},
+            {x: '2290.97', y: '5152.51', r: "68.5", sec: 'SEC1', row: 'A', seat: 2, venue: 'Civic Center Playhouse', id: 2},
+            {x: '2235.12', y: '5307.48', r: "68.5", sec: 'SEC1', row: 'A', seat: 13, venue: 'Civic Center Playhouse', id: 3},
             {x: '2173.57', y: '5460.27', r: "68.5", sec: 'SEC1', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 4},
             {x: '2106.42', y: '5610.7', r: "68.5", sec: 'SEC1', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 5},
             {x: '2033.74', y: '5758.52', r: "68.5", sec: 'SEC1', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 6},
@@ -277,8 +295,8 @@ export async function load() {
             {x: '6304.12', y: '4293.11', r: "68.5", sec: 'SEC2', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 246},
             {x: '6296.45', y: '4459.27', r: "68.5", sec: 'SEC2', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 247},
             {x: '6285.24', y: '4625.23', r: "68.5", sec: 'SEC2', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 248},
-            {x: '6270.53', y: '4790.92', r: "68.5", sec: 'SEC2', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 249},     
-           ], 
+            {x: '6270.53', y: '4790.92', r: "68.5", sec: 'SEC2', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 249},
+           ],
            right_orch: [
             {x: '2336.25', y: '2771.49', r: "68.5", sec: 'SEC3', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 250},
             {x: '2286.03', y: '2614.31', r: "68.5", sec: 'SEC3', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 251},
@@ -358,7 +376,7 @@ export async function load() {
             {x: '6180.87', y: '2398.04', r: "68.5", sec: 'SEC3', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 325},
             {x: '6154.51', y: '2235.58', r: "68.5", sec: 'SEC3', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 326},
             {x: '6123.66', y: '2073.92', r: "68.5", sec: 'SEC3', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 327},
-           ], 
+           ],
            right_loge: [
             {x: '6144.92', y: '1606.14', r: "68.5", sec: 'SEC4', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 328},
             {x: '5774.02', y: '1572.41', r: "68.5", sec: 'SEC4', row: 'B', seat: 1, venue: 'Civic Center Playhouse', id: 329},
@@ -366,31 +384,31 @@ export async function load() {
             {x: '5031.85', y: '1509.32', r: "68.5", sec: 'SEC4', row: 'D', seat: 1, venue: 'Civic Center Playhouse', id: 331},
             {x: '4659.31', y: '1481.02', r: "68.5", sec: 'SEC4', row: 'E', seat: 1, venue: 'Civic Center Playhouse', id: 332},
             {x: '4289.19', y: '1451.96', r: "68.5", sec: 'SEC4', row: 'F', seat: 1, venue: 'Civic Center Playhouse', id: 333},
-            {x: '3917.65', y: '1425.28', r: "68.5", sec: 'SEC4', row: 'G', seat: 1, venue: 'Civic Center Playhouse', id: 334}, 
+            {x: '3917.65', y: '1425.28', r: "68.5", sec: 'SEC4', row: 'G', seat: 1, venue: 'Civic Center Playhouse', id: 334},
             {x: '3547.31', y: '1399.04', r: "68.5", sec: 'SEC4', row: 'H', seat: 1, venue: 'Civic Center Playhouse', id: 335},
            ],
            left_loge: [
-            {x: '6149.12', y: '6223.19', r: "68.5", sec: 'SEC5', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 336}, 
-            {x: '5777.63', y: '6252.43', r: "68.5", sec: 'SEC5', row: 'B', seat: 1, venue: 'Civic Center Playhouse', id: 337}, 
-            {x: '5406.14', y: '6281.66', r: "68.5", sec: 'SEC5', row: 'C', seat: 1, venue: 'Civic Center Playhouse', id: 338}, 
-            {x: '5034.65', y: '6310.9', r: "68.5", sec: 'SEC5', row: 'D', seat: 1, venue: 'Civic Center Playhouse', id: 339}, 
-            {x: '4663.16', y: '6340.14', r: "68.5", sec: 'SEC5', row: 'E', seat: 1, venue: 'Civic Center Playhouse', id: 340}, 
-            {x: '4291.67', y: '6369.37', r: "68.5", sec: 'SEC5', row: 'F', seat: 1, venue: 'Civic Center Playhouse', id: 341}, 
-            {x: '3920.18', y: '6398.61', r: "68.5", sec: 'SEC5', row: 'G', seat: 1, venue: 'Civic Center Playhouse', id: 342}, 
-            {x: '3548.68', y: '6427.84', r: "68.5", sec: 'SEC5', row: 'H', seat: 1, venue: 'Civic Center Playhouse', id: 343}, 
-           ], 
+            {x: '6149.12', y: '6223.19', r: "68.5", sec: 'SEC5', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 336},
+            {x: '5777.63', y: '6252.43', r: "68.5", sec: 'SEC5', row: 'B', seat: 1, venue: 'Civic Center Playhouse', id: 337},
+            {x: '5406.14', y: '6281.66', r: "68.5", sec: 'SEC5', row: 'C', seat: 1, venue: 'Civic Center Playhouse', id: 338},
+            {x: '5034.65', y: '6310.9', r: "68.5", sec: 'SEC5', row: 'D', seat: 1, venue: 'Civic Center Playhouse', id: 339},
+            {x: '4663.16', y: '6340.14', r: "68.5", sec: 'SEC5', row: 'E', seat: 1, venue: 'Civic Center Playhouse', id: 340},
+            {x: '4291.67', y: '6369.37', r: "68.5", sec: 'SEC5', row: 'F', seat: 1, venue: 'Civic Center Playhouse', id: 341},
+            {x: '3920.18', y: '6398.61', r: "68.5", sec: 'SEC5', row: 'G', seat: 1, venue: 'Civic Center Playhouse', id: 342},
+            {x: '3548.68', y: '6427.84', r: "68.5", sec: 'SEC5', row: 'H', seat: 1, venue: 'Civic Center Playhouse', id: 343},
+           ],
            right_box: [
-            {x: '6328.35', y: '6679', r: "68.5", sec: 'SEC6', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 344}, 
-            {x: '6075.68', y: '6698.89', r: "68.5", sec: 'SEC6', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 345}, 
-            {x: '5823.01', y: '6718.77', r: "68.5", sec: 'SEC6', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 346}, 
-            {x: '5570.34', y: '6738.66', r: "68.5", sec: 'SEC6', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 347}, 
-            {x: '5317.67', y: '6758.54', r: "68.5", sec: 'SEC6', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 348}, 
-            {x: '5065', y: '6778.43', r: "68.5", sec: 'SEC6', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 349}, 
-            {x: '4812.33', y: '6798.31', r: "68.5", sec: 'SEC6', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 350}, 
-            {x: '4559.66', y: '6818.2', r: "68.5", sec: 'SEC6', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 351}, 
-            {x: '4307', y: '6838.08', r: "68.5", sec: 'SEC6', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 352}, 
-            {x: '4054.33', y: '6857.97', r: "68.5", sec: 'SEC6', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 353}, 
-           ],  
+            {x: '6328.35', y: '6679', r: "68.5", sec: 'SEC6', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 344},
+            {x: '6075.68', y: '6698.89', r: "68.5", sec: 'SEC6', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 345},
+            {x: '5823.01', y: '6718.77', r: "68.5", sec: 'SEC6', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 346},
+            {x: '5570.34', y: '6738.66', r: "68.5", sec: 'SEC6', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 347},
+            {x: '5317.67', y: '6758.54', r: "68.5", sec: 'SEC6', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 348},
+            {x: '5065', y: '6778.43', r: "68.5", sec: 'SEC6', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 349},
+            {x: '4812.33', y: '6798.31', r: "68.5", sec: 'SEC6', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 350},
+            {x: '4559.66', y: '6818.2', r: "68.5", sec: 'SEC6', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 351},
+            {x: '4307', y: '6838.08', r: "68.5", sec: 'SEC6', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 352},
+            {x: '4054.33', y: '6857.97', r: "68.5", sec: 'SEC6', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 353},
+           ],
            balc: [
             {x: '7042.84', y: '1768.02', r: "68.5", sec: 'SEC7', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 354},
             {x: '7093.75', y: '1953.35', r: "68.5", sec: 'SEC7', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 355},
@@ -531,17 +549,17 @@ export async function load() {
             {x: '8823.84', y: '5822.79', r: "68.5", sec: 'SEC7', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 490},
            ],
            left_box: [
-            {x: '6279.65', y: '1169.05', r: "68.5", sec: 'SEC8', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 491}, 
-            {x: '6027.05', y: '1148.28', r: "68.5", sec: 'SEC8', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 492}, 
-            {x: '5774.45', y: '1127.52', r: "68.5", sec: 'SEC8', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 493}, 
-            {x: '5521.86', y: '1106.75', r: "68.5", sec: 'SEC8', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 494}, 
-            {x: '5269.26', y: '1085.98', r: "68.5", sec: 'SEC8', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 495}, 
-            {x: '5016.66', y: '1065.22', r: "68.5", sec: 'SEC8', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 496}, 
-            {x: '4764.06', y: '1044.45', r: "68.5", sec: 'SEC8', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 497}, 
-            {x: '4511.47', y: '1023.68', r: "68.5", sec: 'SEC8', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 498}, 
-            {x: '4258.87', y: '1002.92', r: "68.5", sec: 'SEC8', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 499}, 
-            {x: '4006.27', y: '982.15', r: "68.5", sec: 'SEC8', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 500}, 
+            {x: '6279.65', y: '1169.05', r: "68.5", sec: 'SEC8', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 491},
+            {x: '6027.05', y: '1148.28', r: "68.5", sec: 'SEC8', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 492},
+            {x: '5774.45', y: '1127.52', r: "68.5", sec: 'SEC8', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 493},
+            {x: '5521.86', y: '1106.75', r: "68.5", sec: 'SEC8', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 494},
+            {x: '5269.26', y: '1085.98', r: "68.5", sec: 'SEC8', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 495},
+            {x: '5016.66', y: '1065.22', r: "68.5", sec: 'SEC8', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 496},
+            {x: '4764.06', y: '1044.45', r: "68.5", sec: 'SEC8', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 497},
+            {x: '4511.47', y: '1023.68', r: "68.5", sec: 'SEC8', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 498},
+            {x: '4258.87', y: '1002.92', r: "68.5", sec: 'SEC8', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 499},
+            {x: '4006.27', y: '982.15', r: "68.5", sec: 'SEC8', row: 'A', seat: 1, venue: 'Civic Center Playhouse', id: 500},
            ],
         },
     }
-}
+}*/

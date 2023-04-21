@@ -11,7 +11,6 @@ from Constants import query
 
 
 """
-
 --The logic--
 First thing, some person on their account goes to the create season menu. 
 
@@ -60,6 +59,8 @@ def add_productions_to_season(productions, season_id):
     for production in productions:
         query("UPDATE Production SET season_id=? WHERE id=?", params=(season_id, production))
 
+def get_org_name(org_id):
+    return query("SELECT name FROM Organization WHERE org_id=?", params=(org_id,))
 
 def is_volunteer(email, org_id):
     return query(
@@ -75,13 +76,9 @@ def get_future_list_of_productions(email, org_id):
         raise InvalidPermission
 
 
-    query_text = "SELECT Performance.performance_id, Production.title " \
-    "FROM" \
-    "Performance JOIN Production ON Performance.production_id=Production.id" \
-    "WHERE" \
-    "Production.org_id=? AND Production.season_id IS NULL;"
+    query_text = "select id, title from Production where org_id=? and (select season_id from Production where org_id=?) IS NULL;"
 
-    result = query(query_text, (org_id,))
+    result = query(query_text, (org_id,org_id))
     return result
 
 

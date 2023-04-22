@@ -8,11 +8,34 @@ import pickle
 import Constants
 import sqlite3
 from Constants import Payment
+from collections import defaultdict
 
 alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 side_orc_rows = [6,7,7,6,6,6,6,5,5,5,5,5,5,4]
 main_orc_rows = [8,9,10,11,11,12,12,12,12,12,12,12,12,10,9,7]
 balc_rows = [24,23,22,23,22,23]
+
+# mapping month number to month string
+months = ['nada', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
+          'September', 'October', 'November', 'December']
+
+# create seat map
+# inserting into -> seat_map[x][y] = amount
+seat_map = defaultdict(lambda: defaultdict(dict))   # 3d dictionary used to know the seat number for each thing
+file = open('PlayhouseRawData.json')  # open the file
+data = json.load(file) # read the JSON text into a dictionary
+file.close() # close the file. The contents have already been read into memory.
+sections = data['seats']
+for s in sections:
+    seats = sections[s]
+    for seat in seats:
+        x = seat['x']
+        y = seat['y']
+        id = seat['id']
+        seat_map[x][y] = id
+
+
+
 
 
 
@@ -231,7 +254,7 @@ class SeatTaken(Exception):
 #       The only acceptable values for payment method are None, 'card', 'cash'
 #
 ###########################################################################
-def purchase_tickets(seat_ids, email, performance_id, payment_method):
+def purchase_tickets(seat_ids, email, performance_id, payment_method, exchange_ids = []):
     # check that a valid payment_method was entered
     assert payment_method in Payment.all, "ERROR: payment method should be either " \
                                                       "None, 'card', 'check, or 'cash'. " \
@@ -256,7 +279,228 @@ def purchase_tickets(seat_ids, email, performance_id, payment_method):
     print(user_id)
 
     #assign tickets to the user
+    for seat_id in seat_ids:
+        pass
 
+
+
+
+###########################################################################
+# Grab seat/ticket info for the user to select.
+# The returned information is used to populate the view
+#   of the seating selection chart
+###########################################################################
+def get_seating_chart(performance_id):
+
+    #get seating data from db
+    query_one = f"SELECT " \
+                f"id, row, number, x, y, price, section, user_id " \
+                f"FROM Seat WHERE performance_id={performance_id}"
+    results = Constants.query(query_one)
+
+
+    #transform the output to JSON
+    tickets = [] # tickets are stored here
+    for s in results: # iterate over all the seats
+        #create new seat and parse in the information
+        n = dict() # new seat
+        n['id'] = s[0]
+        n['row'] = s[1]
+        n['number'] = s[2]
+        n['x'] = s[3]
+        n['y'] = s[4]
+        n['price'] = s[5]
+        n['section'] = s[6]
+        n['user'] = s[7]
+        tickets.append(n)
+
+
+    #build output and return
+    out = json.dumps({'tickets': tickets})
+    return out
+
+
+
+
+###########################################################################
+# Wrapper function for seating chart that delivers the data formatted
+#   as expected by the frontend.
+# Example data format:
+#{
+# performance: {
+#    title: 'Phantom of the Opera', venue: 'Civic Center Playhouse', date: 'May 09, 2023', time: '7:00 PM', id: 1
+#},
+# tickets: [
+#    {seat_id: 1, user_id: null, performance_id: 1, price: 1, id: 1},
+#    {seat_id: 2, user_id: null, performance_id: 1, price: 2, id: 2},
+#    ....,
+#   ]
+# }
+###########################################################################
+def seating_chart_f(performance_id):
+    # grab data specific to the performance
+    query_text = f"""
+        SELECT
+        prod.title, perf.time, prod.venue_id, perf.performance_id
+            FROM
+        Performance perf JOIN Production prod ON perf.production_id=prod.id
+            WHERE
+        perf.performance_id={performance_id}
+        """
+    results = Constants.query(query_text)
+
+    #parse out performnace info
+    r = results[0]
+    title = r[0]
+    datetime = r[1]
+    venue = 'Civic Center Playhouse' if r[2] == 2 else 'Civic Center Concert Hall'
+    performance_id = r[3]
+
+    # make datetime into date and time
+    tokens = datetime.split(' ')  # split on the space
+    date = tokens[0]
+    time = tokens[1]
+    d_tokens = date.split('-')
+    t_tokens = time.split(':')
+
+    # date
+    month = months[int(d_tokens[1])]
+    year = d_tokens[0]
+    day = d_tokens[2]
+
+    # time
+    hour = int(t_tokens[0])
+    min = t_tokens[1]
+    suffix = 'a.m.'
+    if hour == 12:
+        suffix = 'p.m.'
+    elif hour > 12:
+        hour = hour - 12
+        suffix = 'p.m.'
+
+    # formatting
+    date = f'{month} {day}, {year}'  # example: "May 3, 2023"
+    time = f'{hour}:{min} {suffix}'  # example: "6:00 p.m."
+
+    # properly formatted performance section
+    performance = {'title': title, 'date': date, 'time': time, 'venue': venue, 'performance_id': performance_id}
+
+
+
+    #now get the seating data
+    query_text = f"SELECT " \
+                f"id, row, number, x, y, price, section, user_id " \
+                f"FROM Seat WHERE performance_id={performance_id}"
+    results = Constants.query(query_text)
+
+    #format the 'ticket' data
+    # the correct format is like so for each one:
+    #{seat_id: 4, user_id: null, performance_id: 1, price: 4, id: 4},
+    #They are grouped by the section they are in
+    tickets = []
+    seats = dict()
+    for r in results:
+        """
+        seat_id = int(r[0])
+        row = r[1]
+        seat = r[2] # the number, so like seat B7 is row b seat 7
+        x = r[3]
+        y = r[4]
+        price = r[5]
+        sec = r[6]
+        user_id = r[7]
+        """
+        row = r[1]
+        seat = r[2]  # the number, so like seat B7 is row b seat 7
+        sec = r[6]
+        id = int(r[0])
+        user_id = r[7]
+        #already have performance_id in function parameters
+        price = r[5]
+        x = r[3]
+        y = r[4]
+        seat_id = seat_map[x][y]
+        new_ticket = {'seat_id':seat_id, 'user_id':user_id, 'performance_id':performance_id, 'price':price, 'id': id}
+
+        #check to see if the section exists
+        if sec not in seats.keys():
+            seats[sec] = []
+
+        #add new ticket to the
+        tickets.append(new_ticket)
+
+
+        #SEATS HERE FOR the thing
+        #Now do seats
+        new_seat = {'x': x, 'y':y, 'r':'68.5', 'sec':sec, 'row':row, 'seat':seat, 'venue':venue,'id': seat_id}
+        seats[sec].append(new_seat)
+
+    #combine data into one map
+    data = {'performance':performance, 'tickets': tickets, 'seats':seats}
+    return data
+
+
+
+
+
+###########################################################################
+# List of upcoming performances so the user can select which
+#   one to purchase a ticket for.
+###########################################################################
+def upcoming_performances():
+    #query for upcoming shows
+    query_text = """
+    SELECT
+    prod.title, perf.time, prod.venue_id, perf.performance_id
+        FROM
+    Performance perf JOIN Production prod ON perf.production_id=prod.id
+        WHERE
+    perf.time > datetime()
+    """
+
+
+    #execute and grab the results
+    results = Constants.query(query_text)
+    formatted_results = []
+    for r in results:
+        title = r[0]
+        datetime = r[1]
+        venue = 'Civic Center Playhouse' if r[2] == 2 else 'Civic Center Concert Hall'
+        performance_id = r[3]
+
+        #make datetime into date and time
+        tokens = datetime.split(' ') # split on the space
+        date = tokens[0]
+        time = tokens[1]
+        d_tokens = date.split('-')
+        t_tokens = time.split(':')
+
+        #date
+        month = months[int(d_tokens[1])]
+        year = d_tokens[0]
+        day = d_tokens[2]
+
+        #time
+        hour = int(t_tokens[0])
+        min = t_tokens[1]
+        suffix = 'a.m.'
+        if hour == 12:
+            suffix = 'p.m.'
+        elif hour > 12:
+            hour = hour - 12
+            suffix = 'p.m.'
+
+        #formatting
+        date = f'{month} {day}, {year}'  #example: "May 3, 2023"
+        time = f'{hour}:{min} {suffix}'  #example: "6:00 p.m."
+
+        #append new map
+        #example name: "Hamilton", date: "May 7", time: "6:00 p.m.", venue: "Civic Center Concert Hall", performance_id: "2"
+        new_result = {'name': title, 'date': date, 'time': time, 'venue':venue, 'performance_id':performance_id}
+        formatted_results.append(new_result)
+
+    #return the results in the appropriate format
+    return formatted_results
 
 
 
@@ -267,6 +511,15 @@ def purchase_tickets(seat_ids, email, performance_id, payment_method):
 ##########################################################################################
 #####################################   TESTS    #########################################
 ##########################################################################################
+
+
+#test upcoming performances
+def test_upcoming_performances():
+    results = upcoming_performances()
+    for r in results:
+        print(r)
+
+
 
 
 ############################
@@ -287,23 +540,40 @@ def test_purchase_tickets():
     purchase_tickets(1, 'brenda@gmail.com', 4, 'card')
 
 
+
+
+################################
+# test retrieving seating chart
+################################
+def test_seating_chart():
+    id = 15
+    result = get_seating_chart(id)
+    print(result)
+
+################################################################
+# test retrieving seating chart WITH FORMATTING
+################################################################
+def test_seating_chart_f():
+    id = 21
+    results = seating_chart_f(id)
+
+    tickets = results['tickets']
+    seats = results['seats']
+
+    print('==TICKETS==')
+    for t in tickets:
+        print(t)
+
+    print('==SEATS==')
+    for section in seats:
+        print('section:', section)
+        for item in seats[section]:
+            print(item)
+
+
 ################################
 # tests for this file
 ################################
 if __name__ == "__main__":
-    seats = []
-    #test_purchase_tickets()
-    seating_data = load_playhouse_data()
-    for key in seating_data:
-        #print(f'---{key}---')
-        for seat in seating_data[key]:
-            seats.append((seat['sec'], seat['number'], seat['row']))
-            #print(seat)
+    test_seating_chart_f()
 
-    for seat in seats:
-        print(seat)
-
-
-#Create a function for each venue, reutrn a list of seats (as a 3 tuple).
-# The values of the seat tuple are -> (section, number, row)
-#

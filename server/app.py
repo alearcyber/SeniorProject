@@ -6,8 +6,11 @@ import Queries
 import Constants
 from database.user.sign_up import sign_up_user
 from database.user.login import login_user
+import PurchaseTickets
 from Scheduling import create_new_production
 from CreateSeason import get_future_list_of_productions, get_org_name
+import SeasonPass
+import FrontDesk
 
 app = Flask(__name__, template_folder='templates', static_folder='templates')
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -89,6 +92,55 @@ def signup():
     return json.dumps(result, indent=4)
 
 
+
+
+
+
+###########################################
+# Get the seating chart for a performance
+# expected request body:
+#   {performance_id: n}
+###########################################
+@app.route("/get_seating_chart", methods=['POST'])
+def seating_chart():
+    data = request.get_json()
+    performance_id = data['performance_id']
+    print("Received request for seating data for peformance of id", performance_id)
+    result = PurchaseTickets.seating_chart_f(performance_id)
+    return result
+
+
+
+
+
+
+###########################################
+# list of upcoming performances
+###########################################
+@app.route("/upcoming_performances", methods=['GET'])
+def upcoming_performances():
+    print('LOG: Received request for upcoming performances')
+    data = PurchaseTickets.upcoming_performances()
+    out = json.dumps({'data':data}, indent=4)
+    print('THE JSON IS HERE:', out)
+    return out
+
+
+
+
+
+
+#for the BUY TICKETS page at the top
+
+@app.route("/purchase_tickets", methods=['POST'])
+def purchase_tickets():
+    data = request.get_json()
+    print("Received request for purchasing tickets")
+    print(data)
+    result = PurchaseTickets.purchase_tickets(data['seats'], data['email'], data['performance_id'], data['payment_method'])
+    return json.dumps(result, indent=4)
+
+
 @app.route("/is_volunteer", methods=['GET', 'POST'])
 def is_volunteer():
     # Query to run:
@@ -125,9 +177,40 @@ def get_productions(email, org_id):
 
     return json.dumps({'production_list': result, 'org_name': org_name})
 
-# @app.route('/create_season')
-# def get_productions(email, org_id):
-#     pass
+
+
+
+#used for the user to select a season when they are buying a season pass
+#data is used to load the page that presents the available seasons
+@app.route('/get_upcoming_seasons')
+def get_upcoming_seasons():
+    data = SeasonPass.upcoming_seasons()
+    out = json.dumps({'seasons':data})
+    print(out)
+    return out
+
+
+
+# retrieves a list of all the performances for a given season
+@app.route("/get_season_performances", methods=['POST'])
+def get_season_performances():
+    title = request.get_json()['title']
+    data = SeasonPass.get_all_season_performances(title)
+    out = json.dumps({'performances': data})
+    print(out)
+    return out
+
+
+
+#getting the performances for the front desk
+@app.route("/frontdesk_upcoming_performances", methods=['POST'])
+def frontdesk_performances():
+    email = request.get_json()['email']
+    data = FrontDesk.upcoming_performances(email)
+    out = json.dumps({'performances': data})
+    print('Received request from', email, 'for a list of upcoming perforamances for the front desk.')
+    print(out)
+    return out
 
 if __name__ == '__main__':
     app.run()

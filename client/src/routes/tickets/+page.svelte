@@ -10,21 +10,17 @@
 
   import { Listgroup, Button, Heading } from "flowbite-svelte"
 
-  //hard coded event data that will eventually be received from database
-  let list = [
-    { name: "Phantom of the Opera", date: "May 3", time: "6:00 p.m.", venue: "Civic Center Playhouse"
-    },
-    { name: "Hamilton", date: "May 7", time: "6:00 p.m.", venue: "Civic Center Concert Hall"
-    },
-    { name: "Wicked", date: "May 8", time: "6:00 p.m.", venue: "Civic Center Playhouse"
-    },
-  ]
+
+  // grab data from the database
+  export let data;
+  let list = data.data;
+
 
   //display correct venue graphic
   function href(item) {
     return item.venue === 'Civic Center Concert Hall' 
-      ? '/concert_seats' 
-      : '/playhouse_seats'
+      ? `/concert_seats?id=${item.performance_id}`
+      : `/playhouse_seats?id=${item.performance_id}`
   }
 </script>
 

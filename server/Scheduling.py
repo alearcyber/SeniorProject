@@ -344,13 +344,65 @@ def test3():
     ]
     duration = 120  # 120 minutes, 2 hours
 
+    #params for creating a new production
+    #(title, venue_id, org_id, image, description, duration, times)
+    create_new_production(title, 2, 1, None, description, duration, times)
+
+
+def test4():
+    title = 'Phantom of the Opera'
+    description = 'It is a very popular play. You will be entertained by it.'
+    times = [  # four days in a row at 12:30
+        "2023-07-01 12:30:00",
+        "2023-07-02 12:30:00",
+        "2023-07-03 12:30:00",
+        "2023-07-04 12:30:00",
+    ]
+    duration = 120  # 120 minutes, 2 hours
+
     # params for creating a new production
     # (title, venue_id, org_id, image, description, duration, times)
     create_new_production(title, 2, None, None, description, duration, times)
+
+#This test will create 2 productions for the movies and plays seasons
+#each production will have 3 performances
+def test5():
+    #movies is season_id 1
+    #plays is season_id 2
+    #first productions, the movies
+
+    times = [  # four days in a row at 12:30
+        "2023-08-01 12:30:00",
+        "2023-08-02 12:30:00",
+        "2023-08-03 12:30:00",
+    ]
+    # (title, venue_id, org_id, image, description, duration, times)
+    create_new_production(title='Citizen Kane', venue_id=2, org_id=1, image=None,
+                          description=None, duration=60, times=times)
+
+
+    create_new_production(title='Django', venue_id=2, org_id=1, image=None,
+                          description=None, duration=200,
+                          times=["2023-07-01 12:30:00", "2023-07-02 12:30:00", "2023-07-03 12:30:00",])
+
+
+    create_new_production(title='Book Of Mormon', venue_id=2, org_id=1, image=None,
+                          description=None, duration=120,
+                          times=["2023-08-01 14:00:00", "2023-08-02 14:00:00", "2023-08-03 14:00:00", ])
+
+
+    create_new_production(title='A Passing Fancy', venue_id=2, org_id=1, image=None,
+                          description=None, duration=160,
+                          times=["2023-11-01 16:00:00", "2023-11-02 16:00:00", "2023-11-03 16:00:00", ])
+
+
+
+
+
 
 
 #######################################################
 # For running tests
 #######################################################
 if __name__ == '__main__':
-    test3()
+    test5()

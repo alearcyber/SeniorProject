@@ -87,4 +87,13 @@ def load_playhouse_data():
 
 
 
+###########################################################################
+# Mapping months the number to the approprate month text.
+# For example, 1 is January, 2 is February, etc.
+###########################################################################
+months = ['nada', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
+          'September', 'October', 'November', 'December']
+
+
+
 

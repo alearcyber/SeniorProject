@@ -8,14 +8,36 @@
 	import Center from '../../layouts/center.svelte' //import Center layout
   import Checkout from '../../components/Checkout.svelte'
   import { SeatStore } from '../../stores/SeatStore.js'
+  import { page } from '$app/stores'
   
+  const url = $page.url; //get url
+  let performance_id = url.searchParams.get('pid') //parse out url parameters, the performance id specifically
+
   /**
   * @type {any[]}
   */
   let mySeatStore
   $: mySeatStore = $SeatStore //subscribe to seat store
 
-  const button_alert = () => {
+  let email = ''
+  let payment_method = 'credit'
+
+  const button_alert = async () => {
+    const response = await fetch('http://localhost:5000/purchase_tickets', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        seats_ids: mySeatStore.map(seat => seat.id),
+        email,
+        performance_id,
+        payment_method,
+      })
+    })
+
+    console.log({ response })
+
     alert('Thank you for your purchase! Your order has been confirmed.')
   };
 
@@ -23,6 +45,7 @@
 
   function toggleVisible() {
       visible = !visible
+      credit = visible ? 'card' : 'cash'
   }
 </script>
 
@@ -44,7 +67,7 @@
         </div>
           <div class="mb-6">
             <Label for="email" class="mb-2">Email address</Label>
-            <Input type="email" id="email" placeholder="john.doe@company.com" required />
+            <Input bind:value={email} type="email" id="email" placeholder="john.doe@company.com" required />
           </div>
           <div class="mb-6">
             <Label for="address1" class="mb-2">Address 1</Label>

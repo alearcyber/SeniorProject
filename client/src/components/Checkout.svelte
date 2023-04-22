@@ -22,7 +22,7 @@
         {#each mySeatStore as { sec, row, seat, price } }
           {#if seat} 
             <TableBodyRow>
-              <TableBodyCell>{sec} ROW {row} SEAT {seat} </TableBodyCell>
+              <TableBodyCell class="capitalize">{sec.replace('_', ' ')} - Seat {row}{seat} </TableBodyCell>
               <TableBodyCell>${price}</TableBodyCell>
             </TableBodyRow>
           {/if}

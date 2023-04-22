@@ -254,7 +254,7 @@ class SeatTaken(Exception):
 #       The only acceptable values for payment method are None, 'card', 'cash'
 #
 ###########################################################################
-def purchase_tickets(seat_ids, email, payment_method, exchange_ids):
+def purchase_tickets(seat_ids, email, performance_id, payment_method, exchange_ids = []):
     # check that a valid payment_method was entered
     assert payment_method in Payment.all, "ERROR: payment method should be either " \
                                                       "None, 'card', 'check, or 'cash'. " \

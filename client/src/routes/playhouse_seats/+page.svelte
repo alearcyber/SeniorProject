@@ -17,21 +17,13 @@
 
 
     const url = $page.url; //get url
-    //console.log(url.searchParams.get('id'));
     let performance_id = url.searchParams.get('id') //parse out url parameters, the performance id specifically
-
-
-
-
 
     /**
 	* @type {{ seats: {}; tickets: Array<{}>; performance: {title: string;}; }}
 	*/
     export let data;
-    //console.log("DATA BUILT IN:", data);
-    //console.log("DATA B:", datab);
-    console.log('THE DATA', data);
-
+    data = data.data ?? data
 
     /**
 	* @type {any[]}
@@ -79,7 +71,7 @@
             {/each}
         </Listgroup>
         <div>
-            <Button class="w-full h-full" size="sm" href="/payment">Buy Tickets</Button>
+            <Button class="w-full h-full" size="sm" href="/payment?pid={performance_id}">Buy Tickets</Button>
         </div>
     </div>
 </div>

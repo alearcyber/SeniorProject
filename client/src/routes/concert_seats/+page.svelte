@@ -10,11 +10,17 @@
 	import TicketCard from "../../components/TicketCard.svelte"
     import { SeatStore } from '../../stores/SeatStore.js'
     import Legend from "../../components/Legend.svelte"
+	import { page } from "$app/stores"
+
+    const url = $page.url; //get url
+    let performance_id = url.searchParams.get('id') //parse out url parameters, the performance id specifically
 
     /**
-	* @type {{ seats: {}; tickets: Array<{}>; performance: {title: string;}; }}
+	* @type {{ data: { seats: {}; tickets: Array<{}>; performance: {title: string;}; }}}
 	*/
-    export let data
+    export let data;
+    data = data.data ?? data
+
     /**
 	* @type {any[]}
 	*/
@@ -61,7 +67,7 @@
             {/each}
         </Listgroup>
         <div>
-            <Button class="w-full h-full" size="sm" href="/payment">Buy Tickets</Button>
+            <Button class="w-full h-full" size="sm" href="/payment?pid={performance_id}">Buy Tickets</Button>
         </div>
     </div>
 </div>

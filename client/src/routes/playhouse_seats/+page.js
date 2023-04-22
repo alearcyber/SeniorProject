@@ -1,4 +1,4 @@
-import {data} from "./+page.svelte";
+// import {data} from "./+page.svelte";
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ url }) {
@@ -12,8 +12,8 @@ export async function load({ url }) {
 			body: JSON.stringify({ 'performance_id': pid })
 		});
 
-    const out = await response.json();
-    return { out };
+    const data = await response.json();
+    return { data };
 }
 /**
 export async function load() {

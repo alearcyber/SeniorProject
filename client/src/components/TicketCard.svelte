@@ -13,7 +13,6 @@
     export let row
     export let seat
     export let price
-
 </script>
 
 <div class="">
@@ -29,7 +28,7 @@
             </TableHead>
             <TableBody>
                 <TableBodyRow class="text-base text-center">
-                    <TableBodyCell>{section}</TableBodyCell>
+                    <TableBodyCell class="capitalize">{section.replace(/_/g, ' ')}</TableBodyCell>
                     <TableBodyCell>{row}</TableBodyCell>
                     <TableBodyCell>{seat}</TableBodyCell>
                 </TableBodyRow>

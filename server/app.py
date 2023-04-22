@@ -165,8 +165,9 @@ def create_production():
                                    data['duration'], data['times'])
     
     # Add section pricing to performances
-    for key in data['performances']:
-        print("Section prices:", key['section_prices'])
+    for key in data['section_prices']:
+        price = data['section_prices'][key]
+        print(key + ": " + price)
 
     return json.dumps(result)
 

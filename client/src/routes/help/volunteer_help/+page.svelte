@@ -45,7 +45,10 @@
         <Layout gap={1}>
           <P class= " mt-10 mb-3 pl-16 text-left" weight="bold" color="text-gray-500 dark:text-gray-400"  whitespace="preline" size="xl">
             <h3 class="mt-10 mb-1 pl-5 text-left text-xl font-medium text-blue-900 dark:text-white p-0">Login as Admin</h3>
-              1. ......
+              1. Follow the standard login procedure.
+              Logging in as an admin is automatic as the database will
+              check if the user email/password match an admin account
+              already in the system.
           </P>
           <P class= "mt-10 mb-3 pl-5 text-left" weight="bold" color="text-gray-500 dark:text-gray-400"  whitespace="preline" size="xl">
             <h3 class="mt-10 mb-1 pl-5 text-left text-xl font-medium text-blue-900 dark:text-white p-0">Operate Front Desk Help</h3>

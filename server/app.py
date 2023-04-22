@@ -206,5 +206,28 @@ def frontdesk_performances():
     print(out)
     return out
 
+
+
+#This is for when the front desk is handling any sort of payment
+@app.route('/handle_frontdesk_payment', methods=['POST'])
+def handle_frontdesk_payment():
+    d = request.get_json() #data from the post
+    status = FrontDesk.handle_payment(d['performance_id'], d['number'], d['row'], d['section'], d['payment_method'])
+    if status:
+        print('Handled Payment Successfully')
+    else:
+        print('somthing went wrong handling the payment')
+    return json.dumps({'status': status})
+
+
+#retreiving seat info foor the front desk person
+@app.route('/frontdesk_seat_info', methods=['POST'])
+def frontdesk_seat_info():
+    d = request.get_json()
+    seat_info = FrontDesk.get_seat_info(d['performance_id'], d['number'], d['row'], d['section'])
+    return json.dumps({'seat_info': seat_info})
+
+
+
 if __name__ == '__main__':
     app.run()

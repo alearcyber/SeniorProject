@@ -496,11 +496,12 @@ def upcoming_performances():
 
         #append new map
         #example name: "Hamilton", date: "May 7", time: "6:00 p.m.", venue: "Civic Center Concert Hall", performance_id: "2"
-        new_result = {'name': title, 'date': date, 'time': time, 'venue':venue, 'performance_id':performance_id}
+        new_result = {'name': title, 'date': date, 'time': time, 'venue': venue, 'performance_id':performance_id}
         formatted_results.append(new_result)
 
     #return the results in the appropriate format
     return formatted_results
+
 
 
 

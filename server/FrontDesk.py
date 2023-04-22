@@ -2,6 +2,7 @@
 This file has to do with every that goes on with operating the front desk for a performance.
 """
 import Constants
+import difflib
 
 ####################################################################
 ########################## EXCEPTIONS ##############################
@@ -14,6 +15,18 @@ class SeatAlreadyPaid(Exception):
 #occurs when trying to accept payment and the payment type is invalid
 class InvalidPayment(Exception):
     pass
+
+
+
+#utility function for matching strings
+def closest_payment(input_str):
+    strings_list = [Constants.Payment.card, Constants.Payment.cash, Constants.Payment.check]
+    # get the closest match of the input string in the list of strings
+    match = difflib.get_close_matches(input_str, strings_list, n=1, cutoff=0.6)
+    if match:
+        return match[0]
+    else:
+        return Constants.Payment.cash
 
 
 
@@ -100,10 +113,82 @@ def upcoming_performances(email):
 
 
 
+##############################################################################
+# For when a seat is purchased from the front desk
+# handles both buying an available ticket and processing payment for a reserved ticket
+##############################################################################
+def handle_payment(performance_id, number, row, section, payment_method):
+    #get seat info from db
+    q = f"""
+    SELECT id, payment_method 
+    FROM Seat 
+    WHERE performance_id={performance_id} AND number={number} AND section='{section}' AND row='{row}'
+    """
+    results = Constants.query(q)
+    print(f'Received request to handle payment, query results:', results)
+
+    #check that the seat exists
+    if len(results) <= 0:
+        return False
+
+    seat_id = int(results[0][0]) #id of the seat
+    payment_method = closest_payment(payment_method)
+
+    #set the payment method
+    Constants.query(f"""UPDATE Seat SET payment_method='{payment_method}' WHERE id={seat_id}""")
+
+    #if seat has no User, assign it to the dummy User
+    if results[0][1] is None:
+        Constants.query(f'UPDATE Seat SET user_id=33 WHERE id={seat_id}') #33 is of frontdesk user
+
+
+    #return true for successful operation
+    return True
+
+
+#grabs the info for a seat, returns status and price
+def get_seat_info(performance_id, number, row, section):
+    print('Received request from front desk to get info for a seat')
+    #TODO get the seat info here
+    q = f"""
+        SELECT user_id, payment_method, price
+        FROM Seat 
+        WHERE performance_id={performance_id} AND number={number} AND section='{section}' AND row='{row}'
+        """
+    results = Constants.query(q)
+    # check that the seat exists
+    if len(results) <= 0:
+        return False
+
+    user_id = int(results[0][0])
+    payment_method = results[0][1]
+
+    data = dict()
+    data['price'] = results[0][2]
+
+    #status can ONLY be 'paid', 'reserved', or 'available'
+    if user_id is None: #available
+        data['status'] = 'available'
+    elif payment_method is None:
+        data['status'] = 'reserved'
+    else:
+        data['status'] = 'paid'
+
+    #return data
+    return data
+
+
+
+
+
+
+
+
+
 ######################################
 # Load all the seats for a show
 # params:
-#   performance_id - id of the permormance to show
+#   performance_id - id of the performance to show
 # returns a list of tuples where each tuple is a seat.
 #   This is the same format the data is returned
 #   in from the database.
@@ -112,15 +197,25 @@ def load_seats(performance_id):
     pass
 
 
-
 def test1():
     data = upcoming_performances("tom.bombadillo@arnornet.me")
     print(data)
 
 
+def test2():
+    results = handle_payment(performance_id=26, number=3, row='A', section='main_orch', payment_method=Constants.Payment.cash)
+    print(results)
+
+
+def test3():
+    results = get_seat_info(performance_id=26, number=3, row='A', section='main_orch')
+    print(results)
+
+
+
 
 if __name__ == "__main__":
-    test1()
+    test3()
 
 
 

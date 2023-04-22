@@ -7,7 +7,7 @@ import Constants
 from database.user.sign_up import sign_up_user
 from database.user.login import login_user
 import PurchaseTickets
-from Scheduling import create_new_production
+from Scheduling import create_new_production, set_section_prices
 from CreateSeason import get_future_list_of_productions, get_org_name
 import SeasonPass
 import FrontDesk
@@ -175,11 +175,13 @@ def create_production():
                                    data['org_id'], data['image'], data['description'], 
                                    data['duration'], data['times'])
     
-    # Add section pricing to performances
+    # Verify results
     for key in data['section_prices']:
         price = data['section_prices'][key]
         print(key + ": " + price)
 
+    # Set section prices
+    prices_resut = set_section_prices(result, data['section_prices'])
     return json.dumps(result)
 
 @app.route('/get_productions/<email>:<org_id>')

@@ -131,7 +131,13 @@ def upcoming_performances():
 
 
 #for the BUY TICKETS page at the top
-
+@app.route("/purchase_tickets", methods=['POST'])
+def purchase_tickets():
+    data = request.get_json()
+    print("Received request for purchasing tickets")
+    print(data)
+    result = PurchaseTickets.purchase_tickets(data['seats'], data['email'], data['performance_id'], data['payment_method'])
+    return json.dumps(result, indent=4)
 
 
 

@@ -120,12 +120,13 @@ def upcoming_performances(email):
 def handle_payment(performance_id, number, row, section, payment_method):
     #get seat info from db
     q = f"""
-    SELECT id, payment_method 
+    SELECT id, payment_method, user_id
     FROM Seat 
     WHERE performance_id={performance_id} AND number={number} AND section='{section}' AND row='{row}'
     """
     results = Constants.query(q)
     print(f'Received request to handle payment, query results:', results)
+    user_id = results[0][2]
 
     #check that the seat exists
     if len(results) <= 0:
@@ -138,9 +139,10 @@ def handle_payment(performance_id, number, row, section, payment_method):
     Constants.query(f"""UPDATE Seat SET payment_method='{payment_method}' WHERE id={seat_id}""")
 
     #if seat has no User, assign it to the dummy User
-    if results[0][1] is None:
+    if user_id is None:
         Constants.query(f'UPDATE Seat SET user_id=33 WHERE id={seat_id}') #33 is of frontdesk user
-
+    else:
+        Constants.query(f'UPDATE Seat SET user_id={user_id} WHERE id={seat_id}')
 
     #return true for successful operation
     return True
@@ -156,15 +158,42 @@ def get_seat_info(performance_id, number, row, section):
         WHERE performance_id={performance_id} AND number={number} AND section='{section}' AND row='{row}'
         """
     results = Constants.query(q)
+    print('RESULTS:', results)
     # check that the seat exists
     if len(results) <= 0:
         return False
 
-    user_id = int(results[0][0])
+    user_id = 33
     payment_method = results[0][1]
+    data = dict()  #dictionary being returned
 
-    data = dict()
-    data['price'] = results[0][2]
+    #handle case where the user id is None
+    if results[0][0] is None:
+        user_id = None
+        data['email'] = 'N/A'
+    else:
+        user_id = int(results[0][0])
+
+        # grab the email of the user who bought it
+        # first, check if it is the default user
+        if user_id == 33:
+            data['email'] = "*purchased at front desk*"
+        else:
+            r = Constants.query(f"""SELECT email FROM User WHERE user_id={user_id}""")
+            print('ONE r:', r)
+            data['email'] = r[0][0]
+
+
+
+
+
+    #handle price not being set. Just set it to 5
+    if results[0][2] is None:
+        data['price'] = 5
+    else:
+        data['price'] = results[0][2]
+
+
 
     #status can ONLY be 'paid', 'reserved', or 'available'
     if user_id is None: #available

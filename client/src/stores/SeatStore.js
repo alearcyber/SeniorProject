@@ -3,7 +3,7 @@
  * selected seats on the seat graphics.
  */
 
-import { writable } from "svelte/store"
+import { derived, writable } from "svelte/store"
 
 export const SeatStore = writable([])
 
@@ -21,3 +21,8 @@ export const removeSeat = (seat) => {
 export const clear = () => {
     SeatStore.update(() => [])
 }
+
+export const sum = derived(
+	SeatStore,
+	$SeatStore => $SeatStore.reduce((total, item) => total + item.price, 0)
+);

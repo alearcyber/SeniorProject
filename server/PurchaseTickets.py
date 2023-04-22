@@ -254,7 +254,7 @@ class SeatTaken(Exception):
 #       The only acceptable values for payment method are None, 'card', 'cash'
 #
 ###########################################################################
-def purchase_tickets(seat_ids, email, payment_method, exchange_ids):
+def purchase_tickets(seat_ids, email, performance_id, payment_method, exchange_ids=[]):
     # check that a valid payment_method was entered
     assert payment_method in Payment.all, "ERROR: payment method should be either " \
                                                       "None, 'card', 'check, or 'cash'. " \
@@ -312,6 +312,10 @@ def get_seating_chart(performance_id):
         n['price'] = s[5]
         n['section'] = s[6]
         n['user'] = s[7]
+
+        #handle if for some reason the price is not set
+        if n['price'] is None:
+            n['price'] = 22
         tickets.append(n)
 
 
@@ -416,7 +420,7 @@ def seating_chart_f(performance_id):
         id = int(r[0])
         user_id = r[7]
         #already have performance_id in function parameters
-        price = r[5]
+        price = r[5] if (r[5] is not None) else 22  #ternary to set a default price
         x = r[3]
         y = r[4]
         seat_id = seat_map[x][y]

@@ -121,8 +121,8 @@ def seating_chart():
 def upcoming_performances():
     print('LOG: Received request for upcoming performances')
     data = PurchaseTickets.upcoming_performances()
-    out = json.dumps({'data':data}, indent=4)
-    print('THE JSON IS HERE:', out)
+    out = json.dumps({'data': data}, indent=4)
+    #print('THE JSON IS HERE:', out)
     return out
 
 
@@ -135,8 +135,19 @@ def upcoming_performances():
 def purchase_tickets():
     data = request.get_json()
     print("Received request for purchasing tickets")
-    print(data)
-    result = PurchaseTickets.purchase_tickets(data['seats'], data['email'], data['performance_id'], data['payment_method'])
+    print("data received:", data)
+    #parse out the data
+    d = data
+    seat_data = d['seat_data']
+    email = d['email']
+    performance_id = d['performance_id']
+    payment_method = d['payment_method']
+    #check for 'credit' instead of 'card'
+    if payment_method == 'credit':
+        payment_method = Constants.Payment.card
+
+    #result = PurchaseTickets.purchase_tickets(data['seats'], data['email'], data['performance_id'], data['payment_method'])
+    result = PurchaseTickets.purchase_tickets(seat_data=seat_data, email=email, performance_id=performance_id, payment_method=payment_method)
     return json.dumps(result, indent=4)
 
 

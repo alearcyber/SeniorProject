@@ -23,7 +23,6 @@
 
   // Triggered when page is loaded
 	onMount(async () => {
-		console.log('This is onMount');
 		let val = sessionStorage.getItem('user');
 		if (val === null) {
 			console.log('User is not logged in');

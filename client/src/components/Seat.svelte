@@ -23,7 +23,7 @@
 
     export const states = {
         available: 'available',
-        occupied: 'occupied', 
+        occupied: 'occupied',
         selected: 'selected'
     }
 

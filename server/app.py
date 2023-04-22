@@ -121,8 +121,8 @@ def seating_chart():
 def upcoming_performances():
     print('LOG: Received request for upcoming performances')
     data = PurchaseTickets.upcoming_performances()
-    out = json.dumps({'data':data}, indent=4)
-    print('THE JSON IS HERE:', out)
+    out = json.dumps({'data': data}, indent=4)
+    #print('THE JSON IS HERE:', out)
     return out
 
 
@@ -131,14 +131,25 @@ def upcoming_performances():
 
 
 #for the BUY TICKETS page at the top
-
 @app.route("/purchase_tickets", methods=['POST'])
 def purchase_tickets():
     data = request.get_json()
     print("Received request for purchasing tickets")
-    print(data)
-    result = PurchaseTickets.purchase_tickets(data['seats'], data['email'], data['performance_id'], data['payment_method'])
+    print("data received:", data)
+    #parse out the data
+    d = data
+    seat_data = d['seat_data']
+    email = d['email']
+    performance_id = d['performance_id']
+    payment_method = d['payment_method']
+    #check for 'credit' instead of 'card'
+    if payment_method == 'credit':
+        payment_method = Constants.Payment.card
+
+    #result = PurchaseTickets.purchase_tickets(data['seats'], data['email'], data['performance_id'], data['payment_method'])
+    result = PurchaseTickets.purchase_tickets(seat_data=seat_data, email=email, performance_id=performance_id, payment_method=payment_method)
     return json.dumps(result, indent=4)
+
 
 
 @app.route("/is_volunteer", methods=['GET', 'POST'])
@@ -212,6 +223,29 @@ def frontdesk_performances():
     print('Received request from', email, 'for a list of upcoming perforamances for the front desk.')
     print(out)
     return out
+
+
+
+#This is for when the front desk is handling any sort of payment
+@app.route('/handle_frontdesk_payment', methods=['POST'])
+def handle_frontdesk_payment():
+    d = request.get_json() #data from the post
+    status = FrontDesk.handle_payment(d['performance_id'], d['number'], d['row'], d['section'], d['payment_method'])
+    if status:
+        print('Handled Payment Successfully')
+    else:
+        print('somthing went wrong handling the payment')
+    return json.dumps({'status': status})
+
+
+#retreiving seat info foor the front desk person
+@app.route('/frontdesk_seat_info', methods=['POST'])
+def frontdesk_seat_info():
+    d = request.get_json()
+    seat_info = FrontDesk.get_seat_info(d['performance_id'], d['number'], d['row'], d['section'])
+    return json.dumps({'seat_info': seat_info})
+
+
 
 if __name__ == '__main__':
     app.run()

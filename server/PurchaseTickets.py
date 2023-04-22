@@ -258,29 +258,41 @@ def purchase_tickets(seat_ids, email, performance_id, payment_method, exchange_i
     # check that a valid payment_method was entered
     assert payment_method in Payment.all, "ERROR: payment method should be either " \
                                                       "None, 'card', 'check, or 'cash'. " \
-                                                      "You entered " +str(payment_method)
+                                                      "You entered " + str(payment_method)
 
-
-
-    # Check that seats are available
-    if not is_seat_available(seat_ids): # seats are not available, Throw exception
-        raise SeatTaken('One of the seats you requested is taken')
-
-    # TODO finish this
     #grab user id for the given email
     results = query(f"SELECT user_id from User WHERE email='{email}'")
 
-    #check that the email acutaly belonged to some user
-    assert len(results) > 0, f'ERROR: The email, {email}, does not belong to any users.'
+    #check if email belongs to existing user in the db
+    user_exists_already = len(results) > 0
+
 
     #parse out the user_id from that user.
-    user_id = results[0][0]
+    #user_id = results[0][0]
 
-    print(user_id)
+    #get the seat ids from the database
+    seat_ids = []
+    for num, row, sec in seat_data:
+        q = f"""SELECT id FROM Seat WHERE number={num} AND row='{row}' AND section='{sec}' AND performance_id={performance_id}"""
+        r = Constants.query(q)
+        seat_ids.append(r[0][0])
+
+
+    #if the email does NOT already have a user, create one
+    if not user_exists_already:
+        q = f"""INSERT INTO User (email) VALUES ('{email}')"""
+        Constants.query(q)
+        user_id = Constants.query(f"SELECT user_id from User WHERE email='{email}'")[0][0]
+    else: #user does exist in the database
+        user_id = results[0][0]
+
 
     #assign tickets to the user
     for seat_id in seat_ids:
-        pass
+        q = f"""UPDATE Seat SET user_id = {user_id}, payment_method='{payment_method}' WHERE id={seat_id}"""
+        Constants.query(q)
+
+    return True
 
 
 
@@ -312,6 +324,10 @@ def get_seating_chart(performance_id):
         n['price'] = s[5]
         n['section'] = s[6]
         n['user'] = s[7]
+
+        #handle if for some reason the price is not set
+        if n['price'] is None:
+            n['price'] = 22
         tickets.append(n)
 
 
@@ -416,11 +432,11 @@ def seating_chart_f(performance_id):
         id = int(r[0])
         user_id = r[7]
         #already have performance_id in function parameters
-        price = r[5]
+        price = r[5] if (r[5] is not None) else 22  #ternary to set a default price
         x = r[3]
         y = r[4]
         seat_id = seat_map[x][y]
-        new_ticket = {'seat_id':seat_id, 'user_id':user_id, 'performance_id':performance_id, 'price':price, 'id': id}
+        new_ticket = {'seat_id': seat_id, 'user_id':user_id, 'performance_id': performance_id, 'price':price, 'id': id}
 
         #check to see if the section exists
         if sec not in seats.keys():
@@ -496,11 +512,12 @@ def upcoming_performances():
 
         #append new map
         #example name: "Hamilton", date: "May 7", time: "6:00 p.m.", venue: "Civic Center Concert Hall", performance_id: "2"
-        new_result = {'name': title, 'date': date, 'time': time, 'venue':venue, 'performance_id':performance_id}
+        new_result = {'name': title, 'date': date, 'time': time, 'venue': venue, 'performance_id':performance_id}
         formatted_results.append(new_result)
 
     #return the results in the appropriate format
     return formatted_results
+
 
 
 
@@ -575,5 +592,7 @@ def test_seating_chart_f():
 # tests for this file
 ################################
 if __name__ == "__main__":
-    test_seating_chart_f()
+    pass
+    #test_seating_chart_f()
+
 

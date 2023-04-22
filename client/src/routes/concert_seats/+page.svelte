@@ -59,7 +59,7 @@
                 Your Tickets
             </h1>
             {#each mySeatStore as { id, sec, row, seat } }
-                {#if seat } 
+                {#if seat }
                     <ListgroupItem class="text-base font-semibold gap-2">
                         <TicketCard section={sec} row={row} seat={seat} price={tickets[id]?.price ?? 0} />
                     </ListgroupItem>

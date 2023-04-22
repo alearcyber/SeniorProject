@@ -23,6 +23,6 @@ export const clear = () => {
 }
 
 export const sum = derived(
-	SeatStore, 
+	SeatStore,
 	$SeatStore => $SeatStore.reduce((total, item) => total + item.price, 0)
 );

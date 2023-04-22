@@ -24,7 +24,7 @@
     </form>
 
     <form class=" ml-1flex flex-col space-y-2" style="width:500px" action='/'>
-        
+
         <!-- Export Data Header -->
         <h3 class="text-3xl font-medium text-gray-900 dark:text-white p-0">Export Data from Database</h3>
 

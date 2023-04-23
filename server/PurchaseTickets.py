@@ -484,6 +484,7 @@ def upcoming_performances():
     results = Constants.query(query_text)
     formatted_results = []
     for r in results:
+        print("R =", r)
         title = r[0]
         datetime = r[1]
         venue = 'Civic Center Playhouse' if r[2] == 2 else 'Civic Center Concert Hall'
@@ -504,6 +505,9 @@ def upcoming_performances():
         #time
         hour = int(t_tokens[0])
         min = t_tokens[1]
+        if (int(min) < 10):
+            min = "0" + min
+            
         suffix = 'a.m.'
         if hour == 12:
             suffix = 'p.m.'

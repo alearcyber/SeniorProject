@@ -20,7 +20,7 @@
 	// This info will be passed into the database
     let season_info = {
         org_id: '',
-        season_name: '',
+        title: '',
         description: '',
         productions: [],
     }
@@ -52,7 +52,22 @@
     }
     
     async function create_season() {
-        console.log(selected);
+
+        let org_id = sessionStorage.getItem("org_id");
+		if (org_id != null) season_info.org_id = org_id;
+
+		let response = await fetch('http://127.0.0.1:5000/create_season', {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(season_info)
+		});
+		const out = await response.json();
+		console.log(out);
+		alert(`${season_info.title} season created.`);
+		location.reload();
     }
 
     
@@ -66,7 +81,7 @@
 		<!-- Season Name Field -->
 		<Label class="space-y-2">
 			<span>Season Name</span>
-			<Input type="text" name="season_name" bind:value={season_info.season_name} placeholder="" required />
+			<Input type="text" name="season_name" bind:value={season_info.title} placeholder="" required />
 		</Label>
 
         <!-- Description Field -->
@@ -90,7 +105,7 @@
 			<span> Production List</span>
 			{#each production_names as item, p}
 				<div class="d-flex justify-space-around">
-					<input type="checkbox" value={production_ids[p]} bind:group={selected} />
+					<input type="checkbox" value={production_ids[p]} bind:group={season_info.productions} />
 					{item}<br />
 				</div>
 			{/each}

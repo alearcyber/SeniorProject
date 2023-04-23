@@ -119,7 +119,19 @@
 		// Record each performance
 		for (let i in performances) {
 			let performance_date = new Date(performances[i].date + ' ' + performances[i].time);
-			production_info.times.push(performance_date.toISOString());
+			let date_string =
+				performance_date.getFullYear() +
+				(performance_date.getMonth() + 1 < 10 ? '-0' : '-') +
+				(performance_date.getMonth() + 1) +
+				(performance_date.getDate() < 10 ? '-0' : '-') +
+				performance_date.getDate() +
+				(performance_date.getHours() + 1 < 10 ? ' 0' : ' ') +
+				performance_date.getHours() +
+				(performance_date.getMinutes() + 1 < 10 ? ':0' : ':') +
+				performance_date.getMinutes() +
+				(performance_date.getSeconds() + 1 < 10 ? ':0' : ':') +
+				performance_date.getSeconds();
+			production_info.times.push(date_string);
 		}
 
 		// Insert performances into production before the data is sent over
@@ -139,6 +151,8 @@
 		const out = await response.json();
 		console.log(out);
 		alert(`Production created with ${production_info.times.length} performances.`);
+		
+		location.reload();
 		return out;
 	}
 </script>

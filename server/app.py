@@ -8,7 +8,7 @@ from database.user.sign_up import sign_up_user
 from database.user.login import login_user
 import PurchaseTickets
 from Scheduling import create_new_production, set_section_prices
-from CreateSeason import get_future_list_of_productions, get_org_name
+from CreateSeason import get_future_list_of_productions, get_org_name, add_season, add_productions_to_season
 import SeasonPass
 import FrontDesk
 
@@ -182,6 +182,15 @@ def create_production():
     # Set section prices
     print()
     prices_result = set_section_prices(json.dumps(result), data['section_prices'])
+    return json.dumps(result)
+
+@app.route("/create_season", methods=["GET", "POST"])
+def create_season():
+    data = request.get_json()
+    print(data)
+    result = add_season(data['org_id'], data['title'],  data['description'])
+    result_2 = add_productions_to_season(data['productions'], json.dumps(result[0][0]))
+
     return json.dumps(result)
 
 @app.route('/get_productions/<email>:<org_id>')

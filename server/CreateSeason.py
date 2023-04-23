@@ -50,12 +50,13 @@ work on get_future_list_of_productions. What outputs ?
 
 
 def add_season(org_id, title, description):
-    query("INSERT INTO Season (org_id, name, description) VALUES (?, ?, ?)", params=(org_id, title, description))
-    return query("SELECT id FROM Season WHERE org_id=? AND name=? AND description=?",
+    query("INSERT INTO Season (org_id, title, description) VALUES (?, ?, ?)", params=(org_id, title, description))
+    return query("SELECT id FROM Season WHERE org_id=? AND title=? AND description=?",
                  params=(org_id, title, description))
 
 
 def add_productions_to_season(productions, season_id):
+    print(productions, season_id)
     for production in productions:
         query("UPDATE Production SET season_id=? WHERE id=?", params=(season_id, production))
 
@@ -76,9 +77,9 @@ def get_future_list_of_productions(email, org_id):
         raise InvalidPermission
 
 
-    query_text = "select id, title from Production where org_id=? and (select season_id from Production where org_id=?) IS NULL;"
+    query_text = "select id, title from Production where org_id=? and season_id IS NULL;"
 
-    result = query(query_text, (org_id,org_id))
+    result = query(query_text, (org_id,))
     return result
 
 

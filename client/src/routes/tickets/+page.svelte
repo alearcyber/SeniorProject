@@ -22,7 +22,37 @@
       ? `/concert_seats?id=${item.performance_id}`
       : `/playhouse_seats?id=${item.performance_id}`
   }
+
+
+
+  //function to go to exchange ticket page
+  function go_to_exchange_page(){
+    window.location.href = '/exchange'
+  }
+
 </script>
+
+
+<style>
+    button {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    color: #fff;
+    background-color: #4caf50;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  button:hover {
+    background-color: #3e8e41;
+  }
+</style>
 
 <!-- Title -->
 <Heading tag="h1" class="mb-4 text-blue-500" customSize="text-3xl font-extrabold  md:text-4xl lg:text-5xl">
@@ -57,3 +87,9 @@
     </Button>
   </div>
 </Listgroup>
+
+<div>
+  <h2>Looking to Exchange a ticket?</h2>
+  <button on:click={go_to_exchange_page}>Click Here!</button>
+
+</div>

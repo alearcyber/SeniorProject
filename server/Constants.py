@@ -87,6 +87,7 @@ def load_playhouse_data():
 
 
 
+
 ###########################################################################
 # Mapping months the number to the approprate month text.
 # For example, 1 is January, 2 is February, etc.
@@ -97,3 +98,58 @@ months = ['nada', 'January', 'February', 'March', 'April', 'May', 'June', 'July'
 
 
 
+
+
+#Format datetime string in a readable way, returns a 2-tuple of strings: (date, time)
+def format_datetime(datetime):
+    # make datetime into date and time
+    tokens = datetime.split(' ')  # split on the space
+    date = tokens[0]
+    time = tokens[1]
+    d_tokens = date.split('-')
+    t_tokens = time.split(':')
+
+    # date
+    month = months[int(d_tokens[1])]
+    year = d_tokens[0]
+    day = d_tokens[2]
+
+    # time
+    hour = int(t_tokens[0])
+    min = t_tokens[1]
+    suffix = 'a.m.'
+    if hour == 12:
+        suffix = 'p.m.'
+    elif hour > 12:
+        hour = hour - 12
+        suffix = 'p.m.'
+
+    # formatting
+    date = f'{month} {day}, {year}'  # example: "May 3, 2023"
+    time = f'{hour}:{min} {suffix}'  # example: "6:00 p.m."
+    return date, time
+
+
+#mapping section names internally to ones for user to view
+section_name_map = {"main_orch": "Main Orchestra",
+      "left_orch": "Left Orchestra",
+      "right_orch": "Right Orchestra",
+      "balc": "Balcony",
+      "right_box": "Right Box",
+      "left_box": "Left Box",
+      "left_loge": "Left Loge",
+      "right_loge": "Right Loge"}
+
+
+
+
+#test formatting of datetime strings
+def test1():
+    date, time = format_datetime("2023-08-02 12:30:00")
+    print('date:', date, ' | time:', time)
+
+
+
+if __name__ == "__main__":
+    print('--Running tests for Constants.py--')
+    test1()

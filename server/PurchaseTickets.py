@@ -27,11 +27,11 @@ data = json.load(file) # read the JSON text into a dictionary
 file.close() # close the file. The contents have already been read into memory.
 sections = data['seats']
 for s in sections:
-    seats = sections[s]
-    for seat in seats:
-        x = seat['x']
-        y = seat['y']
-        id = seat['id']
+    seats_ = sections[s]
+    for seat_ in seats_:
+        x = seat_['x']
+        y = seat_['y']
+        id = seat_['id']
         seat_map[x][y] = id
 
 
@@ -459,6 +459,11 @@ def seating_chart_f(performance_id):
 
 
 
+
+
+
+
+
 ###########################################################################
 # List of upcoming performances so the user can select which
 #   one to purchase a ticket for.
@@ -523,6 +528,72 @@ def upcoming_performances():
 
 
 
+#grabs the tickets that a user has purchased
+def get_owned_tickets(email):
+
+    #grab future tickets
+    q = f"""
+    SELECT Seat.id, Production.title, Performance.time, Seat.row, Seat.number, Seat.section, Seat.price
+    FROM Production JOIN Performance JOIN Seat JOIN User
+    ON
+        Production.id = Performance.production_id AND
+        Seat.performance_id = Performance.performance_id AND
+        User.user_id = Seat.user_id
+    WHERE
+        User.email = '{email}' AND 
+        Performance.time > datetime()
+    """
+    r = Constants.query(q)
+
+    #return empty list if no tickets were found
+    if len(r) <= 0:
+        return []
+
+    #grab the variables
+    seats = []
+
+    for seat_id, title, datetime, row, num, sec, price in r:
+        n = dict()  # new seat
+
+        #first, parse out datetime to appropriate string
+        date, time = Constants.format_datetime(datetime)
+        n['date'] = date
+        n['time'] = time
+
+        #add the rest
+        n['id'] = seat_id
+        n['title'] = title
+        n['row'] = row
+        n['num'] = num
+        n['sec'] = Constants.section_name_map[sec]
+        n['price'] = price if (price is not None) else 22 #set price to default with Ternary if it is none
+
+        #append to list
+        seats.append(n)
+
+    return seats
+
+
+#make tickets available for purchase. This is for exchanging tickets
+def free_tickets(seat_ids):
+    #parse out the seat ids from the formatted string info in the session storage
+    tokens = seat_ids.split(';')
+    actual_ids = []
+    for pair in tokens:
+        actual_ids.append(pair.split(',')[0])
+    seat_ids = actual_ids
+
+    print("seat ids parsed out:", seat_ids)
+    #Update the DB
+    for id in seat_ids:
+        q = f"""
+        UPDATE Seat
+        SET user_id = NULL, payment_method = NULL
+        WHERE id={id}
+        """
+        Constants.query(q)
+    return True
+
 
 
 ##########################################################################################
@@ -567,6 +638,9 @@ def test_seating_chart():
     result = get_seating_chart(id)
     print(result)
 
+
+
+
 ################################################################
 # test retrieving seating chart WITH FORMATTING
 ################################################################
@@ -588,11 +662,27 @@ def test_seating_chart_f():
             print(item)
 
 
+
+
+#test retriving list of owned tickets
+def test1():
+    email = "tom.bombadillo@arnornet.me"
+    seats = get_owned_tickets(email)
+    for seat in seats:
+        print(seat)
+
+
+# test freeing tickets being exhcanged
+def test2():
+    a = "7117,22"
+    free_tickets(a)
+
+
 ################################
 # tests for this file
 ################################
 if __name__ == "__main__":
-    pass
-    #test_seating_chart_f()
+    print('--Running tests for PurchaseTickets.py--')
+    test2()
 
 

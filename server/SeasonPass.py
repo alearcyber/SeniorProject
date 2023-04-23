@@ -193,6 +193,14 @@ def season_seat_availability(season_id):
                params=(season_id,))
 
 
+
+
+
+
+
+
+
+
 #test retreival of upcoming seasons
 def test1():
     upcoming_seasons()

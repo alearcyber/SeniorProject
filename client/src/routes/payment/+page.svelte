@@ -65,6 +65,22 @@
     } else {
       alert('Thank you! Your seats have been reserved.')
     }
+
+
+
+    //do the proper actions and whatnot for exchanging seats
+    if(sessionStorage.getItem('exchange')){
+      //send off the information to change
+      const response2 = await fetch('http://localhost:5000/free_tickets', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({'seat_ids': sessionStorage.getItem('exchange')})
+      });
+
+      //reset the ticket exchange info in the session storage
+      sessionStorage.removeItem('exchange');
+      alert('Additional Note: Your tickets have been successfully exchanged!');
+    }
   };
 
 

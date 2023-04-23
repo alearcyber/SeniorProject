@@ -54,8 +54,6 @@
 
         alert(`You chose ${selectedCards[0].title}!`)
         window.location.href = `/frontdesk/manager?title=${selectedCards[0].title}&id=${selectedCards[0].id}`;
-        //TODO - continue HERE. Take the 'combined' string of id's and send it to a new page
-        //will have to make that new page and make it so that page processes the payment information
       }
     }
 

@@ -178,10 +178,10 @@ def create_production():
     # Verify results
     for key in data['section_prices']:
         price = data['section_prices'][key]
-        print(key + ": " + price)
 
     # Set section prices
-    prices_resut = set_section_prices(result, data['section_prices'])
+    print()
+    prices_result = set_section_prices(json.dumps(result), data['section_prices'])
     return json.dumps(result)
 
 @app.route('/get_productions/<email>:<org_id>')

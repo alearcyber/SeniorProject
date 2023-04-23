@@ -17,9 +17,13 @@
 		default_price: '',
 		section_prices: {
 			main_orch: '',
-			balcony: '',
-			loge: '',
-			box: '',
+			right_orch: '',
+			left_orch: '',
+			balc: '',
+			right_loge: '',
+			left_loge: '',
+			right_box: '',
+			left_box: '',
 			handicap: '',
 			pit: '',
 			lower_balcony: '',
@@ -99,6 +103,13 @@
 		} else {
 			console.error('Invalid organization ID');
 		}
+
+		// Set left side prices from right side
+		production_info.section_prices.left_orch = production_info.section_prices.right_orch;
+		production_info.section_prices.left_loge = production_info.section_prices.right_loge;
+		production_info.section_prices.left_box = production_info.section_prices.right_box;
+
+		console.log(production_info);
 
 		// Calculate days between the dates
 		let start_date = Date.parse(start_date_str);
@@ -255,51 +266,43 @@
 					required
 				/>
 			{:else if production_info.venue_id == 2}
-				<span>Orchestra Price</span>
+				<span>Main Orchestra Price</span>
 				<Input
 					type="text"
 					name="orch_price"
-					bind:value={production_info.section_prices.orchestra}
+					bind:value={production_info.section_prices.main_orch}
 					placeholder="$"
 					required
 				/>
-				<span>Pit Price</span>
+				<span>Side Orchestra Price</span>
 				<Input
 					type="text"
 					name="pit_price"
-					bind:value={production_info.section_prices.pit}
+					bind:value={production_info.section_prices.right_orch}
 					placeholder="$"
 					required
 				/>
-				<span>Lower Balcony Price</span>
+				<span>Balcony Price</span>
 				<Input
 					type="text"
 					name="lower_balcony_price"
-					bind:value={production_info.section_prices.lower_balcony}
-					placeholder="$"
-					required
-				/>
-				<span>Upper Balcony Price</span>
-				<Input
-					type="text"
-					name="upper_balcony_price"
-					bind:value={production_info.section_prices.upper_balcony}
+					bind:value={production_info.section_prices.balc}
 					placeholder="$"
 					required
 				/>
 				<span>Loge Price</span>
 				<Input
 					type="text"
-					name="loge_price"
-					bind:value={production_info.section_prices.loge}
+					name="upper_balcony_price"
+					bind:value={production_info.section_prices.right_loge}
 					placeholder="$"
 					required
 				/>
-				<span>Handicap Price</span>
+				<span>Box Price</span>
 				<Input
 					type="text"
-					name="handicap_price"
-					bind:value={production_info.section_prices.handicap}
+					name="loge_price"
+					bind:value={production_info.section_prices.right_box}
 					placeholder="$"
 					required
 				/>

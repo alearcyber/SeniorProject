@@ -283,6 +283,7 @@ def set_section_prices(production_id, section_prices):
                     """
     for section_name in section_prices:
         price = section_prices[section_name]
+        print(section_name + ": " + price)
         Constants.query(query_text, params=(price, section_name, production_id))
 
     return True

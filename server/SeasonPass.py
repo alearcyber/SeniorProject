@@ -187,10 +187,18 @@ def buy_season_pass(email, seat_row, seat_number, performances_ids, season_id, p
 
 #seat availability for season id
 def season_seat_availability(season_id):
-  return query("SELECT Seat.id, Seat.price FROM Season JOIN Production ON Season.id=Production.season_id "
+  return Constants.query("SELECT Seat.id, Seat.price FROM Season JOIN Production ON Season.id=Production.season_id "
                "JOIN Performance ON Production.id=Performance.production_id JOIN Seat "
                "ON Seat.performance_id=Performance.performance_id WHERE Season.id=? AND Seat.user_id IS NULL",
                params=(season_id,))
+
+
+
+
+
+
+
+
 
 
 #test retreival of upcoming seasons

@@ -1,15 +1,17 @@
-<!-- 
+<!--
     Payment Page
     This page is where the customer will pay for their ticket(s)
 -->
 
 <script>
+  import {onMount} from "svelte";
   import { Input, Label, Button, Select, Heading, P, Hr, Checkbox } from 'flowbite-svelte'
-	import Center from '../../layouts/center.svelte' //import Center layout
+  import Radio from './Radio.svelte'
+  import Center from '../../layouts/center.svelte' //import Center layout
   import Checkout from '../../components/Checkout.svelte'
   import { SeatStore } from '../../stores/SeatStore.js'
   import { page } from '$app/stores'
-  
+
   const url = $page.url; //get url
   let performance_id = url.searchParams.get('pid') //parse out url parameters, the performance id specifically
 
@@ -20,33 +22,81 @@
   $: mySeatStore = $SeatStore //subscribe to seat store
 
   let email = ''
-  let payment_method = 'credit'
+  let payment_method = 'card'
+
+
+  //onMount function
+  onMount(async () => {
+    //grab the users email
+    if (!(sessionStorage.getItem('user') === null)){
+      email = sessionStorage.getItem('user');
+    }
+  });
+
 
   const button_alert = async () => {
+    //grab number, row, and section or each selected seat
+    let seat_data = [];
+    for(let i = 0; i < mySeatStore.length; i++){
+      //[number, row, section]
+      let s = mySeatStore[i];
+      seat_data.push([s.seat, s.row, s.sec]);
+    }
+
+
     const response = await fetch('http://localhost:5000/purchase_tickets', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        seats_ids: mySeatStore.map(seat => seat.id),
+        //seats_ids: mySeatStore.map(seat => seat.id),
+        seat_data: seat_data,
         email,
         performance_id,
-        payment_method,
+        'payment_method': paymentMethod,
       })
     })
 
     console.log({ response })
 
-    alert('Thank you for your purchase! Your order has been confirmed.')
+    if(paymentMethod === 'card'){
+      alert('Thank you for your purchase! Your order has been confirmed.')
+    } else {
+      alert('Thank you! Your seats have been reserved.')
+    }
+
+
+
+    //do the proper actions and whatnot for exchanging seats
+    if(sessionStorage.getItem('exchange')){
+      //send off the information to change
+      const response2 = await fetch('http://localhost:5000/free_tickets', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({'seat_ids': sessionStorage.getItem('exchange')})
+      });
+
+      //reset the ticket exchange info in the session storage
+      sessionStorage.removeItem('exchange');
+      alert('Additional Note: Your tickets have been successfully exchanged!');
+    }
   };
 
-  let visible = true;
 
-  function toggleVisible() {
-      visible = !visible
-      credit = visible ? 'card' : 'cash'
-  }
+  //radio button options. must be either 'card', 'cash', or 'check' as value to send back to database
+  let paymentMethod = 'card';
+  const options = [{
+    value: 'cash',
+    label: 'Cash',
+  }, {
+    value: 'card',
+    label: 'Credit Card',
+  }, {
+    value: 'check',
+    label: 'Check',
+  }];
+
 </script>
 
 <Center>
@@ -95,7 +145,7 @@
             <Input type="text" id="country" placeholder="United States" required />
           </div>
         </div>
-        {#if visible}
+        {#if paymentMethod === 'card'}
           <div class="mb-6">
             <Label for="card_number" class="mb-2">Card Number</Label>
             <Input type="text" id="card_number" placeholder="**** **** **** ****" required />
@@ -111,7 +161,10 @@
             </div>
           </div>
         {/if}
-        <Checkbox class="mb-4" on:change={toggleVisible}>I'm paying with cash or check</Checkbox>
+        <Radio {options} fontSize={16} legend='Choose A Payment Method' bind:userSelected={paymentMethod}/>
+        {#if !(paymentMethod === 'card')}
+          <p>Note: You must pay at the door if you pay with check or cash</p>
+        {/if}
         <Button type="submit" on:click={button_alert} href="/">Submit</Button>
       </form>
     </div>

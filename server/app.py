@@ -249,5 +249,41 @@ def frontdesk_seat_info():
 
 
 
+#show tickets eligible to be exchanged
+@app.route('/get_my_tickets', methods=['POST'])
+def get_my_tickets():
+    d = request.get_json()
+    email = d['email']
+    seats = PurchaseTickets.get_owned_tickets(email)
+    return json.dumps({'seats': seats})
+
+
+
+#exchange these tickets in the database
+@app.route('/free_tickets', methods=['POST'])
+def free_tickets():
+    d = request.get_json()
+    seat_ids = d['seat_ids']
+    print('Received request to free up tickets. The session storage variable received is:', seat_ids)
+    success = PurchaseTickets.free_tickets(seat_ids)
+    return json.dumps({'success': success})
+
+
+
+@app.route('/buy_season_ticket', methods=['POST'])
+def buy_season_ticket():
+    d = request.get_json()
+    params = (d['number'],d['row'],d['section'],d['season'],d['email'],d['name'], d['address'])
+    q = f"""
+    INSERT INTO SeasonTicket (number, row, section, season, email, name, address)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+    """
+
+    Constants.query(q, params=params)
+    return json.dumps({'success': True})
+
+
+
+
 if __name__ == '__main__':
     app.run()

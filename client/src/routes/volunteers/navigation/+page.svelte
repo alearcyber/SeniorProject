@@ -37,6 +37,12 @@
                 <img src="../started_logo.jpg" class="mr-3 h-24 sm:h-24" alt="logo" style=" height:250px" />
                 <a href="/volunteers/importexport" class="text-4xl text-blue-700 hover:underline dark:text-blue-500">Import/Export Database</a>
             </Card> 
+
+            <!-- Past Season Pass Info -->
+            <Card class="flex flex-col space-y-5" style="width: 500px">
+                <img src="../seasonpass.jpg" class="mr-3 h-24 sm:h-24" alt="logo" style=" height:250px" />
+                <a href="/pastseason" class="text-4xl text-blue-700 hover:underline dark:text-blue-500">Past Season Pass Info</a>
+            </Card> 
         </div>
     </div>  
     

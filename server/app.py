@@ -186,6 +186,7 @@ def create_production():
 
 @app.route('/get_productions/<email>:<org_id>')
 def get_productions(email, org_id):
+    print(email, org_id)
     result = get_future_list_of_productions(email, org_id)
     org_name = get_org_name(org_id)
 

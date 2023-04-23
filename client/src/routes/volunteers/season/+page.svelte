@@ -35,7 +35,7 @@
 		// Get production list from server
         let response = await fetch(`http://127.0.0.1:5000/get_productions/${email}:${org_id}`);
         const out = await response.json();
-        console.log(out['production_list']);
+        console.log(out);
 		
 		// Make local vars with the production data so they're easier to access
 		production_names = [];

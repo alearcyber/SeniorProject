@@ -138,6 +138,7 @@
 
 		const out = await response.json();
 		console.log(out);
+		alert(`Production created with ${production_info.times.length} performances.`);
 		return out;
 	}
 </script>

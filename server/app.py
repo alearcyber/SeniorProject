@@ -267,5 +267,20 @@ def free_tickets():
 
 
 
+@app.route('/buy_season_ticket', methods=['POST'])
+def buy_season_ticket():
+    d = request.get_json()
+    params = (d['number'],d['row'],d['section'],d['season'],d['email'],d['name'], d['address'])
+    q = f"""
+    INSERT INTO SeasonTicket (number, row, section, season, email, name, address)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+    """
+
+    Constants.query(q, params=params)
+    return json.dumps({'success': True})
+
+
+
+
 if __name__ == '__main__':
     app.run()

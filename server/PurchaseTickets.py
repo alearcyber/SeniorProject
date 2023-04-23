@@ -459,6 +459,11 @@ def seating_chart_f(performance_id):
 
 
 
+
+
+
+
+
 ###########################################################################
 # List of upcoming performances so the user can select which
 #   one to purchase a ticket for.
@@ -632,6 +637,9 @@ def test_seating_chart():
     id = 15
     result = get_seating_chart(id)
     print(result)
+
+
+
 
 ################################################################
 # test retrieving seating chart WITH FORMATTING

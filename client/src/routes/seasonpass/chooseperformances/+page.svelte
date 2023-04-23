@@ -71,18 +71,19 @@
 
     //handles confirm button
     function confirm_selection(){
-      //check for nothing selected
-      if(selectedCards.length <= 0){
+      if(selectedCards.length <= 0){ //nothing selected
         alert("ERROR: you have not selected anything");
-      } else {
+
+      } else if (were_duplicate_productions_selected()){ //duplicates
+        alert("ERROR: you can only select ONE performance per production");
+
+      } else { //its good
         //create the string to send with the selections
         //it will be the id's seperated by dashes
         let combined = selectedCards.map(item => item.id).join('-'); //the combineds id's spererated by dashes as one string
-        alert(`Your selection is ${combined}`)
+        alert(`Nice Choice, Now choose your seat!`)
+        window.location.href = `/seasonpass/seat?season=${season}&performances=${combined}`;
 
-
-        //TODO - continue HERE. Take the 'combined' string of id's and send it to a new page
-        //will have to make that new page and make it so that page processes the payment information
       }
     }
 
@@ -95,6 +96,17 @@
           window.location.href = '/seasonpass/selectseason';
         }
 	});
+
+
+    //Make sure no duplicates are selected
+    function were_duplicate_productions_selected(){
+      //make a list of the performance titles
+      let performance_titles = [];
+      for(let i = 0; i < selectedCards.length; i++){
+        performance_titles.push(selectedCards[i].title);
+      }
+      return (new Set(performance_titles)).size !== performance_titles.length;
+    }
 
 </script>
 
@@ -127,7 +139,7 @@
       class="card {selectedCards.includes(card) ? 'selected' : ''}"
       on:click={() => toggleSelection(card)}
     >
-      <h3>{card.title}</h3>
+      <h3>Production: {card.title}</h3>
       <p>{card.content}</p>
     </div>
   {/each}
